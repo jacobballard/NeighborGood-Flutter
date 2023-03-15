@@ -1,0 +1,26 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install Flutter
+      uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '2.5.3' # Replace with your Flutter version
+    - name: Get dependencies
+      run: flutter pub get
+    - name: Build web
+      run: flutter build web --release
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.2
+      with:
+        branch: gh-pages
+        folder: build/web

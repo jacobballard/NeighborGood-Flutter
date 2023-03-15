@@ -3,12 +3,12 @@ import 'package:device_preview/device_preview.dart';
 import 'src/app.dart';
 
 void main() => runApp(
-      DevicePreview(
-        enabled: true,
-        tools: [...DevicePreview.defaultTools],
-        builder: (context) => App(),
-      ),
-    );
+    // DevicePreview(
+    //   enabled: true,
+    //   tools: [...DevicePreview.defaultTools],
+    //   builder: (context) => App(),
+    // ),
+    App());
 
 // class MyApp extends StatelessWidget {
 // class MyApp extends StatelessWidget {

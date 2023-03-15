@@ -70,8 +70,6 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:pastry/main.dart';
 import 'package:pastry/src/ui/all_bakers.dart';
 import 'package:pastry/src/ui/all_products.dart';
 import 'package:pastry/src/ui/profile.dart';

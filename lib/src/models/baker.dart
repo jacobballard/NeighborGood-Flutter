@@ -22,48 +22,42 @@ class Baker {
     required this.longitude,
     required this.productIds,
     required this.description,
-  }) {
-    initialize();
-  }
-
-  void initialize() {
-    this.products = [
-      Product(
-        id: '1',
-        name: 'Chocolate Cake',
-        description:
-            'A delicious chocolate cake with layers of ganache and buttercream frosting',
-        price: 20.99,
-        imageUrls: [
-          'https://example.com/chocolate_cake1.jpg',
-          'https://example.com/chocolate_cake2.jpg',
-          'https://example.com/chocolate_cake3.jpg',
-        ],
-      ),
-      Product(
-        id: '2',
-        name: 'Croissant',
-        description: 'A flaky croissant perfect for breakfast or brunch',
-        price: 3.99,
-        imageUrls: [
-          'https://example.com/croissant1.jpg',
-          'https://example.com/croissant2.jpg',
-        ],
-      ),
-      Product(
-        id: '3',
-        name: 'Blueberry Muffin',
-        description:
-            'A freshly baked blueberry muffin bursting with juicy blueberries',
-        price: 2.99,
-        imageUrls: [
-          'https://example.com/blueberry_muffin1.jpg',
-          'https://example.com/blueberry_muffin2.jpg',
-          'https://example.com/blueberry_muffin3.jpg',
-        ],
-      ),
-    ];
-  }
+  }) : this.products = [
+          Product(
+            id: '1',
+            name: 'Chocolate Cake',
+            description:
+                'A delicious chocolate cake with layers of ganache and buttercream frosting',
+            price: 20.99,
+            imageUrls: [
+              'https://example.com/chocolate_cake1.jpg',
+              'https://example.com/chocolate_cake2.jpg',
+              'https://example.com/chocolate_cake3.jpg',
+            ],
+          ),
+          Product(
+            id: '2',
+            name: 'Croissant',
+            description: 'A flaky croissant perfect for breakfast or brunch',
+            price: 3.99,
+            imageUrls: [
+              'https://example.com/croissant1.jpg',
+              'https://example.com/croissant2.jpg',
+            ],
+          ),
+          Product(
+            id: '3',
+            name: 'Blueberry Muffin',
+            description:
+                'A freshly baked blueberry muffin bursting with juicy blueberries',
+            price: 2.99,
+            imageUrls: [
+              'https://example.com/blueberry_muffin1.jpg',
+              'https://example.com/blueberry_muffin2.jpg',
+              'https://example.com/blueberry_muffin3.jpg',
+            ],
+          ),
+        ];
 
   factory Baker.fromMap(Map<String, dynamic> map) {
     return Baker(

@@ -137,7 +137,7 @@ class StoreDetailPage extends StatelessWidget {
                   SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text("Direct Message"),
+                    child: Text("Direct Messages"),
                   ),
                   SizedBox(height: 16),
                   Row(

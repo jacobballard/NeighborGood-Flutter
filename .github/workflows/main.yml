@@ -11,21 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'master'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build web app
-        run: flutter build web --release
-
-      - name: Deploy to Github Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/web
+      - uses: actions/checkout@v2 # Only works with v2
+      - uses: subosito/flutter-action@v1
+      - uses: bluefireteam/flutter-gh-pages@v7

@@ -12,9 +12,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+         node-version: '16'
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@v1.5.1
+        uses: subosito/flutter-action@v2
         with:
           channel: 'master'
 

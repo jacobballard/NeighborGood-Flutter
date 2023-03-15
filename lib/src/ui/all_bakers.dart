@@ -159,7 +159,7 @@ class _StorePageState extends State<StorePage> {
       );
     }
 
-    final distance = store.distance.toStringAsFixed(1);
+    // final distance = store.distance.toStringAsFixed(1);
 
     return GestureDetector(
       onTap: () {
@@ -190,7 +190,8 @@ class _StorePageState extends State<StorePage> {
                   SizedBox(height: 4.0),
                   Row(children: starWidgets),
                   SizedBox(height: 4.0),
-                  Text('$distance miles away'),
+                  Text(
+                      'TODO miles away'), // TODO: Need to calculate distance here
                 ],
               ),
             ),

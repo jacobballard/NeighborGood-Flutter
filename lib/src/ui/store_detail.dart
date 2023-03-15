@@ -151,7 +151,7 @@ class StoreDetailPage extends StatelessWidget {
                       IconButton(
                         onPressed: () {},
                         icon: const FaIcon(FontAwesomeIcons.instagram),
-                        tooltip: "Social Media Profile 2",
+                        tooltip: "Social Media Profile 23",
                       ),
                       IconButton(
                         onPressed: () {},

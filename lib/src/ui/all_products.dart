@@ -106,6 +106,8 @@ class MyAllProductsPage extends StatefulWidget {
 class _MyAllProductsPageState extends State<MyAllProductsPage> {
   final List<Product> _allProducts = [
     Product(
+      bakerDisplayName: "you",
+      bakerId: '1',
       id: '1',
       name: 'Cupcake',
       description: 'Delicious cupcake with sprinkles',
@@ -113,6 +115,8 @@ class _MyAllProductsPageState extends State<MyAllProductsPage> {
       imageUrls: ['https://example.com/cupcake.jpg'],
     ),
     Product(
+      bakerDisplayName: "you",
+      bakerId: '1',
       id: '2',
       name: 'Chocolate Chip Cookie',
       description: 'Soft and chewy cookie with chocolate chips',
@@ -120,6 +124,8 @@ class _MyAllProductsPageState extends State<MyAllProductsPage> {
       imageUrls: ['https://example.com/cookie.jpg'],
     ),
     Product(
+      bakerDisplayName: "you",
+      bakerId: '1',
       id: '3',
       name: 'Brownie',
       description: 'Rich and fudgy brownie',
@@ -127,6 +133,8 @@ class _MyAllProductsPageState extends State<MyAllProductsPage> {
       imageUrls: ['https://example.com/brownie.jpg'],
     ),
     Product(
+      bakerDisplayName: "you",
+      bakerId: '1',
       id: '4',
       name: 'Apple Pie',
       description: 'Classic apple pie with flaky crust',

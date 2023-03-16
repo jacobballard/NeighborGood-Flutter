@@ -15,7 +15,7 @@
     the `--base-href` argument provided to `flutter build`.
   -->
   <base href="$FLUTTER_BASE_HREF">
-
+  
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
@@ -37,12 +37,16 @@
     var serviceWorkerVersion = null;
   </script>
   <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+  <script src="flutter.js" defer onload="initializeFlutter()"></script>
+
+  <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script> -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script> -->
 </head>
 <body>
-  <script>
+  
+  <!-- <script>
     window.addEventListener('load', function(ev) {
-      // Download main.dart.js
+      // Download main.dart.jsa
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
@@ -54,6 +58,41 @@
         }
       });
     });
+  </script> -->
+
+  <script>
+    function initializeFlutter() {
+      if (typeof _flutter !== 'undefined') {
+        _flutter.loader.loadEntrypoint({
+          serviceWorker: {
+            serviceWorkerVersion: serviceWorkerVersion,
+          },
+          onEntrypointLoaded: function(engineInitializer) {
+            engineInitializer.initializeEngine().then(function(appRunner) {
+              appRunner.runApp();
+            });
+          }
+        });
+      } else {
+        setTimeout(initializeFlutter, 50);
+      }
+    }
   </script>
+
+<!-- <script>
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCaB_Gel86eutQ_8miYlB9cHPwwWMuQJf0",
+    authDomain: "pastry-6b817.firebaseapp.com",
+    projectId: "pastry-6b817",
+    storageBucket: "pastry-6b817.appspot.com",
+    messagingSenderId: "1030211861772",
+    appId: "1:1030211861772:web:cade4e0c84f64893a65d29",
+    measurementId: "G-SVNDR2S2H5"
+  };
+
+  const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.analytics(app);
+</script> -->
 </body>
 </html>

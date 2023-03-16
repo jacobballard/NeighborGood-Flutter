@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1030211861772",
+    "project_id": "pastry-6b817",
+    "storage_bucket": "pastry-6b817.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030211861772:android:33869bdbf07c2128a65d29",
+        "android_client_info": {
+          "package_name": "com.example.pastry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030211861772-jptqr40kea2d5katia1rqv6jt9ddtcvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABf3s_Po9SL8V8fqkUiUdyQbtievofqTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030211861772-jptqr40kea2d5katia1rqv6jt9ddtcvb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1030211861772-4b2tc2m8j0i23gd3opk2q5fc024psoq1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pastry"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

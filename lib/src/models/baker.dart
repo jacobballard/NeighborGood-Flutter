@@ -24,6 +24,8 @@ class Baker {
     required this.description,
   }) : this.products = [
           Product(
+            bakerDisplayName: "you",
+            bakerId: '1',
             id: '1',
             name: 'Chocolate Cake',
             description:
@@ -36,6 +38,8 @@ class Baker {
             ],
           ),
           Product(
+            bakerDisplayName: "you",
+            bakerId: '1',
             id: '2',
             name: 'Croissant',
             description: 'A flaky croissant perfect for breakfast or brunch',
@@ -46,6 +50,8 @@ class Baker {
             ],
           ),
           Product(
+            bakerDisplayName: "you",
+            bakerId: '1',
             id: '3',
             name: 'Blueberry Muffin',
             description:

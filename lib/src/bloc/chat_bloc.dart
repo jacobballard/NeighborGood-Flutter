@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/bloc/chat_events.dart';
@@ -6,13 +5,11 @@ import 'package:pastry/src/bloc/chat_states.dart';
 import '../models/chat_message.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  ChatBloc() : super(ChatInitial());
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  @override
-  Stream<ChatState> mapEventToState(ChatEvent event) async* {
-    if (event is FetchMessages) {
-      yield ChatLoading();
+  ChatBloc() : super(ChatInitial()) {
+    on<FetchMessages>((event, emit) async {
+      emit(ChatLoading());
       try {
         QuerySnapshot querySnapshot = await _firestore
             .collection('messages')
@@ -28,11 +25,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           );
         }).toList();
 
-        yield ChatLoaded(messages: messages);
+        emit(ChatLoaded(messages: messages));
       } catch (e) {
-        yield ChatError(message: 'Error fetching messages: $e');
+        emit(ChatError(message: 'Error fetching messages: $e'));
       }
-    } else if (event is SendMessage) {
+    });
+
+    on<SendMessage>((event, emit) async {
       try {
         await _firestore.collection('messages').add({
           'content': event.chatMessage.content,
@@ -40,8 +39,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           'timestamp': event.chatMessage.timestamp,
         });
       } catch (e) {
-        yield ChatError(message: 'Error sending message: $e');
+        emit(ChatError(message: 'Error sending message: $e'));
       }
-    }
+    });
   }
 }

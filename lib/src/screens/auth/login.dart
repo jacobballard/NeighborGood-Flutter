@@ -4,6 +4,7 @@ import 'dart:io';
 import '../../../repositories/authentication_repository.dart';
 import 'package:flutter/foundation.dart';
 
+import '../tab_bar.dart';
 import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -82,7 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
             _emailController.text,
             _passwordController.text,
           );
-          // Navigate to the chat page or another screen upon successful login
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MyTabBar()),
+            (route) => false,
+          );
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(e.toString())),
@@ -102,7 +107,11 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () async {
             try {
               await widget.authRepo.signInWithGoogle();
-              // Navigate to the chat page or another screen upon successful login
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => MyTabBar()),
+                (route) => false,
+              );
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(e.toString())),
@@ -115,7 +124,11 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () async {
             try {
               await widget.authRepo.signInWithFacebook();
-              // Navigate to the chat page or another screen upon successful login
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => MyTabBar()),
+                (route) => false,
+              );
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(e.toString())),
@@ -129,7 +142,11 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () async {
               try {
                 await widget.authRepo.signInWithApple();
-                // Navigate to the chat page or another screen upon successful login
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyTabBar()),
+                  (route) => false,
+                );
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(e.toString())),
@@ -140,8 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
-
-  // In login_screen.dart
 
   Widget _buildSwitchToSignupButton(BuildContext context) {
     return TextButton(
@@ -156,23 +171,17 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // In forgot_password_screen.dart
-
   Widget _buildResetPasswordButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
-        try {
-          await widget.authRepo.resetPassword(_emailController.text);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Password reset email sent')),
-          );
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString())),
-          );
-        }
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ForgotPasswordScreen(authRepo: widget.authRepo)),
+        );
       },
-      child: Text('Reset Password'),
+      child: Text('Forgot Password?'),
     );
   }
 }

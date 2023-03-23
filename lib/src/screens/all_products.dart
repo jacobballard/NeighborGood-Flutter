@@ -93,8 +93,8 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:pastry/src/ui/product_detail.dart';
-import 'package:pastry/src/ui/product_grid_view.dart';
+import 'package:pastry/src/screens/product_detail.dart';
+import 'package:pastry/src/screens/product_grid_view.dart';
 
 import '../models/product.dart';
 

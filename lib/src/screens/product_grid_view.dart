@@ -68,7 +68,7 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:pastry/src/models/product.dart';
-import 'package:pastry/src/ui/product_detail.dart';
+import 'package:pastry/src/screens/product_detail.dart';
 
 class ProductGridView extends StatelessWidget {
   final List<Product> products;

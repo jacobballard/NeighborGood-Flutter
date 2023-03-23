@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pastry/src/ui/product_grid_view.dart';
-import '../models/product.dart';
-import 'all_bakers.dart';
-import 'all_products.dart';
+import 'package:pastry/src/screens/product_grid_view.dart';
+import '../bloc/chat_bloc.dart';
 import '../models/baker.dart';
+import 'chat/message_screen.dart';
 
 class StoreDetailPage extends StatelessWidget {
   final Baker store;
@@ -58,7 +58,17 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => ChatBloc(),
+                              child: ChatScreen(),
+                            ),
+                          ),
+                        );
+                      },
                       child: const Text("Direct Messages"),
                     ),
                     const SizedBox(height: 16),

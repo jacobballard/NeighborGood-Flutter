@@ -70,9 +70,9 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pastry/src/ui/all_bakers.dart';
-import 'package:pastry/src/ui/all_products.dart';
-import 'package:pastry/src/ui/profile.dart';
+import 'package:pastry/src/screens/all_bakers.dart';
+import 'package:pastry/src/screens/all_products.dart';
+import 'package:pastry/src/screens/profile.dart';
 
 class MyTabBar extends StatefulWidget {
   @override

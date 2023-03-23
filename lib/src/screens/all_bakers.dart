@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pastry/src/ui/store_detail.dart';
+import 'package:pastry/src/screens/store_detail.dart';
 
 import '../models/baker.dart';
 

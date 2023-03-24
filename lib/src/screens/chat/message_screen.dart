@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/chat_bloc.dart';
-import '../../bloc/chat_events.dart';
-import '../../bloc/chat_states.dart';
+import '../../blocs/chat/chat_bloc.dart';
+import '../../blocs/chat/chat_events.dart';
+import '../../blocs/chat/chat_states.dart';
 import '../../models/chat_message.dart';
 
 class ChatScreen extends StatefulWidget {

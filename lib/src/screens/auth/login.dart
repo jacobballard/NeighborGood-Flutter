@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _buildLoginButton(context),
             _buildSocialLogins(context),
             _buildResetPasswordButton(context),
+            _buildContinueAsGuestButton(context),
             _buildSwitchToSignupButton(context),
           ],
         )),
@@ -72,6 +73,28 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildContinueAsGuestButton(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        try {
+          await widget.authRepo.signInAnonymously();
+          if (context.mounted) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MyTabBar()),
+              (route) => false,
+            );
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      },
+      child: Text('Continue as Guest'),
     );
   }
 

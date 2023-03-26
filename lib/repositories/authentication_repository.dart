@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -7,6 +9,10 @@ class AuthenticationRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FacebookAuth _facebookAuth = FacebookAuth.instance;
+
+  Future<User?> getCurrentUser() async {
+    return _firebaseAuth.currentUser;
+  }
 
 // Email Sign-up
   Future<UserCredential> signUpWithEmailAndPassword(
@@ -69,6 +75,26 @@ class AuthenticationRepository {
 
   Future<void> resetPassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<UserCredential> signInAnonymously() async {
+    return await _firebaseAuth.signInAnonymously();
+  }
+
+  Future<void> saveUserData({
+    required String uid,
+    required String fullName,
+    required String username,
+    required LatLng location,
+    required String role,
+  }) async {
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'fullName': fullName,
+      'username': username,
+      'latitude': location.latitude,
+      'longitude': location.longitude,
+      'role': role,
+    });
   }
 
 // Sign out

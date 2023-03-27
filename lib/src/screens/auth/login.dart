@@ -24,22 +24,48 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Sign In'),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _buildEmailInput(),
-            _buildPasswordInput(),
-            _buildLoginButton(context),
-            _buildSocialLogins(context),
-            _buildResetPasswordButton(context),
-            _buildContinueAsGuestButton(context),
-            _buildSwitchToSignupButton(context),
-          ],
-        )),
+      body: Stack(
+        children: [
+          Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _buildEmailInput(),
+                  _buildPasswordInput(),
+                  _buildLoginButton(context),
+                  _buildSocialLogins(context),
+                  _buildContinueAsGuestButton(context),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 10,
+            left: 10,
+            child: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () async {
+                try {
+                  await widget.authRepo.signInAnonymously();
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyTabBar()),
+                      (route) => false,
+                    );
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString())),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

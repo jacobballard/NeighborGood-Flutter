@@ -17,6 +17,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  authentication_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/authentication_repository"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   bloc:
     dependency: transitive
     description:
@@ -33,6 +40,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  cache:
+    dependency: transitive
+    description:
+      path: "packages/cache"
+      relative: true
+    source: path
+    version: "1.0.0"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -233,6 +247,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.24"
+  flow_builder:
+    dependency: "direct main"
+    description:
+      name: flow_builder
+      sha256: "212a5c6575e87bec2003fa3f31dd7d80f0d89f6152db54f43fb0b6f45943e955"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -384,6 +406,21 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.4.0"
+  form_inputs:
+    dependency: "direct main"
+    description:
+      path: "packages/form_inputs"
+      relative: true
+    source: path
+    version: "1.0.0"
+  formz:
+    dependency: transitive
+    description:
+      name: formz
+      sha256: ed92f501f4a44b1da9137a025007df773b3732147b413c464158ecd997612ab6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
   geolocator:
     dependency: "direct main"
     description:
@@ -432,6 +469,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.1"
+  google_fonts:
+    dependency: "direct main"
+    description:
+      name: google_fonts
+      sha256: "927573f2e8a8d65c17931e21918ad0ab0666b1b636537de7c4932bdb487b190f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.3"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -609,7 +654,7 @@ packages:
     source: hosted
     version: "0.2.0"
   meta:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: meta
       sha256: "12307e7f0605ce3da64cf0db90e5fcab0869f3ca03f76be6bb2991ce0a55e82b"

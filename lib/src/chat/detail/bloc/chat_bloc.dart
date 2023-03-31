@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pastry/src/blocs/chat/chat_events.dart';
-import 'package:pastry/src/blocs/chat/chat_states.dart';
-import '../../models/chat_message.dart';
+import 'package:equatable/equatable.dart';
+import 'package:pastry/src/chat/detail/model/chat_message.dart';
+
+part 'chat_events.dart';
+part 'chat_states.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

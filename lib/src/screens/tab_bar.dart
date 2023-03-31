@@ -1,73 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:pastry/main.dart';
-
-// class MyTabBar extends StatefulWidget {
-//   @override
-//   _MyTabBarState createState() => _MyTabBarState();
-// }
-
-// class _MyTabBarState extends State<MyTabBar>
-//     with SingleTickerProviderStateMixin {
-//   late TabController _tabController;
-
-//   final List<Tab> tabs = [
-//     Tab(icon: Icon(Icons.home), text: 'Home'),
-//     Tab(icon: Icon(Icons.search), text: 'Search'),
-//     Tab(icon: Icon(Icons.person), text: 'Profile'),
-//   ];
-
-//   final List<Widget> pages = [
-//     MyHomePage(title: "Test"),
-//     MyHomePage(title: "Test"),
-//     MyHomePage(title: "Test")
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _tabController = TabController(length: tabs.length, vsync: this);
-//   }
-
-//   // @override
-//   // Widget build(BuildContext context) {
-//   //   return Scaffold(
-//   //     appBar: AppBar(
-//   //       title: Text('My App'),
-//   //       bottom: TabBar(
-//   //         controller: _tabController,
-//   //         tabs: tabs,
-//   //       ),
-//   //     ),
-//   //     body: TabBarView(
-//   //       controller: _tabController,
-//   //       children: pages,
-//   //     ),
-//   //   );
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: TabBarView(
-//         controller: _tabController,
-//         children: pages,
-//       ),
-//       bottomNavigationBar: Material(
-//         color: Theme.of(context).primaryColor,
-//         child: TabBar(
-//           controller: _tabController,
-//           tabs: tabs,
-//         ),
-//       ),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     _tabController.dispose();
-//     super.dispose();
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pastry/src/screens/all_bakers.dart';
@@ -75,6 +5,8 @@ import 'package:pastry/src/screens/all_products.dart';
 import 'package:pastry/src/screens/profile.dart';
 
 class MyTabBar extends StatefulWidget {
+  static Page<dynamic> page() => MaterialPage<dynamic>(child: MyTabBar());
+
   @override
   _MyTabBarState createState() => _MyTabBarState();
 }

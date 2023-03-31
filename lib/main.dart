@@ -1,14 +1,12 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
-// import 'package:device_preview/device_preview.dart';
-import 'src/app.dart';
+import 'package:pastry/src/app/app.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // If you have a separate 'firebase_options.dart' file
-import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: FirebaseOptions(
+    options: const FirebaseOptions(
       apiKey: "AIzaSyCaB_Gel86eutQ_8miYlB9cHPwwWMuQJf0",
       authDomain: "pastry-6b817.firebaseapp.com",
       projectId: "pastry-6b817",
@@ -18,7 +16,10 @@ void main() async {
       measurementId: "G-SVNDR2S2H5",
     ),
   );
-  runApp(MyApp());
+  final authenticationRepository = AuthenticationRepository();
+  await authenticationRepository.user.first;
+
+  runApp(App(authenticationRepository: authenticationRepository));
 }
 
 // class MyApp extends StatelessWidget {

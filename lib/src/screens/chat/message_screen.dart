@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/chat/chat_bloc.dart';
 import '../../blocs/chat/chat_events.dart';
 import '../../blocs/chat/chat_states.dart';
-import '../../models/chat_message.dart';
+import '../../chat/detail/model/chat_message.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);

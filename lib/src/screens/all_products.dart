@@ -94,7 +94,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pastry/src/screens/product_detail.dart';
-import 'package:pastry/src/screens/product_grid_view.dart';
+import 'package:pastry/src/product/view/product_grid_view.dart';
 
 import '../models/product.dart';
 

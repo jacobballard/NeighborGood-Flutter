@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pastry/src/screens/product_grid_view.dart';
+import 'package:pastry/src/product/view/product_grid_view.dart';
 import '../blocs/chat/chat_bloc.dart';
 import '../models/baker.dart';
 import 'chat/message_screen.dart';

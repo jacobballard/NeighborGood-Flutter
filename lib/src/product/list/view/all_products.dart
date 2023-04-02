@@ -93,10 +93,10 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:pastry/src/screens/product_detail.dart';
-import 'package:pastry/src/product/view/product_grid_view.dart';
+import 'package:pastry/src/product/list/view/product_grid_view.dart';
+import 'package:pastry/src/product/detail/view/product_detail.dart';
 
-import '../models/product.dart';
+import '../../detail/model/product.dart';
 
 class MyAllProductsPage extends StatefulWidget {
   @override

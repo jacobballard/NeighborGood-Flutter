@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0-307.0.dev <4.0.0"
+  sdk: ">=2.19.6 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -28,38 +28,37 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cached_network_image: ^3.2.3
-  cloud_firestore: ^4.4.4
-  equatable: ^2.0.5
-  firebase_auth: ^4.2.10
-  firebase_core: ^2.7.1
-  firebase_storage: ^11.0.15
+  cached_network_image:
+  cloud_firestore:
+  equatable:
+  firebase_auth:
+  firebase_core:
+  firebase_storage:
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.2
-  flutter_facebook_auth: ^5.0.8
-  flutter_rating_bar: ^4.0.1
-  fluttertoast: ^8.2.1
-  font_awesome_flutter: ^10.4.0
-  geolocator: ^9.0.2
-  google_maps_flutter: ^2.2.5
-  google_sign_in: ^6.0.2
-  image_picker: ^0.8.7
-  meta: ^1.9.0
-  rxdart: ^0.27.7
-  shared_preferences: ^2.0.18
-  sign_in_with_apple: ^4.3.0
+  flutter_bloc:
+  flutter_facebook_auth:
+  flutter_rating_bar:
+  fluttertoast:
+  font_awesome_flutter:
+  google_maps_flutter:
+  google_sign_in:
+  image_picker:
+  meta:
+  rxdart:
+  shared_preferences:
+  sign_in_with_apple:
   authentication_repository:
     path: packages/authentication_repository
   form_inputs:
     path: packages/form_inputs
-  flow_builder: ^0.0.9
-  google_fonts: ^4.0.3
+  flow_builder:
+  google_fonts:
+  location: ^4.4.0
+  http: ^0.13.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  
-  
 
 dev_dependencies:
   flutter_test:

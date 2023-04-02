@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pastry/src/screens/store_detail.dart';
+import 'package:pastry/src/baker/detail/view/store_detail.dart';
 
-import '../models/baker.dart';
+import '../detail/model/baker.dart';
 
 class StorePage extends StatefulWidget {
   @override

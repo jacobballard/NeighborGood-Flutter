@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pastry/src/product/view/product_grid_view.dart';
-import '../blocs/chat/chat_bloc.dart';
-import '../models/baker.dart';
-import 'chat/message_screen.dart';
+import 'package:pastry/src/chat/detail/bloc/chat_bloc.dart';
+import 'package:pastry/src/product/list/view/product_grid_view.dart';
+import '../model/baker.dart';
+import '../../../chat/detail/view/message_screen.dart';
 
 class StoreDetailPage extends StatelessWidget {
   final Baker store;

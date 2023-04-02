@@ -111,7 +111,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
-import 'package:pastry/src/models/product.dart';
+import 'package:pastry/src/product/detail/model/product.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Product product;

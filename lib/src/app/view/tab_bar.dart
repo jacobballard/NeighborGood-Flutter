@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pastry/src/screens/all_bakers.dart';
-import 'package:pastry/src/screens/all_products.dart';
-import 'package:pastry/src/screens/profile.dart';
+import 'package:pastry/src/baker/list/all_bakers.dart';
+import 'package:pastry/src/product/list/view/all_products.dart';
+import 'package:pastry/src/account/profile/view/profile.dart';
 
 class MyTabBar extends StatefulWidget {
   static Page<dynamic> page() => MaterialPage<dynamic>(child: MyTabBar());

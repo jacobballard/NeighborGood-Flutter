@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pastry/src/baker/list/all_bakers.dart';
+import 'package:pastry/src/baker/list/view/all_bakers.dart';
 import 'package:pastry/src/product/list/view/all_products.dart';
-import 'package:pastry/src/account/profile/view/profile.dart';
+import 'package:pastry/src/account/account/view/account_settings.dart';
 
 class MyTabBar extends StatefulWidget {
-  static Page<dynamic> page() => MaterialPage<dynamic>(child: MyTabBar());
+  const MyTabBar({Key? key}) : super(key: key);
+
+  static Page<dynamic> page() => const MaterialPage<dynamic>(child: MyTabBar());
 
   @override
-  _MyTabBarState createState() => _MyTabBarState();
+  MyTabBarState createState() => MyTabBarState();
 }
 
-class _MyTabBarState extends State<MyTabBar> {
+class MyTabBarState extends State<MyTabBar> {
   int _currentIndex = 0;
 
   final List<Widget> pages = [
     // MyHomePage(title: "Test"),
     StorePage(),
     MyAllProductsPage(),
-    UserProfilePage()
+    const AccountSettingsView()
   ];
 
   @override
@@ -30,7 +32,7 @@ class _MyTabBarState extends State<MyTabBar> {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
@@ -54,7 +56,7 @@ class _MyTabBarState extends State<MyTabBar> {
       return Scaffold(
         body: pages[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),

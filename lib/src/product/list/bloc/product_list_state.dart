@@ -6,19 +6,20 @@ class ProductListState extends Equatable {
   const ProductListState({
     this.status = ProductListStatus.initial,
     this.products = const [],
-
+    this.maxDistance = 25.0,
     // this.filter = ProductListFilter.all
   });
 
   final ProductListStatus status;
-  final List<Product> products;
+  final List<ProductSummary> products;
+  final double maxDistance;
   // final ProductListFilter filter;
 
   // Iterable<Product> get filteredProducts => filter.applyAll(products);
 
   ProductListState copyWith({
     ProductListStatus Function()? status,
-    List<Product> Function()? products,
+    List<ProductSummary> Function()? products,
     // ProductListFilter Function()? filter,
   }) {
     return ProductListState(

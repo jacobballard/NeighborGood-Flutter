@@ -43,19 +43,24 @@ dependencies:
   font_awesome_flutter:
   google_maps_flutter:
   google_sign_in:
-  image_picker:
+  image_picker: ^0.8.7+1
   meta:
   rxdart:
   shared_preferences:
   sign_in_with_apple:
   authentication_repository:
     path: packages/authentication_repository
+  repositories:
+    path: packages/repositories
   form_inputs:
     path: packages/form_inputs
   flow_builder:
   google_fonts:
   location: ^4.4.0
   http: ^0.13.5
+  geoflutterfire: ^3.0.2
+  file_picker: ^5.2.7
+  formz: ^0.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

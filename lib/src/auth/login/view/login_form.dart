@@ -104,7 +104,7 @@ class _LoginButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('loginForm_continue_raisedButton'),
+                key: const Key('loginForm_continue_ElevatedButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -126,7 +126,7 @@ class _GoogleLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ElevatedButton.icon(
-      key: const Key('loginForm_googleLogin_raisedButton'),
+      key: const Key('loginForm_googleLogin_ElevatedButton'),
       label: const Text(
         'SIGN IN WITH GOOGLE',
         style: TextStyle(color: Colors.white),

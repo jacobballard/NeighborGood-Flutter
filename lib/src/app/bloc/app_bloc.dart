@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pastry/src/location/model/location_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +39,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       // (Assuming you've saved the location using SharedPreferences)
       // Implement a function `getLocationFromPreferences` to fetch location from SharedPreferences
       final location = await getLocationFromPreferences();
-      print("location?? ${location?.latitude} + ${location?.longitude}");
+      // print("location?? ${location?.latitude} + ${location?.longitude}");
       if (location != null) {
         emit(AppState.authenticated(event.user));
       } else {
@@ -64,9 +64,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     double? latitude = prefs.getDouble('latitude');
     double? longitude = prefs.getDouble('longitude');
-    print("location!!");
+    // print("location!!");
     if (latitude != null && longitude != null) {
-      print("location!!!");
+      // print("location!!!");
       return LocationData(latitude, longitude);
     } else {
       return null;

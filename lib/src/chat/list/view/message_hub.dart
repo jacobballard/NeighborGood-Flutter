@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class MessageHubPage extends StatefulWidget {
+  const MessageHubPage({super.key});
+
   @override
-  _MessageHubPageState createState() => _MessageHubPageState();
+  MessageHubPageState createState() => MessageHubPageState();
 }
 
-class _MessageHubPageState extends State<MessageHubPage> {
+class MessageHubPageState extends State<MessageHubPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages'),
+        title: const Text('Messages'),
       ),
       body: ListView.builder(itemBuilder: _buildMessageList),
     );
@@ -29,7 +31,7 @@ class _MessageHubPageState extends State<MessageHubPage> {
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [Text("test")],
+          children: const [Text("test")],
         ),
       ),
     );

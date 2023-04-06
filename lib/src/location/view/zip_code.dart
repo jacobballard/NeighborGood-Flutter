@@ -5,11 +5,13 @@ import 'package:pastry/src/app/app.dart';
 import 'package:pastry/src/location/bloc/location_bloc.dart';
 
 class ZipCodeScreen extends StatefulWidget {
+  const ZipCodeScreen({super.key});
+
   @override
-  _ZipCodeScreenState createState() => _ZipCodeScreenState();
+  ZipCodeScreenState createState() => ZipCodeScreenState();
 }
 
-class _ZipCodeScreenState extends State<ZipCodeScreen> {
+class ZipCodeScreenState extends State<ZipCodeScreen> {
   final _formKey = GlobalKey<FormState>();
   final _zipCodeController = TextEditingController();
   ZipCodeInput _zipCodeInput = const ZipCodeInput.pure();
@@ -37,7 +39,7 @@ class _ZipCodeScreenState extends State<ZipCodeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enter Zip Code'),
+        title: const Text('Enter Zip Code'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -49,9 +51,9 @@ class _ZipCodeScreenState extends State<ZipCodeScreen> {
               TextFormField(
                 controller: _zipCodeController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Zip Code'),
+                decoration: const InputDecoration(labelText: 'Zip Code'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _zipCodeInput.valid
                     ? () {
@@ -74,13 +76,13 @@ class _ZipCodeScreenState extends State<ZipCodeScreen> {
                         });
                       }
                     : () {
-                        final snackBar = SnackBar(
+                        const snackBar = SnackBar(
                           content:
                               Text('Please enter a valid 5-digit zip code'),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),
@@ -91,7 +93,7 @@ class _ZipCodeScreenState extends State<ZipCodeScreen> {
 }
 
 class ZipCodeScreenPage extends Page {
-  ZipCodeScreenPage() : super(key: ValueKey('ZipCodeScreen'));
+  const ZipCodeScreenPage() : super(key: const ValueKey('ZipCodeScreen'));
 
   @override
   Route createRoute(BuildContext context) {
@@ -99,7 +101,7 @@ class ZipCodeScreenPage extends Page {
       settings: this,
       builder: (BuildContext context) => BlocProvider<LocationBloc>(
         create: (_) => LocationBloc(),
-        child: ZipCodeScreen(),
+        child: const ZipCodeScreen(),
       ),
     );
   }

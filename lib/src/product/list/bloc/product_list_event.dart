@@ -9,6 +9,9 @@ abstract class ProductListEvent extends Equatable {
 
 class ProductListSubscriptionRequested extends ProductListEvent {
   const ProductListSubscriptionRequested();
+
+  // This is very ugly and needs to be injected later
+  // final double maxDistance = 25.0;
 }
 
 // TODO : Later, example found here : https://github.com/felangel/bloc/blob/master/examples/flutter_todos/lib/todos_overview/models/todos_view_filter.dart

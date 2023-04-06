@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,14 +20,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     emit(LocationLoading());
-    print("Locating loading!");
+    // print("Locating loading!");
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       double? latitude = prefs.getDouble('latitude');
       double? longitude = prefs.getDouble('longitude');
 
       if (latitude == null || longitude == null) {
-        Location location = new Location();
+        Location location = Location();
         LocationData locationData = await location.getLocation();
         latitude = locationData.latitude;
         longitude = locationData.longitude;
@@ -69,12 +68,12 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     try {
-      print("trying :::!");
+      // print("trying :::!");
       var response = await http.get(Uri.parse(
           'https://nominatim.openstreetmap.org/search?postalcode=${event.zipCode}&format=json'));
 
       if (response.statusCode == 200) {
-        print("ok ${response.body}");
+        // print("ok ${response.body}");
         var jsonResponse = jsonDecode(response.body);
         if (jsonResponse.isNotEmpty) {
           double latitude = double.parse(jsonResponse[0]['lat']);
@@ -95,7 +94,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         emit(LocationError('Failed to load location data'));
       }
     } catch (e) {
-      print(e);
+      // print(e);
       emit(LocationError(
           'Error: Unable to convert zip code to latitude and longitude'));
     }

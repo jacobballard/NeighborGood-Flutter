@@ -7,11 +7,11 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  ChatScreenState createState() => ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController _messageController = TextEditingController();
+class ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       );
     } else if (state is ChatLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     } else {
       return Container();
     }
@@ -70,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildMessageInput(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
           Expanded(
@@ -100,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 _messageController.clear();
               }
             },
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
           ),
         ],
       ),

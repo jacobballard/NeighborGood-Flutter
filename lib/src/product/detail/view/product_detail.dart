@@ -1,115 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:pastry/src/models/product.dart';
-
-// class ProductDetailPage extends StatefulWidget {
-//   final Product product;
-
-//   const ProductDetailPage({Key? key, required this.product}) : super(key: key);
-
-//   @override
-//   _ProductDetailPageState createState() => _ProductDetailPageState();
-// }
-
-// class _ProductDetailPageState extends State<ProductDetailPage> {
-//   int _currentPage = 0;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(widget.product.name),
-//       ),
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: PageView(
-//               children: widget.product.imageUrls.map((imageUrl) {
-//                 return Image.network(imageUrl);
-//               }).toList(),
-//               onPageChanged: (int page) {
-//                 setState(() {
-//                   _currentPage = page;
-//                 });
-//               },
-//             ),
-//           ),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               IconButton(
-//                 icon: Icon(Icons.arrow_back),
-//                 onPressed: () {
-//                   setState(() {
-//                     _currentPage =
-//                         (_currentPage - 1) % widget.product.imageUrls.length;
-//                   });
-//                 },
-//               ),
-//               Text('${_currentPage + 1}/${widget.product.imageUrls.length}'),
-//               IconButton(
-//                 icon: Icon(Icons.arrow_forward),
-//                 onPressed: () {
-//                   setState(() {
-//                     _currentPage =
-//                         (_currentPage + 1) % widget.product.imageUrls.length;
-//                   });
-//                 },
-//               ),
-//             ],
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.stretch,
-//               children: [
-//                 Text(
-//                   widget.product.name,
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 24.0,
-//                   ),
-//                 ),
-//                 SizedBox(height: 8.0),
-//                 Text(
-//                   '\$${widget.product.price}',
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 20.0,
-//                   ),
-//                 ),
-//                 SizedBox(height: 8.0),
-//                 Text(
-//                   widget.product.description,
-//                   style: TextStyle(
-//                     fontSize: 16.0,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               ElevatedButton(
-//                 onPressed: () {
-//                   // TODO: Add to cart logic
-//                 },
-//                 child: Text('Add to cart'),
-//               ),
-//               SizedBox(width: 16.0),
-//               ElevatedButton(
-//                 onPressed: () {
-//                   // TODO: Buy now logic
-//                 },
-//                 child: Text('Buy now'),
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:pastry/src/product/detail/model/product.dart';
 
@@ -122,7 +10,7 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.name),
+        title: Text(product.productName),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -131,9 +19,9 @@ class ProductDetailPage extends StatelessWidget {
             SizedBox(
               height: 300,
               child: PageView.builder(
-                itemCount: product.imageUrls.length,
+                itemCount: product.imageURLs.length,
                 itemBuilder: (context, index) {
-                  final imageUrl = product.imageUrls[index];
+                  final imageUrl = product.imageURLs[index];
                   return Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
@@ -142,41 +30,41 @@ class ProductDetailPage extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.name,
-                    style: TextStyle(
+                    product.productName,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    '\$${product.price.toStringAsFixed(2)}',
-                    style: TextStyle(
+                    '\$${product.basePrice.toStringAsFixed(2)}',
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    product.description,
-                    style: TextStyle(fontSize: 16),
+                    product.description ?? "",
+                    style: const TextStyle(fontSize: 16),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
                         onPressed: () {},
-                        child: Text('Add to cart'),
+                        child: const Text('Add to cart'),
                       ),
                       ElevatedButton(
                         onPressed: () {},
-                        child: Text('Buy now'),
+                        child: const Text('Buy now'),
                       ),
                     ],
                   ),

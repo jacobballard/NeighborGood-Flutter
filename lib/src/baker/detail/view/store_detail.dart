@@ -2,28 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pastry/src/chat/detail/bloc/chat_bloc.dart';
-import 'package:pastry/src/product/list/view/product_grid_view.dart';
 import '../model/baker.dart';
 import '../../../chat/detail/view/message_screen.dart';
 
 class StoreDetailPage extends StatelessWidget {
-  final Baker store;
+  final Store store;
 
   const StoreDetailPage({Key? key, required this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double appBarHeight = AppBar().preferredSize.height;
-    final double storeHeaderHeight =
-        248.0; // Adjust this to the actual height of the Store header
-    final double remainingHeight = screenHeight -
-        storeHeaderHeight -
-        16.0; // subtract any other widget heights
+    // final double screenHeight = MediaQuery.of(context).size.height;
+    // final double appBarHeight = AppBar().preferredSize.height;
+    // final double storeHeaderHeight =
+    248.0; // Adjust this to the actual height of the Store header
+    // final double remainingHeight = screenHeight -
+    // storeHeaderHeight -
+    16.0; // subtract any other widget heights
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(store.title),
+          title: Text(store.storeName),
         ),
         body: CustomScrollView(
           slivers: [
@@ -34,7 +33,7 @@ class StoreDetailPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      store.title,
+                      store.storeName,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -42,7 +41,7 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "@${store.title}",
+                      "@${store.storeName}",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey[600],
@@ -50,7 +49,7 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "ETA: ${store.latitude} mins",
+                      "ETA: ${store.coordinates.latitude} mins",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey[600],
@@ -64,7 +63,7 @@ class StoreDetailPage extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => BlocProvider(
                               create: (context) => ChatBloc(),
-                              child: ChatScreen(),
+                              child: const ChatScreen(),
                             ),
                           ),
                         );
@@ -103,18 +102,19 @@ class StoreDetailPage extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 return Column(
-                  children: [
-                    const Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         "All Products",
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Container(
-                      child: ProductGridView(products: store.products),
-                    ),
+                    //TODO : Store's detail Bloc
+                    // Container(
+                    //   child: ProductGridView(products: s),
+                    // ),
                   ],
                 );
               }, childCount: 1),

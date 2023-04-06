@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pastry/src/product/detail/model/product.dart';
-import 'package:pastry/src/product/detail/view/product_detail.dart';
+import 'package:pastry/src/product/list/model/product_summary.dart';
 
 class ProductGridView extends StatelessWidget {
-  final List<Product> products;
+  final List<ProductSummary> products;
 
-  ProductGridView({required this.products});
+  const ProductGridView({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +14,7 @@ class ProductGridView extends StatelessWidget {
       shrinkWrap: true,
       primary: false,
       physics: const ScrollPhysics(),
-      padding: EdgeInsets.only(top: kToolbarHeight),
+      padding: const EdgeInsets.only(top: kToolbarHeight),
       itemCount: products.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: MediaQuery.of(context).size.width > 600 ? 5 : 2,
@@ -26,12 +25,12 @@ class ProductGridView extends StatelessWidget {
         final product = products[index];
         return InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetailPage(product: product),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => // Rewrite to pull from db ProductDetailPage(product: product),
+            //   ),
+            // );
           },
           child: Card(
             child: Column(
@@ -39,24 +38,24 @@ class ProductGridView extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Image.network(
-                    product.imageUrls[0],
+                    product.firstImageURL,
                     fit: BoxFit.cover,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        product.name,
-                        style: TextStyle(
+                        product.productName,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Text(
-                        product.description,
+                        product.productName,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

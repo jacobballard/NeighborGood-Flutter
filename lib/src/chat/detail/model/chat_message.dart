@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 
 class ChatMessage extends Equatable {
@@ -7,7 +6,7 @@ class ChatMessage extends Equatable {
   final String senderId;
   final DateTime timestamp;
 
-  ChatMessage(
+  const ChatMessage(
       {required this.id,
       required this.content,
       required this.senderId,

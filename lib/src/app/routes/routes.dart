@@ -14,6 +14,6 @@ List<Page<dynamic>> onGenerateAppViewPages(
     case AppStatus.unauthenticated:
       return [LoginPage.page()];
     case AppStatus.locationRequest:
-      return [ZipCodeScreenPage()];
+      return const [ZipCodeScreenPage()];
   }
 }

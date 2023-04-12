@@ -19,4 +19,11 @@ class AppState extends Equatable {
 
   @override
   List<Object> get props => [status, user];
+
+  AppState copyWith({AppStatus? status, User? user}) {
+    return AppState._(
+      status: status ?? this.status,
+      user: user ?? this.user,
+    );
+  }
 }

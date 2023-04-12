@@ -18,8 +18,8 @@ class MyTabBarState extends State<MyTabBar> {
 
   final List<Widget> pages = [
     // MyHomePage(title: "Test"),
-    StorePage(),
-    MyAllProductsPage(),
+    const StorePage(),
+    const MyAllProductsPage(),
     const AccountSettingsView()
   ];
 

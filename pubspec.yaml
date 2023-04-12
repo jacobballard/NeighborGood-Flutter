@@ -49,6 +49,8 @@ dependencies:
   sign_in_with_apple:
   authentication_repository:
     path: packages/authentication_repository
+  cache:
+    path: packages/cache
   repositories:
     path: packages/repositories
   form_inputs:

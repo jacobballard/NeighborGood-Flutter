@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cache/cache.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pastry/src/location/model/location_data.dart';
@@ -12,6 +14,7 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
+        _cacheClient = CacheClient(),
         super(
           authenticationRepository.currentUser.isNotEmpty
               ? AppState.authenticated(authenticationRepository.currentUser)
@@ -26,32 +29,58 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   final AuthenticationRepository _authenticationRepository;
   late final StreamSubscription<User> _userSubscription;
+  final CacheClient _cacheClient;
 
   void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
-    // emit(
-    //   event.user.isNotEmpty
-    //       ? AppState.authenticated(event.user)
-    //       : const AppState.unauthenticated(),
-    // );
+    void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
+      if (event.user.isNotEmpty) {
+        String? accountType =
+            _cacheClient.read<String>(key: "--USER-ACCOUNT-TYPE--");
+        AccountType accType;
 
-    if (event.user.isNotEmpty) {
-      // Check if location is available
-      // (Assuming you've saved the location using SharedPreferences)
-      // Implement a function `getLocationFromPreferences` to fetch location from SharedPreferences
-      final location = await getLocationFromPreferences();
-      // print("location?? ${location?.latitude} + ${location?.longitude}");
-      if (location != null) {
-        emit(AppState.authenticated(event.user));
+        if (accountType == null) {
+          accountType = await getAccountTypeFromFirestore(event.user.id);
+
+          if (accountType != null) {
+            _cacheClient.write(key: event.user.id, value: accountType);
+          } else {
+            // TODO : Maybe I need redundancy here depending...
+          }
+        }
+
+        accType = (accountType != null && accountType == 'seller')
+            ? AccountType.seller
+            : AccountType.buyer;
+
+        final updatedUser = event.user.copyWith(accountType: accType);
+        _handleLocation(updatedUser, emit);
       } else {
-        emit(const AppState.locationRequest());
+        emit(const AppState.unauthenticated());
       }
+    }
+  }
+
+  void _handleLocation(User user, Emitter<AppState> emit) async {
+    final location = await getLocationFromPreferences();
+    if (location != null) {
+      emit(AppState.authenticated(user));
     } else {
-      emit(const AppState.unauthenticated());
+      emit(const AppState.locationRequest());
     }
   }
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
     unawaited(_authenticationRepository.logOut());
+  }
+
+  Future<String?> getAccountTypeFromFirestore(String userId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentSnapshot userDoc =
+        await firestore.collection('users').doc(userId).get();
+
+    String? accountType =
+        (userDoc.data() as Map<String, dynamic>)['account_type'];
+    return accountType;
   }
 
   @override

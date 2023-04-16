@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:pastry/src/app/model/location.dart';
 import 'package:pastry/src/baker/detail/model/baker.dart';
-import 'package:pastry/src/location/utils/location_utils.dart';
 import 'package:pastry/src/product/list/model/product_summary.dart';
 
 part 'product_list_event.dart';
@@ -22,7 +22,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
 
     // First, get the nearby stores within the desired distance
     List<Store> nearbyStores =
-        await _fetchNearbyStores(25.0, await getStoredLocation());
+        await _fetchNearbyStores(event.maxDistance, event.location);
 
     // Initialize an empty list to store product summaries
     List<ProductSummary> productSummaries = [];
@@ -56,6 +56,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     //     .collection(FirebaseFirestore.instance.collection('stores'));
 
     final geo = Geoflutterfire();
+
     final collectionRef = FirebaseFirestore.instance.collection('stores');
     final geoRef = geo.collection(collectionRef: collectionRef);
 

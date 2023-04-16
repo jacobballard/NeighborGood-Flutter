@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 import 'package:pastry/src/product/list/bloc/product_list_bloc.dart';
 import 'package:pastry/src/product/list/view/product_grid_view.dart';
 
@@ -11,7 +12,9 @@ class MyAllProductsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final productListBloc = ProductListBloc();
-        productListBloc.add(const ProductListSubscriptionRequested());
+        productListBloc.add(ProductListSubscriptionRequested(
+            maxDistance: 25.0,
+            location: context.read<LocationCubit>().position));
         return productListBloc;
       },
       child: Scaffold(

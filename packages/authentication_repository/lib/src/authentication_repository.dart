@@ -158,7 +158,9 @@ class AuthenticationRepository {
     GoogleSignIn? googleSignIn,
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
+        _googleSignIn = googleSignIn ?? GoogleSignIn.standard() {
+    checkForExistingUser();
+  }
 
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -185,6 +187,19 @@ class AuthenticationRepository {
       _cache.write(key: userCacheKey, value: user);
       return user;
     });
+  }
+
+  /// Returns any persisted user
+  /// Defaults to executing void
+  Future<void> checkForExistingUser() async {
+    try {
+      final firebaseUser = _firebaseAuth.currentUser;
+      if (firebaseUser != null) {
+        _cache.write(key: userCacheKey, value: firebaseUser.toUser);
+      }
+    } catch (_) {
+      // Handle any exceptions here if needed
+    }
   }
 
   /// Returns the current cached user.

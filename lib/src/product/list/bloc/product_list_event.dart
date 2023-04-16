@@ -8,10 +8,13 @@ abstract class ProductListEvent extends Equatable {
 }
 
 class ProductListSubscriptionRequested extends ProductListEvent {
-  const ProductListSubscriptionRequested();
+  final double maxDistance;
+  final GeoPoint location;
 
-  // This is very ugly and needs to be injected later
-  // final double maxDistance = 25.0;
+  const ProductListSubscriptionRequested({
+    required this.maxDistance,
+    required this.location,
+  });
 }
 
 // TODO : Later, example found here : https://github.com/felangel/bloc/blob/master/examples/flutter_todos/lib/todos_overview/models/todos_view_filter.dart

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 import 'package:pastry/src/baker/detail/model/baker.dart';
 import 'package:pastry/src/baker/list/bloc/store_list_bloc.dart';
-import 'package:pastry/src/location/utils/location_utils.dart';
 
 class StorePage extends StatelessWidget {
   const StorePage({super.key});
@@ -26,7 +26,7 @@ class StorePage extends StatelessWidget {
                     maxDistance: 25,
                     searchQuery: result,
                     filterValue: '',
-                    center: await getStoredLocation(),
+                    center: context.read<LocationCubit>().position,
                   ),
                 );
               }

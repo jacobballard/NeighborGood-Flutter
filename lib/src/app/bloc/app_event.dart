@@ -13,5 +13,3 @@ class _AppUserChanged extends AppEvent {
 
   final User user;
 }
-
-class AppLocationUpdated extends AppEvent {}

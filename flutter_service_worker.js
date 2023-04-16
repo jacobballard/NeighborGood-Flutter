@@ -7,9 +7,9 @@ const RESOURCES = {
 "canvaskit/profiling/canvaskit.js": "c21852696bc1cc82e8894d851c01921a",
 "canvaskit/profiling/canvaskit.wasm": "371bc4e204443b0d5e774d64a046eb99",
 "canvaskit/canvaskit.wasm": "3de12d898ec208a5f31362cc00f09b9e",
-"index.html": "78b016fbf7128fa3165dbf02e2f0b07e",
-"/": "78b016fbf7128fa3165dbf02e2f0b07e",
-"main.dart.js": "2b2485567c767840cfc53e2be788e7ed",
+"index.html": "3dca17a1d6842f824da885fc35782eb3",
+"/": "3dca17a1d6842f824da885fc35782eb3",
+"main.dart.js": "e0f80fa362dad4b67ede4aeb63c6f3c4",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
@@ -25,7 +25,7 @@ const RESOURCES = {
 "assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "b00363533ebe0bfdb95f3694d7647f6d",
 "assets/fonts/MaterialIcons-Regular.otf": "e7069dfd19b331be16bed984668fe080",
 "assets/FontManifest.json": "3ddd9b2ab1c2ae162d46e3cc7b78ba88",
-"assets/NOTICES": "3911556c54afdbe758ed36e125311eb0",
+"assets/NOTICES": "0667e009c99f105f32bdae67221c86e0",
 "assets/AssetManifest.json": "e65e91eae3690a24a8d0c7c41eb2b836"
 };
 

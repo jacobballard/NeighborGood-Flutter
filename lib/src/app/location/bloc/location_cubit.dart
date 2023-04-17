@@ -1,17 +1,18 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 
 part 'location_state.dart';
 
 class LocationCubit extends Cubit<GetLocationState> {
-  LocationCubit() : super(GetLocationInitial());
+  LocationCubit() : super(LocationLoading());
 
   static LocationCubit get(context) => BlocProvider.of(context);
 
-  GeoPoint position = GeoPoint(0.0, 0.0);
+  late GeoPoint position;
 
   initLocation() async {
     bool isServiceEnabled;
@@ -40,5 +41,20 @@ class LocationCubit extends Cubit<GetLocationState> {
       this.position = GeoPoint(position.latitude, position.longitude);
     }).catchError((error) {});
     return GeoPoint(position.latitude, position.longitude);
+  }
+
+  Future<GeoPoint> getLocationFromZipCode(String zipCode) async {
+    try {
+      List<Location> locations = await locationFromAddress(zipCode);
+      if (locations.isNotEmpty) {
+        Location location = locations.first;
+        position = GeoPoint(location.latitude, location.longitude);
+        return position;
+      } else {
+        throw Exception('No location found for the provided zip code.');
+      }
+    } catch (e) {
+      throw Exception('Error getting location from zip code: $e');
+    }
   }
 }

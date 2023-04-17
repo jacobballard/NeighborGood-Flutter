@@ -144,6 +144,15 @@ class LogInWithGoogleFailure implements Exception {
   final String message;
 }
 
+// Add this exception class to your other exceptions
+class SignInAnonymouslyFailure implements Exception {
+  const SignInAnonymouslyFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  final String message;
+}
+
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
 
@@ -221,6 +230,18 @@ class AuthenticationRepository {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const SignUpWithEmailAndPasswordFailure();
+    }
+  }
+
+  // Add the signInAnonymously method to your AuthenticationRepository class
+  Future<void> signInAnonymously() async {
+    try {
+      await _firebaseAuth.signInAnonymously();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      // Handle any specific errors here if needed
+      throw SignInAnonymouslyFailure(e.code);
+    } catch (_) {
+      throw const SignInAnonymouslyFailure();
     }
   }
 

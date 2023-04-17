@@ -21,14 +21,16 @@ class StorePage extends StatelessWidget {
                 delegate: _StoreSearchDelegate(),
               );
               if (result != null && result != "") {
-                BlocProvider.of<StoreListBloc>(context).add(
-                  FetchStores(
-                    maxDistance: 25,
-                    searchQuery: result,
-                    filterValue: '',
-                    center: context.read<LocationCubit>().position,
-                  ),
-                );
+                if (context.mounted) {
+                  BlocProvider.of<StoreListBloc>(context).add(
+                    FetchStores(
+                      maxDistance: 25,
+                      searchQuery: result,
+                      filterValue: '',
+                      center: context.read<LocationCubit>().position,
+                    ),
+                  );
+                }
               }
             },
           ),

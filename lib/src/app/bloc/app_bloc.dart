@@ -1,11 +1,7 @@
 import 'dart:async';
-
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cache/cache.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
@@ -13,7 +9,7 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
-        _cacheClient = CacheClient(),
+        //_cacheClient = CacheClient(),
         super(
           authenticationRepository.currentUser.isNotEmpty
               ? AppState.authenticated(authenticationRepository.currentUser)
@@ -27,8 +23,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   final AuthenticationRepository _authenticationRepository;
+  // ignore: unused_field
   late final StreamSubscription<User> _userSubscription;
-  final CacheClient _cacheClient;
+  // final CacheClient _cacheClient;
 
   void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
     emit(

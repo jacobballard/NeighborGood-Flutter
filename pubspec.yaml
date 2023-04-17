@@ -63,6 +63,7 @@ dependencies:
   formz: ^0.4.0
   firebase_core: ^1.24.0
   geolocator: ^9.0.2
+  geocoding: ^2.1.0
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1

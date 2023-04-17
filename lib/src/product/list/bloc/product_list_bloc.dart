@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
-import 'package:pastry/src/app/model/location.dart';
 import 'package:pastry/src/baker/detail/model/baker.dart';
 import 'package:pastry/src/product/list/model/product_summary.dart';
 

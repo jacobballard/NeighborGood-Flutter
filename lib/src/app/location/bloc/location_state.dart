@@ -1,15 +1,20 @@
 part of 'location_cubit.dart';
 
 @immutable
-abstract class GetLocationState {}
-
-class GetLocationInitial extends GetLocationState {}
+abstract class GetLocationState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class LocationLoading extends GetLocationState {}
 
-class LocationSuccess extends GetLocationState {}
+class LocationKnown extends GetLocationState {
+  final GeoPoint position;
 
-class LocationFail extends GetLocationState {
-  final String error;
-  LocationFail(this.error);
+  LocationKnown(this.position);
+
+  @override
+  List<Object?> get props => [position];
 }
+
+class LocationUnknown extends GetLocationState {}

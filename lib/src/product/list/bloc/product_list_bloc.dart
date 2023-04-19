@@ -17,7 +17,10 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     ProductListSubscriptionRequested event,
     Emitter<ProductListState> emit,
   ) async {
+    print("test.,..");
     emit(state.copyWith(status: () => ProductListStatus.loading));
+
+    print("Loading...");
 
     // First, get the nearby stores within the desired distance
     List<Store> nearbyStores =
@@ -40,12 +43,19 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
         }
       }
     }
-
+    print("Do I ever make it here?");
     // Update the state with the fetched product summaries and update the status
-    emit(state.copyWith(
-      status: () => ProductListStatus.success,
-      products: () => productSummaries,
-    ));
+    if (!productSummaries.isEmpty) {
+      emit(state.copyWith(
+        status: () => ProductListStatus.success,
+        products: () => productSummaries,
+      ));
+    } else {
+      emit(state.copyWith(
+        status: () => ProductListStatus.empty,
+        products: () => productSummaries,
+      ));
+    }
   }
 
   Future<List<Store>> _fetchNearbyStores(
@@ -53,7 +63,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     // final geoRef = Geoflutterfire()
     //     .geoFirestore
     //     .collection(FirebaseFirestore.instance.collection('stores'));
-
+    print("_fetchNearbyStores");
     final geo = Geoflutterfire();
 
     final collectionRef = FirebaseFirestore.instance.collection('stores');
@@ -72,12 +82,15 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     // event.docs.map((doc) => Store.fromDocument(doc)).toList());
 
     List<Store> stores = [];
-
-    await for (final snapshot in queryStream) {
-      for (final doc in snapshot) {
+    await for (final documentSnapshotIterable in queryStream) {
+      if (documentSnapshotIterable.isEmpty) {
+        return stores; // Return an empty list if the query result is empty
+      }
+      for (final doc in documentSnapshotIterable) {
         stores.add(Store.fromDocument(doc));
       }
     }
+
     return stores;
   }
 }

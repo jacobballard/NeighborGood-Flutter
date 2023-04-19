@@ -58,6 +58,9 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
     // Fetch documents and convert them to Store instances
     List<Store> stores = [];
     await for (final documentSnapshotIterable in queryStream) {
+      if (documentSnapshotIterable.isEmpty) {
+        return stores; // Return an empty list if the query result is empty
+      }
       for (final doc in documentSnapshotIterable) {
         stores.add(Store.fromDocument(doc));
       }

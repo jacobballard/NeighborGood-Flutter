@@ -30,11 +30,12 @@ class LoginForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/bloc_logo_small.png',
-                height: 120,
-              ),
-              const SizedBox(height: 16),
+              // TODO : Must replace with actual logo or remove entirely
+              // Image.asset(
+              //   'assets/bloc_logo_small.png',
+              //   height: 120,
+              // ),
+              // const SizedBox(height: 16),
               _EmailInput(),
               const SizedBox(height: 8),
               _PasswordInput(),
@@ -112,7 +113,12 @@ class _LoginButton extends StatelessWidget {
                   backgroundColor: const Color(0xFFFFD600),
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
+                    ? () async {
+                        await context.read<LoginCubit>().logInWithCredentials();
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      }
                     : null,
                 child: const Text('LOGIN'),
               );
@@ -126,20 +132,22 @@ class _GoogleLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ElevatedButton.icon(
-      key: const Key('loginForm_googleLogin_ElevatedButton'),
-      label: const Text(
-        'SIGN IN WITH GOOGLE',
-        style: TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+        key: const Key('loginForm_googleLogin_ElevatedButton'),
+        label: const Text(
+          'SIGN IN WITH GOOGLE',
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: theme.colorScheme.secondary,
-      ),
-      icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
-      onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
-    );
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          backgroundColor: theme.colorScheme.secondary,
+        ),
+        icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
+        onPressed: () async {
+          await context.read<LoginCubit>().logInWithGoogle();
+          Navigator.of(context).pop();
+        });
   }
 }
 

@@ -1,6 +1,6 @@
 part of 'product_list_bloc.dart';
 
-enum ProductListStatus { initial, loading, success, failure }
+enum ProductListStatus { initial, loading, success, failure, empty }
 
 class ProductListState extends Equatable {
   const ProductListState({

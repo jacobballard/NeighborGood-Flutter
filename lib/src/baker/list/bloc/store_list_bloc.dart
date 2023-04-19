@@ -18,10 +18,11 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
   ) async {
     emit(StoreListLoading());
     try {
+      print("trying StoreListBloc getter");
       List<Store> stores = await fetchStoresFromFirestore(
         maxDistance: event.maxDistance,
-        searchQuery: event.searchQuery,
-        filterValue: event.filterValue,
+        // searchQuery: event.searchQuery,
+        // filterValue: event.filterValue,
         center: event.center,
       );
       emit(StoreLoaded(stores));
@@ -32,8 +33,8 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
 
   Future<List<Store>> fetchStoresFromFirestore({
     required double maxDistance,
-    required String searchQuery,
-    required String filterValue,
+    // required String searchQuery,
+    // required String filterValue,
     required GeoPoint center,
   }) async {
     // Initialize Geoflutterfire

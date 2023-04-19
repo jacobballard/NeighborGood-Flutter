@@ -15,7 +15,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(InitialProfileState()) {
     on<ProfileInitRequested>(_onProfileInitRequested);
   }
-
   Future<void> _onProfileInitRequested(
     ProfileInitRequested event,
     Emitter<ProfileState> emit,
@@ -23,16 +22,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(InitialProfileState());
 
     try {
-      final user = _firebaseAuth.currentUser;
-      if (user == null) {
-        emit(const LoadedProfileState(status: ProfileStatus.error));
-        return;
-      }
-
       final accountDoc =
-          await _firebaseFirestore.collection('users').doc(user.uid).get();
+          await _firebaseFirestore.collection('users').doc(event.uid).get();
 
       if (!accountDoc.exists) {
+        print("account didn't exist :(");
         emit(const LoadedProfileState(status: ProfileStatus.error));
         return;
       }
@@ -44,4 +38,34 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(const LoadedProfileState(status: ProfileStatus.error));
     }
   }
+
+  // Future<void> _onProfileInitRequested(
+  //   ProfileInitRequested event,
+  //   Emitter<ProfileState> emit,
+  // ) async {
+  //   emit(InitialProfileState());
+
+  //   try {
+  //     final user = _firebaseAuth.currentUser;
+  //     print(user);
+  //     if (user == null) {
+  //       emit(const LoadedProfileState(status: ProfileStatus.error));
+  //       return;
+  //     }
+
+  //     final accountDoc =
+  //         await _firebaseFirestore.collection('users').doc(user.uid).get();
+
+  //     if (!accountDoc.exists) {
+  //       emit(const LoadedProfileState(status: ProfileStatus.error));
+  //       return;
+  //     }
+
+  //     final account = Account.fromDocument(accountDoc);
+
+  //     emit(LoadedProfileState(status: ProfileStatus.success, account: account));
+  //   } catch (e) {
+  //     emit(const LoadedProfileState(status: ProfileStatus.error));
+  //   }
+  // }
 }

@@ -106,49 +106,179 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MyTabBar();
+    // var loc_cubit = context.read<LocationCubit>();
+
+    // return BlocBuilder<LocationCubit, GetLocationState>(builder: ((context, state) {
+    //   if (state is LocationLoading) {
+    //     print("Built LocationLoading!!");
+    //   } else {
+    //     print("we're working on it okay? ");
+    //   }
+    //   return const MyTabBar();
+    // }));
   }
 }
 
+// class AppWithAuthAndLocationListener extends StatelessWidget {
+//   const AppWithAuthAndLocationListener({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<AppBloc, AppState>(
+//       builder: (context, state) {
+//         if (state.status == AppStatus.unauthenticated) {
+//           WidgetsBinding.instance.addPostFrameCallback((_) {
+//             _showLoginPopup(context);
+//           });
+//           return const AppView();
+//         } else {
+//           return BlocListener<LocationCubit, GetLocationState>(
+//             listener: (locationContext, locationState) {
+//               print(
+//                   "got the status outside checking for location?? state: $locationState");
+
+//               if (locationState is LocationUnknown) {
+//                 WidgetsBinding.instance.addPostFrameCallback((_) {
+//                   print("I gotta make it here?? locationPopup");
+//                   _showLocationPopup(locationContext);
+//                 });
+//               } else {
+//                 print(locationState);
+//               }
+//             },
+//             child: const AppView(),
+//           );
+//         }
+//       },
+//     );
+//   }
+// class AppWithAuthAndLocationListener extends StatelessWidget {
+//   const AppWithAuthAndLocationListener({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocListener<AppBloc, AppState>(
+//       listener: (context, state) {
+//         if (state.status == AppStatus.unauthenticated) {
+//           WidgetsBinding.instance.addPostFrameCallback((_) {
+//             _showLoginPopup(context);
+//           });
+//         }
+//       },
+//       child: Builder(
+//         builder: (context) {
+//           return BlocListener<LocationCubit, GetLocationState>(
+//             listener: (locationContext, locationState) {
+//               final appState = context.read<AppBloc>().state;
+//               if (appState.status == AppStatus.authenticated &&
+//                   locationState is LocationUnknown) {
+//                 WidgetsBinding.instance.addPostFrameCallback((_) {
+//                   _showLocationPopup(locationContext);
+//                 });
+//               }
+//             },
+//             child: const AppView(),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// class AppWithAuthAndLocationListener extends StatelessWidget {
+//   const AppWithAuthAndLocationListener({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocListener<AppBloc, AppState>(
+//       listener: (context, state) {
+//         if (state.status == AppStatus.unauthenticated) {
+//           WidgetsBinding.instance.addPostFrameCallback((_) {
+//             _showLoginPopup(context);
+//           });
+//         }
+//       },
+//       child: Builder(
+//         builder: (context) {
+//           return BlocBuilder<LocationCubit, GetLocationState>(
+//             builder: (locationContext, locationState) {
+//               print("building");
+//               final appState = context.read<AppBloc>().state;
+//               if (appState.status == AppStatus.authenticated &&
+//                   locationState is LocationUnknown) {
+//                 WidgetsBinding.instance.addPostFrameCallback((_) {
+//                   _showLocationPopup(locationContext);
+//                 });
+//               }
+//               return const AppView();
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
 class AppWithAuthAndLocationListener extends StatelessWidget {
   const AppWithAuthAndLocationListener({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<AppBloc, AppState>(
-          listener: (context, state) {
-            if (state.status == AppStatus.unauthenticated) {
-              print("Authenticated??");
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                print("I gotta make it here?? loginPopup");
-                _showLoginPopup(context);
-              });
-            } else {
-              print("Wowwsow we in??");
-            }
-          },
-        ),
-        BlocListener<LocationCubit, GetLocationState>(
-          listener: (context, locationState) {
-            final appStatus =
-                context.select((AppBloc bloc) => bloc.state.status);
-            print(
-                "got the status outside checking for location?? state: $locationState");
-
-            if (appStatus == AppStatus.authenticated &&
-                locationState is LocationUnknown) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                print("I gotta make it here?? locationPopup");
-                _showLocationPopup(context);
-              });
-            }
-          },
-        ),
-      ],
+    return BlocListener<AppBloc, AppState>(
+      // listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == AppStatus.unauthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _showLoginPopup(context);
+          });
+        } else if (state.status == AppStatus.authenticated) {
+          final locationState = context.read<LocationCubit>().state;
+          if (locationState is LocationUnknown) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _showLocationPopup(context);
+            });
+          }
+        }
+      },
       child: const AppView(),
     );
   }
+
+// class AppWithAuthAndLocationListener extends StatelessWidget {
+//   const AppWithAuthAndLocationListener({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<AppBloc, AppState>(
+//       builder: (context, appState) {
+//         if (appState.status == AppStatus.unauthenticated) {
+//           print("Authenticated??");
+//           WidgetsBinding.instance.addPostFrameCallback((_) {
+//             print("I gotta make it here?? loginPopup");
+//             _showLoginPopup(context);
+//           });
+//         } else {
+//           print("Wowwsow we in??");
+//         }
+
+//         return BlocBuilder<LocationCubit, GetLocationState>(
+//           builder: (context, locationState) {
+//             print('Location builder called with state: $locationState');
+//             final appStatus =
+//                 context.select((AppBloc bloc) => bloc.state.status);
+
+//             if (appStatus == AppStatus.authenticated &&
+//                 locationState is LocationUnknown) {
+//               WidgetsBinding.instance.addPostFrameCallback((_) {
+//                 print("I gotta make it here?? locationPopup");
+//                 _showLocationPopup(context);
+//               });
+//             } else {
+//               print(locationState);
+//             }
+
+//             return const AppView();
+//           },
+//         );
+//       },
+//     );
+//   }
 
   // Future<void> _showLoginPopup(BuildContext context) async {
   //   return showDialog<void>(
@@ -310,7 +440,7 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
             builder: (BuildContext innerContext) {
               return GestureDetector(
                 onTap: () {
-                  // Execute your command here, e.g., innerContext.read<LocationCubit>().yourCommand();
+                  // innerContext.read<LocationCubit>().
                   Navigator.of(innerContext).pop(); // Close the popup
                 },
                 child: Container(

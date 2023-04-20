@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-enum AccountType { buyer, seller }
+enum AccountType { buyer, seller, guest }
 
 class User extends Equatable {
   /// {@macro user}
@@ -35,6 +36,30 @@ class User extends Equatable {
 
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;
+
+  // In the User class
+  User.fromDocument(DocumentSnapshot doc)
+      : id = doc.id,
+        email = doc['email'] as String?,
+        name = doc['name'] as String?,
+        photo = doc['photo'] as String?,
+        accountType = _accountTypeFromString(doc['accountType'] as String?);
+
+  static AccountType? _accountTypeFromString(String? accountTypeString) {
+    if (accountTypeString == null) return null;
+    return AccountType.values
+        .firstWhere((e) => e.toString().split('.').last == accountTypeString);
+  }
+
+  // In the User class
+  Map<String, dynamic> toMap() {
+    return {
+      'email': email,
+      'name': name,
+      'photo': photo,
+      'accountType': accountType?.toString().split('.').last,
+    };
+  }
 
   // Add copyWith method
   User copyWith({

@@ -12,6 +12,8 @@ dependencies:
   equatable:
   firebase_auth:
   firebase_core:
+  cloud_firestore:
+  sign_in_with_apple: ^4.3.0
 
   flutter:
     sdk: flutter

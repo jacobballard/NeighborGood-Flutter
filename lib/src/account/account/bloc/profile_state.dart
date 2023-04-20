@@ -1,35 +1,23 @@
 part of 'profile_bloc.dart';
 
-enum ProfileStatus { initial, loading, success, error }
-
-abstract class ProfileState extends Equatable {
+abstract class ProfileState {
   const ProfileState();
-
-  @override
-  List<Object?> get props => [];
 }
 
-class InitialProfileState extends ProfileState {}
+class ProfileBuyer extends ProfileState {
+  const ProfileBuyer(this.user);
 
-class LoadedProfileState extends ProfileState {
-  final ProfileStatus status;
-  final Account? account;
+  final User user;
+}
 
-  const LoadedProfileState({
-    required this.status,
-    this.account,
-  });
+class ProfileSeller extends ProfileState {
+  const ProfileSeller(this.user);
 
-  LoadedProfileState copyWith({
-    ValueGetter<ProfileStatus>? status,
-    ValueGetter<Account>? account,
-  }) {
-    return LoadedProfileState(
-      status: status?.call() ?? this.status,
-      account: account?.call() ?? this.account,
-    );
-  }
+  final User user;
+}
 
-  @override
-  List<Object?> get props => [status, account];
+class ProfileGuest extends ProfileState {
+  const ProfileGuest(this.user);
+
+  final User user;
 }

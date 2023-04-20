@@ -11,11 +11,11 @@ class LoginPage extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Login', style: Theme.of(context).textTheme.headline5),
+            Text('Login', style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 16),
             const LoginForm(),
           ],

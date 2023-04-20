@@ -69,6 +69,22 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  Future<void> signInWithApple() async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    try {
+      await _authenticationRepository.signInWithApple();
+      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+    } on SignInWithAppleFailure catch (e) {
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+    } catch (_) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
+
   Future<void> signInAnonymously() async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {

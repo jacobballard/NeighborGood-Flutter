@@ -8,7 +8,9 @@ import '../../signup/signup.dart';
 import '../login.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+  const LoginForm({Key? key, this.isAlreadyGuest = false}) : super(key: key);
+
+  final bool isAlreadyGuest;
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +47,29 @@ class LoginForm extends StatelessWidget {
               _GoogleLoginButton(),
               const SizedBox(height: 4),
               _SignUpButton(),
+              if (!isAlreadyGuest) const SizedBox(height: 4),
+              if (!isAlreadyGuest) _ContinueAsGuestButton(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ContinueAsGuestButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          onPressed: () async {
+            await context.read<LoginCubit>().signInAnonymously();
+            if (context.mounted) Navigator.of(context).pop();
+          },
+          child: const Text('CONTINUE AS GUEST'),
+        );
+      },
     );
   }
 }

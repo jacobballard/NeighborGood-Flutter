@@ -46,7 +46,7 @@ dependencies:
   meta:
   rxdart:
   shared_preferences:
-  sign_in_with_apple:
+  sign_in_with_apple: ^4.3.0
   authentication_repository:
     path: packages/authentication_repository
   cache:

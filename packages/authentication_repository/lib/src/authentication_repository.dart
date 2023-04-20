@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 /// {@template sign_up_with_email_and_password_failure}
 /// Thrown if during the sign up process if a failure occurs.
@@ -153,6 +154,8 @@ class SignInAnonymouslyFailure implements Exception {
   final String message;
 }
 
+class SignInWithAppleFailure implements Exception {}
+
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
 
@@ -198,6 +201,12 @@ class AuthenticationRepository {
     });
   }
 
+  ///Return if the user is anonymous
+  ///
+  ///Returns Bool
+  // In AuthenticationRepository class
+  bool get isAnonymous => _firebaseAuth.currentUser?.isAnonymous ?? false;
+
   /// Returns any persisted user
   /// Defaults to executing void
   Future<void> checkForExistingUser() async {
@@ -242,6 +251,34 @@ class AuthenticationRepository {
       throw SignInAnonymouslyFailure(e.code);
     } catch (_) {
       throw const SignInAnonymouslyFailure();
+    }
+  }
+
+  Future<void> signInWithApple() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          // TODO: Set your own clientId and redirectUri
+          clientId: 'your.client.id',
+          redirectUri: Uri.parse('https://your.redirect.uri'),
+        ),
+        nonce: 'nonce', // Consider generating a secure random nonce
+      );
+
+      final oauthCredential =
+          firebase_auth.OAuthProvider('apple.com').credential(
+        idToken: credential.identityToken,
+        accessToken: credential.authorizationCode,
+        // rawNonce: credential.rawNonce,
+      );
+
+      await _firebaseAuth.signInWithCredential(oauthCredential);
+    } catch (e) {
+      throw SignInWithAppleFailure();
     }
   }
 

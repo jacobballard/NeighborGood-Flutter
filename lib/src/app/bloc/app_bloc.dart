@@ -25,55 +25,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
   // ignore: unused_field
   late final StreamSubscription<User> _userSubscription;
-  // final CacheClient _cacheClient;
 
   void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
-    emit(
-      event.user.isNotEmpty
-          ? AppState.authenticated(event.user)
-          : const AppState.unauthenticated(),
-    );
+    if (event.user.isEmpty) {
+      emit(const AppState.unauthenticated());
+    } else if (_authenticationRepository.isAnonymous) {
+      emit(AppState.authenticated(
+          event.user.copyWith(accountType: AccountType.guest)));
+    } else {
+      emit(AppState.authenticated(event.user));
+    }
   }
-
-  // void _handleLocation(User user, Emitter<AppState> emit) async {
-  //   final location = await getLocationFromPreferences();
-  //   if (location != null) {
-  //     emit(AppState.authenticated(user));
-  //   } else {
-  //     emit(const AppState.locationRequest());
-  //   }
-  // }
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
     unawaited(_authenticationRepository.logOut());
   }
-
-  // Future<String?> getAccountTypeFromFirestore(String userId) async {
-  //   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  //   final DocumentSnapshot userDoc =
-  //       await firestore.collection('users').doc(userId).get();
-
-  //   String? accountType =
-  //       (userDoc.data() as Map<String, dynamic>)['account_type'];
-  //   return accountType;
-  // }
-
-  // @override
-  // Future<void> close() {
-  //   _userSubscription.cancel();
-  //   return super.close();
-  // }
-
-  // Future<LocationData?> getLocationFromPreferences() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   double? latitude = prefs.getDouble('latitude');
-  //   double? longitude = prefs.getDouble('longitude');
-  //   // print("location!!");
-  //   if (latitude != null && longitude != null) {
-  //     // print("location!!!");
-  //     return LocationData(latitude, longitude);
-  //   } else {
-  //     return null;
-  //   }
-  // }
 }

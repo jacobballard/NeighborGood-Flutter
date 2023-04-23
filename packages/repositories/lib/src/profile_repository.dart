@@ -25,11 +25,11 @@ class ProfileRepository {
   Future<void> createStore({
     required String id,
     required String title,
-    required String description,
-    required String insta,
-    required String tik,
-    required String meta,
-    required String pin,
+    String? description,
+    String? insta,
+    String? tik,
+    String? meta,
+    String? pin,
   }) async {
     if (title.isEmpty) {
       throw Exception('Title is required');
@@ -38,27 +38,23 @@ class ProfileRepository {
     try {
       final WriteBatch batch = FirebaseFirestore.instance.batch();
 
-      // Reference to the store document
       final storeDocRef =
           FirebaseFirestore.instance.collection('stores').doc(id);
 
-      // Reference to the user document
       final userDocRef = FirebaseFirestore.instance.collection('users').doc(id);
 
-      // Set store data
       batch.set(storeDocRef, {
         'title': title,
-        if (description.isNotEmpty) 'description': description,
-        if (insta.isNotEmpty) 'insta': insta,
-        if (tik.isNotEmpty) 'tik': tik,
-        if (meta.isNotEmpty) 'meta': meta,
-        if (pin.isNotEmpty) 'pin': pin,
+        if (description != null && description.isNotEmpty)
+          'description': description,
+        if (insta != null && insta.isNotEmpty) 'insta': insta,
+        if (tik != null && tik.isNotEmpty) 'tik': tik,
+        if (meta != null && meta.isNotEmpty) 'meta': meta,
+        if (pin != null && pin.isNotEmpty) 'pin': pin,
       });
 
-      // Update user's accountType to seller
       batch.update(userDocRef, {'accountType': 'seller'});
 
-      // Commit the batch
       await batch.commit();
     } catch (e) {
       throw Exception('Failed to create store: ${e.toString()}');

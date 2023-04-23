@@ -3,6 +3,7 @@ part of 'become_seller_cubit.dart';
 class BecomeSellerState extends Equatable {
   final StoreTitle storeTitle;
   final StoreDescription storeDescription;
+  final DeliveryRange deliveryRange;
   final StoreTik storeTik;
   final StoreInsta storeInsta;
   final StorePin storePin;

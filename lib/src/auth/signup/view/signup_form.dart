@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pastry/src/account/account/bloc/profile_bloc.dart';
 
 import '../cubit/signup_cubit.dart';
 
@@ -127,7 +128,13 @@ class _SignUpButton extends StatelessWidget {
                   backgroundColor: Colors.orangeAccent,
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
+                    ? () async {
+                        await context.read<SignUpCubit>().signUpFormSubmitted();
+                        // await context.read<ProfileBloc>().
+                        //Probably push an account info page right here
+
+                        // if (context.mounted) Navigator.of(context).pop();
+                      }
                     : null,
                 child: const Text('SIGN UP'),
               );

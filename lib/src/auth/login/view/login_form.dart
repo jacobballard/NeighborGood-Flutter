@@ -8,9 +8,7 @@ import '../../signup/signup.dart';
 import '../login.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({Key? key, this.isAlreadyGuest = false}) : super(key: key);
-
-  final bool isAlreadyGuest;
+  const LoginForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +40,13 @@ class LoginForm extends StatelessWidget {
               const SizedBox(height: 8),
               _PasswordInput(),
               const SizedBox(height: 8),
-              _LoginButton(),
+              const _LoginButton(),
               const SizedBox(height: 8),
-              _GoogleLoginButton(),
+              const _GoogleLoginButton(),
               const SizedBox(height: 4),
               _SignUpButton(),
-              if (!isAlreadyGuest) const SizedBox(height: 4),
-              if (!isAlreadyGuest) _ContinueAsGuestButton(),
+              const SizedBox(height: 4),
+              _ContinueAsGuestButton(),
             ],
           ),
         ),
@@ -118,6 +116,9 @@ class _PasswordInput extends StatelessWidget {
 }
 
 class _LoginButton extends StatelessWidget {
+  const _LoginButton({Key? key, this.isAlreadyGuest = false}) : super(key: key);
+  final bool isAlreadyGuest;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -149,6 +150,10 @@ class _LoginButton extends StatelessWidget {
 }
 
 class _GoogleLoginButton extends StatelessWidget {
+  const _GoogleLoginButton({Key? key, this.isAlreadyGuest = false})
+      : super(key: key);
+  final bool isAlreadyGuest;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -167,7 +172,7 @@ class _GoogleLoginButton extends StatelessWidget {
         icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
         onPressed: () async {
           await context.read<LoginCubit>().logInWithGoogle();
-          Navigator.of(context).pop();
+          if (context.mounted) Navigator.of(context).pop();
         });
   }
 }

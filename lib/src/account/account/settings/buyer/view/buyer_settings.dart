@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/account/account/settings/utils/custom_buttons.dart';
+import 'package:pastry/src/account/become_seller/cubit/become_seller_cubit.dart';
+import 'package:pastry/src/account/become_seller/view/become_seller.dart';
+import 'package:repositories/repositories.dart';
 
 class BuyerSettingsPage extends StatelessWidget {
   const BuyerSettingsPage({Key? key}) : super(key: key);
@@ -24,7 +28,16 @@ class BuyerSettingsPage extends StatelessWidget {
         TextButton(
           onPressed: () {
             // Navigate to become a seller page
-            Navigator.pushNamed(context, '/become_a_seller');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider<BecomeSellerCubit>(
+                  create: (context) =>
+                      BecomeSellerCubit(context.read<ProfileRepository>()),
+                  child: const BecomeSellerPage(),
+                ),
+              ),
+            );
           },
           child: const Text('Become a Seller'),
         ),

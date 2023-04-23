@@ -1,8 +1,6 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pastry/src/auth/login/login.dart';
-import 'package:pastry/src/auth/login/view/login_form.dart';
+import 'package:pastry/src/app/app.dart';
 
 class GuestSettingsPage extends StatelessWidget {
   const GuestSettingsPage({Key? key}) : super(key: key);
@@ -11,23 +9,14 @@ class GuestSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Guest Settings'),
+        title: const Text('Log In / Sign Up'),
       ),
-      body: BlocProvider(
-        create: (context) =>
-            LoginCubit(context.read<AuthenticationRepository>()),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Login', style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 16),
-                const LoginForm(isAlreadyGuest: true),
-              ],
-            ),
-          ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            BlocProvider.of<AppBloc>(context).add(const AppLogoutRequested());
+          },
+          child: const Text('Login In / Sign Up'),
         ),
       ),
     );

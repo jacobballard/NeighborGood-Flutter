@@ -90,3 +90,21 @@ class StorePin extends FormzInput<String, PinValidationError> {
     return _pinRegExp.hasMatch(value ?? '') ? null : PinValidationError.invalid;
   }
 }
+
+enum DeliveryRangeValidationError { invalid }
+
+class DeliveryRange extends FormzInput<String, DeliveryRangeValidationError> {
+  const DeliveryRange.pure() : super.pure('');
+  const DeliveryRange.dirty([String value = '']) : super.dirty(value);
+
+  @override
+  DeliveryRangeValidationError? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return DeliveryRangeValidationError.invalid;
+    }
+    final numberValue = num.tryParse(value);
+    return (numberValue != null && numberValue > 0)
+        ? null
+        : DeliveryRangeValidationError.invalid;
+  }
+}

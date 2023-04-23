@@ -156,6 +156,11 @@ class SignInAnonymouslyFailure implements Exception {
 
 class SignInWithAppleFailure implements Exception {}
 
+class LinkWithEmailAndPasswordFailure implements Exception {
+  const LinkWithEmailAndPasswordFailure({required this.message});
+  final String message;
+}
+
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
 
@@ -242,8 +247,25 @@ class AuthenticationRepository {
     }
   }
 
+  // // Link Anonymous and actual accounts here
+  // // In the future this maybe
+  // Future<void> linkWithEmailAndPassword(
+  //     {required String email, required String password}) async {
+  //   try {
+  //     final userCredential = _firebaseAuth.currentUser;
+  //     final credential = firebase_auth.EmailAuthProvider.credential(
+  //         email: email, password: password);
+  //     await userCredential?.linkWithCredential(credential);
+  //   } on firebase_auth.FirebaseAuthException catch (e) {
+  //     // You can handle specific exceptions here if needed
+  //     throw LinkWithEmailAndPasswordFailure(
+  //         message: e.message ?? 'Unknown error occurred');
+  //   }
+  // }
+
   // Add the signInAnonymously method to your AuthenticationRepository class
-  Future<void> signInAnonymously() async {
+
+  signInAnonymously() async {
     try {
       await _firebaseAuth.signInAnonymously();
     } on firebase_auth.FirebaseAuthException catch (e) {

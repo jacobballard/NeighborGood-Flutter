@@ -52,6 +52,35 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  // I know I know but I only have to change one layer this way
+  // Future<void> linkAccountWithEmailAndPassword() async {
+  //   if (!state.status.isValidated) return;
+  //   // emit(state.copyWith(status: FormzStatus.submissionInProgress));
+  //   // try {
+  //   //   await _authenticationRepository.linkWithEmailAndPassword(
+  //   //     email: state.email.value,
+  //   //     password: state.password.value,
+  //   //   );
+  //   //   emit(state.copyWith(status: FormzStatus.submissionSuccess));
+  //   // } on LinkWithEmailAndPasswordFailure catch (e) {
+  //   //   emit(
+  //   //     state.copyWith(
+  //   //       errorMessage: e.message,
+  //   //       status: FormzStatus.submissionFailure,
+  //   //     ),
+  //   //   );
+  //   // } catch (_) {
+  //   //   emit(state.copyWith(status: FormzStatus.submissionFailure));
+  //   // }
+  //   emit(state.copyWith(status: FormzStatus.submissionInProgress));
+  //   try {
+  //     await _authenticationRepository.logOut();
+  //     await logInWithCredentials();
+  //   } catch (e) {
+  //     emit(state.copyWith(status: FormzStatus.submissionFailure));
+  //   }
+  // }
+
   Future<void> logInWithGoogle() async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {

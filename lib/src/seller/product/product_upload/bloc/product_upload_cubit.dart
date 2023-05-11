@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:form_inputs/form_inputs.dart';
+import 'package:pastry/src/seller/product/product_upload/bloc/modifier_cubit.dart';
 
 part 'product_upload_state.dart';
 
@@ -44,7 +45,21 @@ class ProductUploadCubit extends Cubit<ProductUploadState> {
     ));
   }
 
-  // Add more input change handlers here for other fields
+  void addModifier() {
+    final updatedModifierCubits =
+        List<ProductUploadModifierCubit>.from(state.modifierCubits)
+          ..add(ProductUploadModifierCubit());
+    emit(state.copyWith(modifierCubits: updatedModifierCubits));
+  }
+
+  void removeModifier(int index) {
+    final removedCubit = state.modifierCubits[index];
+    final updatedModifierCubits =
+        List<ProductUploadModifierCubit>.from(state.modifierCubits)
+          ..removeAt(index);
+    emit(state.copyWith(modifierCubits: updatedModifierCubits));
+    removedCubit.close();
+  }
 
   Future<void> uploadProduct() async {
     if (!state.status.isValidated) return;

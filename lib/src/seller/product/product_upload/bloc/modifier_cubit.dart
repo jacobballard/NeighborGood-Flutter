@@ -2,6 +2,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:form_inputs/form_inputs.dart';
+import 'package:formz/formz.dart';
+import 'package:pastry/src/seller/product/product_upload/bloc/picker_option_cubit.dart';
 
 part 'modifier_state.dart';
 
@@ -18,27 +20,17 @@ class ProductUploadModifierCubit extends Cubit<ProductUploadModifierState> {
     emit(state.copyWith(characterLimit: characterLimit));
   }
 
-  void addPickerOption(String option, double price) {
-    final pickerOption = PickerOption.dirty(option, price);
-    emit(
-      state.copyWith(
-        pickerOptions: List<PickerOption>.from(state.pickerOptions)
-          ..add(pickerOption),
-      ),
-    );
-  }
-
-  void updatePickerOption(int index, String option, double price) {
-    final pickerOption = PickerOption.dirty(option, price);
-    final updatedPickerOptions = List<PickerOption>.from(state.pickerOptions);
-    updatedPickerOptions[index] = pickerOption;
-
-    emit(state.copyWith(pickerOptions: updatedPickerOptions));
+  void addPickerOption() {
+    emit(state.copyWith(
+      pickerOptionCubits: List<PickerOptionCubit>.from(state.pickerOptionCubits)
+        ..add(PickerOptionCubit()),
+    ));
   }
 
   void removePickerOption(int index) {
-    final updatedPickerOptions = List<PickerOption>.from(state.pickerOptions)
-      ..removeAt(index);
-    emit(state.copyWith(pickerOptions: updatedPickerOptions));
+    emit(state.copyWith(
+      pickerOptionCubits: List<PickerOptionCubit>.from(state.pickerOptionCubits)
+        ..removeAt(index),
+    ));
   }
 }

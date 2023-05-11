@@ -206,6 +206,13 @@ class AuthenticationRepository {
     });
   }
 
+  Future<String> getIdToken() async {
+    if (_firebaseAuth.currentUser == null) {
+      throw Exception("No authenticated user");
+    }
+    return await _firebaseAuth.currentUser!.getIdToken();
+  }
+
   ///Return if the user is anonymous
   ///
   ///Returns Bool

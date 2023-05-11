@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/account/become_seller/cubit/become_seller_cubit.dart';
@@ -20,8 +21,9 @@ class BecomeSellerPage extends StatelessWidget {
           children: [
             const SizedBox(height: 16),
             BlocProvider<BecomeSellerCubit>(
-              create: (context) =>
-                  BecomeSellerCubit(context.read<ProfileRepository>()),
+              create: (context) => BecomeSellerCubit(
+                  context.read<ProfileRepository>(),
+                  context.read<AuthenticationRepository>()),
               child: const BecomeSellerForm(),
             )
           ],

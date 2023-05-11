@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pastry/src/seller/product/product_upload/bloc/modifier_cubit.dart';
 import 'package:pastry/src/seller/product/product_upload/bloc/product_upload_cubit.dart';
+
+import '../bloc/picker_option_cubit.dart';
+import '../bloc/picker_option_state.dart';
 
 class ProductUploadScreen extends StatelessWidget {
   const ProductUploadScreen({super.key});
@@ -24,6 +28,28 @@ class ProductUploadScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 _BasePriceInput(),
                 // Add other input widgets here
+                const SizedBox(height: 8),
+                BlocBuilder<ProductUploadCubit, ProductUploadState>(
+                  builder: (context, state) {
+                    return Column(
+                      children:
+                          state.modifierCubits.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final cubit = entry.value;
+                        return BlocProvider.value(
+                          value: cubit,
+                          child: _ProductModifierInput(index: index),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () =>
+                      context.read<ProductUploadCubit>().addModifier(),
+                  child: const Text('Add Modifier'),
+                ),
                 const SizedBox(height: 8),
                 _UploadButton(),
                 //TODOBuy and add to cart buttons
@@ -111,134 +137,137 @@ class _UploadButton extends StatelessWidget {
   }
 }
 
-// class _ModifierInput extends StatelessWidget {
-//   final int modifierIndex;
+class _ProductModifierInput extends StatelessWidget {
+  final int index;
 
-//   _ModifierInput({required this.modifierIndex});
+  _ProductModifierInput({required this.index});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider<ProductUploadModifierCubit>(
-//       create: (context) => ProductUploadModifierCubit(),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           DropdownButtonFormField<String>(
-//             items: [
-//               DropdownMenuItem(
-//                 value: 'input',
-//                 child: Text('Input'),
-//               ),
-//               DropdownMenuItem(
-//                 value: 'picker',
-//                 child: Text('Picker'),
-//               ),
-//             ],
-//             onChanged: (value) => context.read<ProductUploadModifierCubit>().modifierTypeChanged(value),
-//             decoration: InputDecoration(
-//               labelText: 'Modifier Type',
-//             ),
-//           ),
-//           BlocBuilder<ProductUploadModifierCubit, ProductUploadModifierState>(
-//             builder: (context, state) {
-//               if (state.modifierType.value == 'input') {
-//                 return _TextInput(modifierIndex: modifierIndex);
-//               } else if (state.modifierType.value == 'picker') {
-//                 return _PickerInput(modifierIndex: modifierIndex);
-//               }
-//               return Container();
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    var productUploadModifierCubit =
+        context.read<ProductUploadCubit>().state.modifierCubits[index];
 
-// class _TextInput extends StatelessWidget {
-//   final int modifierIndex;
+    return BlocProvider.value(
+      value: productUploadModifierCubit,
+      child:
+          BlocBuilder<ProductUploadModifierCubit, ProductUploadModifierState>(
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DropdownButtonFormField<String>(
+                value: state.modifierType.value,
+                items: <String>['text input', 'choice'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) => context
+                    .read<ProductUploadModifierCubit>()
+                    .modifierTypeChanged(value),
+                decoration: InputDecoration(
+                  labelText: 'Modifier Type',
+                  errorText: state.modifierType.invalid
+                      ? 'Invalid modifier type'
+                      : null,
+                ),
+              ),
+              if (state.modifierType.value == 'choice') ...[
+                for (var i = 0; i < state.pickerOptionCubits.length; i++)
+                  _PickerOptionInput(
+                    modifierIndex: index,
+                    optionIndex: i,
+                  ),
+                ElevatedButton(
+                  onPressed: () => context
+                      .read<ProductUploadModifierCubit>()
+                      .addPickerOption(),
+                  child: const Text('Add Option'),
+                ),
+              ] else
+                TextField(
+                  onChanged: (value) => context
+                      .read<ProductUploadModifierCubit>()
+                      .characterLimitChanged(int.tryParse(value) ?? 0),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Character Limit',
+                    errorText: state.characterLimit.invalid
+                        ? 'Invalid character limit'
+                        : null,
+                  ),
+                ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () =>
+                    context.read<ProductUploadCubit>().removeModifier(index),
+                child: const Text('Remove Modifier'),
+              ),
+              const SizedBox(height: 16),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
 
-//   _TextInput({required this.modifierIndex});
+class _PickerOptionInput extends StatelessWidget {
+  final int modifierIndex;
+  final int optionIndex;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         TextFormField(
-//           onChanged: (value) => context.read<ProductUploadModifierCubit>().characterLimitChanged(int.tryParse(value) ?? 0),
-//           keyboardType: TextInputType.number,
-//           decoration: InputDecoration(
-//             labelText: 'Character Limit',
-//             helperText: 'Enter the maximum number of characters allowed',
-//           ),
-//         ),
-//         // Add any other input-related UI elements here
-//       ],
-//     );
-//   }
-// }
+  _PickerOptionInput({required this.modifierIndex, required this.optionIndex});
 
-// class _PickerInput extends StatelessWidget {
-//   final int modifierIndex;
+  @override
+  Widget build(BuildContext context) {
+    var pickerOptionCubit = context
+        .read<ProductUploadCubit>()
+        .state
+        .modifierCubits[modifierIndex]
+        .state
+        .pickerOptionCubits[optionIndex];
 
-//   _PickerInput({required this.modifierIndex});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Text('Picker Options'),
-//         BlocBuilder<ProductUploadModifierCubit, ProductUploadModifierState>(
-//           builder: (context, state) {
-//             return ListView.builder(
-//               shrinkWrap: true,
-//               itemCount: state.pickerOptions.length,
-//               itemBuilder: (context, index) {
-//                 final pickerOption = state.pickerOptions[index];
-//                 return _PickerOptionInput(
-//                   modifierIndex: modifierIndex,
-//                   optionIndex: index,
-//                   initialOption: pickerOption.value,
-//                   initialPrice: pickerOption.price,
-//                 );
-//               },
-//             );
-//           },
-//         ),
-//         TextButton(
-//           onPressed: () => context.read<ProductUploadModifierCubit>().addPickerOption('', 0),
-//           child: Text('Add Picker Option'),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-// class _PickerOptionInput extends StatefulWidget {
-//   final int modifierIndex;
-//   final int optionIndex;
-//   final String initialOption;
-//   final double initialPrice;
-
-//   _PickerOptionInput({
-//     required this.modifierIndex,
-//     required this.optionIndex,
-//     required this.initialOption,
-//     required this.initialPrice,
-//   });
-
-//   @override
-//   _PickerOptionInputState createState() => _PickerOptionInputState();
-// }
-
-// class _PickerOptionInputState extends State<_PickerOptionInput> {
-//   late TextEditingController _optionController;
-//   late TextEditingController _priceController;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _optionController = TextEditingController(text: widget.initialOption);
-//     _priceController
+    return BlocProvider.value(
+      value: pickerOptionCubit,
+      child: BlocBuilder<PickerOptionCubit, PickerOptionState>(
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                onChanged: (value) =>
+                    context.read<PickerOptionCubit>().optionNameChanged(value),
+                decoration: InputDecoration(
+                  labelText: 'Option Name',
+                  errorText:
+                      state.optionName.invalid ? 'Invalid option name' : null,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                onChanged: (value) => context
+                    .read<PickerOptionCubit>()
+                    .optionPriceChanged(double.tryParse(value) ?? 0.0),
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Option Price',
+                  errorText:
+                      state.optionPrice.invalid ? 'Invalid option price' : null,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => context
+                    .read<ProductUploadModifierCubit>()
+                    .removePickerOption(optionIndex),
+                child: const Text('Remove Option'),
+              ),
+              const SizedBox(height: 16),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}

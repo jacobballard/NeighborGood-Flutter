@@ -46,3 +46,27 @@ class PickerOption extends FormzInput<String, PickerOptionValidationError> {
         : PickerOptionValidationError.invalid;
   }
 }
+
+enum OptionNameValidationError { invalid }
+
+enum OptionPriceValidationError { invalid }
+
+class OptionName extends FormzInput<String, OptionNameValidationError> {
+  const OptionName.pure() : super.pure('');
+  const OptionName.dirty([String value = '']) : super.dirty(value);
+
+  @override
+  OptionNameValidationError? validator(String value) {
+    return value.isNotEmpty ? null : OptionNameValidationError.invalid;
+  }
+}
+
+class OptionPrice extends FormzInput<double, OptionPriceValidationError> {
+  const OptionPrice.pure() : super.pure(0.0);
+  const OptionPrice.dirty([double value = 0.0]) : super.dirty(value);
+
+  @override
+  OptionPriceValidationError? validator(double value) {
+    return value >= 0 ? null : OptionPriceValidationError.invalid;
+  }
+}

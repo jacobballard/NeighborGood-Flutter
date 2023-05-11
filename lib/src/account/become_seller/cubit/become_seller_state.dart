@@ -9,6 +9,9 @@ class BecomeSellerState extends Equatable {
   final StorePin storePin;
   final StoreMeta storeMeta;
   final FormzStatus status;
+  final DeliveryMethods deliveryMethods;
+  final StoreLatitude storeLatitude;
+  final StoreLongitude storeLongitude;
   final String? errorMessage;
 
   const BecomeSellerState({
@@ -19,11 +22,16 @@ class BecomeSellerState extends Equatable {
     this.storePin = const StorePin.pure(),
     this.storeMeta = const StoreMeta.pure(),
     this.status = FormzStatus.pure,
+    this.deliveryMethods = const DeliveryMethods.pure(),
+    this.deliveryRange = const DeliveryRange.pure(),
+    this.storeLatitude = const StoreLatitude.pure(),
+    this.storeLongitude = const StoreLongitude.pure(),
     this.errorMessage,
   });
 
   @override
-  List<Object?> get props => [storeTitle, storeDescription, status];
+  List<Object?> get props =>
+      [storeTitle, storeDescription, status, deliveryMethods];
 
   BecomeSellerState copyWith({
     StoreTitle? storeTitle,
@@ -33,6 +41,10 @@ class BecomeSellerState extends Equatable {
     StoreMeta? storeMeta,
     StoreTik? storeTik,
     FormzStatus? status,
+    DeliveryMethods? deliveryMethods,
+    StoreLatitude? storeLatitude,
+    StoreLongitude? storeLongitude,
+    DeliveryRange? deliveryRange,
     String? errorMessage,
   }) {
     return BecomeSellerState(
@@ -43,6 +55,10 @@ class BecomeSellerState extends Equatable {
       storePin: storePin ?? this.storePin,
       storeTik: storeTik ?? this.storeTik,
       status: status ?? this.status,
+      deliveryMethods: deliveryMethods ?? this.deliveryMethods,
+      deliveryRange: deliveryRange ?? this.deliveryRange,
+      storeLatitude: storeLatitude ?? this.storeLatitude,
+      storeLongitude: storeLongitude ?? this.storeLongitude,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }

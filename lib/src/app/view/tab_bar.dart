@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,8 +36,10 @@ class MyTabBarState extends State<MyTabBar> {
 
     BlocProvider(
       create: (BuildContext context) => ProfileBloc(
-          profileRepository:
-              ProfileRepository(userId: context.read<AppBloc>().state.user.id)),
+          profileRepository: ProfileRepository(
+              userId: context.read<AppBloc>().state.user.id,
+              authenticationRepository:
+                  context.read<AuthenticationRepository>())),
       child: const AccountSettingsView(),
     ),
   ];

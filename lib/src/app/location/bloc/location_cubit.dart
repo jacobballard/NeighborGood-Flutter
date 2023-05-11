@@ -12,7 +12,7 @@ class LocationCubit extends Cubit<GetLocationState> {
 
   static LocationCubit get(context) => BlocProvider.of(context);
 
-  late GeoPoint position;
+  GeoPoint? position;
 
   initLocation() async {
     emit(LocationLoading());
@@ -63,7 +63,7 @@ class LocationCubit extends Cubit<GetLocationState> {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((position) {
       this.position = GeoPoint(position.latitude, position.longitude);
-      emit(LocationKnown(this.position));
+      emit(LocationKnown(this.position!));
     }).catchError((error) {});
   }
 
@@ -73,7 +73,7 @@ class LocationCubit extends Cubit<GetLocationState> {
       if (locations.isNotEmpty) {
         Location location = locations.first;
         position = GeoPoint(location.latitude, location.longitude);
-        emit(LocationKnown(position));
+        emit(LocationKnown(position!));
       } else {
         throw Exception('No location found for the provided zip code.');
       }

@@ -1,28 +1,33 @@
 part of 'modifier_cubit.dart';
 
 class ProductUploadModifierState extends Equatable {
-  final ModifierType modifierType;
-  final CharacterLimit characterLimit;
-  final List<PickerOption> pickerOptions;
-
   const ProductUploadModifierState({
     this.modifierType = const ModifierType.pure(),
     this.characterLimit = const CharacterLimit.pure(),
-    this.pickerOptions = const [],
+    this.pickerOptionCubits = const <PickerOptionCubit>[],
+    this.status = FormzStatus.pure,
   });
+
+  final ModifierType modifierType;
+  final CharacterLimit characterLimit;
+  final List<PickerOptionCubit> pickerOptionCubits;
+  final FormzStatus status;
+
+  @override
+  List<Object> get props =>
+      [modifierType, characterLimit, pickerOptionCubits, status];
 
   ProductUploadModifierState copyWith({
     ModifierType? modifierType,
     CharacterLimit? characterLimit,
-    List<PickerOption>? pickerOptions,
+    List<PickerOptionCubit>? pickerOptionCubits,
+    FormzStatus? status,
   }) {
     return ProductUploadModifierState(
       modifierType: modifierType ?? this.modifierType,
       characterLimit: characterLimit ?? this.characterLimit,
-      pickerOptions: pickerOptions ?? this.pickerOptions,
+      pickerOptionCubits: pickerOptionCubits ?? this.pickerOptionCubits,
+      status: status ?? this.status,
     );
   }
-
-  @override
-  List<Object> get props => [modifierType, characterLimit, pickerOptions];
 }

@@ -1,14 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/become_seller/cubit/become_seller_cubit.dart';
-import 'package:pastry/src/app/app.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 
 class BecomeSellerForm extends StatelessWidget {
   const BecomeSellerForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final locationCubit = context.read<LocationCubit>();
+      if (locationCubit.position != null) {
+        context
+            .read<BecomeSellerCubit>()
+            .storeLatitudeChanged(locationCubit.position!.latitude);
+        context
+            .read<BecomeSellerCubit>()
+            .storeLongitudeChanged(locationCubit.position!.longitude);
+      }
+    });
+
     return BlocListener<BecomeSellerCubit, BecomeSellerState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
@@ -38,6 +52,9 @@ class BecomeSellerForm extends StatelessWidget {
             _PinInput(),
             const SizedBox(height: 8),
             _CreateStoreButton(),
+            const SizedBox(height: 8),
+            _LocationInput(),
+            const SizedBox(height: 8),
           ],
         ),
       ),
@@ -88,9 +105,7 @@ class _CreateStoreButton extends StatelessWidget {
                 ),
                 onPressed: state.status.isValidated
                     ? () async {
-                        await context
-                            .read<BecomeSellerCubit>()
-                            .createStore(context.read<AppBloc>().state.user.id);
+                        await context.read<BecomeSellerCubit>().createStore();
                       }
                     : null,
                 child: const Text('Create Store'),
@@ -204,6 +219,81 @@ class _PinInput extends StatelessWidget {
             helperText: '',
             errorText:
                 state.storePin.invalid ? 'Invalid Pinterest handle' : null,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LocationInput extends StatefulWidget {
+  @override
+  _LocationInputState createState() => _LocationInputState();
+}
+
+class _LocationInputState extends State<_LocationInput> {
+  late GoogleMapController mapController;
+  double? _lastLatPosition;
+  double? _lastLngPosition;
+
+  _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  _onCameraMove(CameraPosition position) {
+    _lastLatPosition = position.target.latitude;
+    _lastLngPosition = position.target.longitude;
+  }
+
+  _onCameraIdle() {
+    if (_lastLatPosition != null && _lastLngPosition != null) {
+      context.read<BecomeSellerCubit>().storeLatitudeChanged(_lastLatPosition!);
+      context
+          .read<BecomeSellerCubit>()
+          .storeLongitudeChanged(_lastLngPosition!);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final GeoPoint initialLocation =
+        context.read<LocationCubit>().position ??= const GeoPoint(0.0, 0.0);
+
+    return BlocBuilder<BecomeSellerCubit, BecomeSellerState>(
+      buildWhen: (previous, current) =>
+          previous.storeLatitude != current.storeLatitude ||
+          previous.storeLongitude != current.storeLongitude,
+      builder: (context, state) {
+        return SizedBox(
+          height: 300, // Change this to fit your needs
+          child: GoogleMap(
+            onMapCreated: _onMapCreated,
+            onCameraMove: _onCameraMove,
+            onCameraIdle: _onCameraIdle,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(
+                initialLocation.latitude,
+                initialLocation.longitude,
+              ), // This should be your initial position
+              zoom: 14.0,
+            ),
+            markers: {
+              Marker(
+                  markerId: const MarkerId('storeLocation'),
+                  position: LatLng(
+                    state.storeLatitude.value,
+                    state.storeLongitude.value,
+                  ),
+                  draggable: true,
+                  onDragEnd: (newPosition) {
+                    context
+                        .read<BecomeSellerCubit>()
+                        .storeLatitudeChanged(newPosition.latitude);
+                    context
+                        .read<BecomeSellerCubit>()
+                        .storeLongitudeChanged(newPosition.longitude);
+                  })
+            },
           ),
         );
       },

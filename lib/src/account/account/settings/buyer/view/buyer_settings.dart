@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/account/account/settings/utils/custom_buttons.dart';
@@ -32,8 +33,9 @@ class BuyerSettingsPage extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => BlocProvider<BecomeSellerCubit>(
-                  create: (context) =>
-                      BecomeSellerCubit(context.read<ProfileRepository>()),
+                  create: (context) => BecomeSellerCubit(
+                      context.read<ProfileRepository>(),
+                      context.read<AuthenticationRepository>()),
                   child: const BecomeSellerPage(),
                 ),
               ),

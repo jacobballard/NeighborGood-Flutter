@@ -93,18 +93,52 @@ class StorePin extends FormzInput<String, PinValidationError> {
 
 enum DeliveryRangeValidationError { invalid }
 
-class DeliveryRange extends FormzInput<String, DeliveryRangeValidationError> {
-  const DeliveryRange.pure() : super.pure('');
-  const DeliveryRange.dirty([String value = '']) : super.dirty(value);
+class DeliveryRange extends FormzInput<double, DeliveryRangeValidationError> {
+  const DeliveryRange.pure() : super.pure(0.0);
+  const DeliveryRange.dirty([double value = 0.0]) : super.dirty(value);
 
   @override
-  DeliveryRangeValidationError? validator(String? value) {
-    if (value == null || value.isEmpty) {
-      return DeliveryRangeValidationError.invalid;
-    }
-    final numberValue = num.tryParse(value);
-    return (numberValue != null && numberValue > 0)
+  DeliveryRangeValidationError? validator(double? value) {
+    return (value != null && value > 0.0)
         ? null
         : DeliveryRangeValidationError.invalid;
+  }
+}
+
+class DeliveryMethods extends FormzInput<List<String>, String> {
+  const DeliveryMethods.pure([List<String>? value])
+      : super.pure(value ?? const <String>[]);
+  const DeliveryMethods.dirty([List<String>? value])
+      : super.dirty(value ?? const <String>[]);
+
+  @override
+  String? validator(List<String>? value) {
+    return value != null && value.isNotEmpty
+        ? null
+        : 'Delivery methods must be selected';
+  }
+}
+
+class StoreLatitude extends FormzInput<double, String> {
+  const StoreLatitude.pure() : super.pure(0.0);
+  const StoreLatitude.dirty([double value = 0.0]) : super.dirty(value);
+
+  @override
+  String? validator(double? value) {
+    return (value != null && value >= -90.0 && value <= 90.0)
+        ? null
+        : 'Invalid latitude';
+  }
+}
+
+class StoreLongitude extends FormzInput<double, String> {
+  const StoreLongitude.pure() : super.pure(0.0);
+  const StoreLongitude.dirty([double value = 0.0]) : super.dirty(value);
+
+  @override
+  String? validator(double? value) {
+    return (value != null && value >= -180.0 && value <= 180.0)
+        ? null
+        : 'Invalid longitude';
   }
 }

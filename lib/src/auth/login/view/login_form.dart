@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:pastry/src/app/app.dart';
 
 import '../../signup/signup.dart';
 import '../login.dart';
@@ -183,7 +184,8 @@ class _SignUpButton extends StatelessWidget {
     final theme = Theme.of(context);
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
-      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+      // onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+      onPressed: () => context.read<AuthPopupCubit>().showSignUp(),
       child: Text(
         'CREATE ACCOUNT',
         style: TextStyle(color: theme.primaryColor),

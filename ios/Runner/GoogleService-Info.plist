@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.pastry</string>
+	<string>app.neighborgood.flutter</string>
 	<key>PROJECT_ID</key>
 	<string>pastry-6b817</string>
 	<key>STORAGE_BUCKET</key>

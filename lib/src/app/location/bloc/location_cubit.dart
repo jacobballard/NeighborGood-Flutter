@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
+import 'package:http/http.dart' as http;
 
 part 'location_state.dart';
 
@@ -36,26 +39,6 @@ class LocationCubit extends Cubit<GetLocationState> {
     } else {
       getLocation();
     }
-
-    // print("done requesting");
-
-    // if (permission == LocationPermission.deniedForever) {
-    //   print("what!!!");
-    //   emit(LocationUnknown());
-    // } else if (permission == LocationPermission.denied) {
-    //   print("what!!!!!");
-    //   permission = await Geolocator.requestPermission();
-    //   if (permission == LocationPermission.denied) {
-    //     emit(LocationUnknown());
-    //     print("what!!!!!!!!!!");
-    //   }
-    // } else if (permission == LocationPermission.unableToDetermine) {
-    //   emit(LocationUnknown());
-    //   print("wha~!!!!!!!!!!!!");
-    // } else {
-    //   print("else???");
-    //   getLocation();
-    // }
   }
 
   Future<void> getLocation() async {
@@ -69,16 +52,33 @@ class LocationCubit extends Cubit<GetLocationState> {
 
   Future<void> getLocationFromZipCode(String zipCode) async {
     try {
-      List<Location> locations = await locationFromAddress(zipCode);
-      if (locations.isNotEmpty) {
-        Location location = locations.first;
-        position = GeoPoint(location.latitude, location.longitude);
-        emit(LocationKnown(position!));
+      final queryParameters = {
+        'address': zipCode,
+        'key': 'AIzaSyBVxgYIPrE6QCMoZpRc6gWPssHELQzBwqE',
+      };
+
+      final uri = Uri.https(
+        'maps.googleapis.com',
+        '/maps/api/geocode/json',
+        queryParameters,
+      );
+
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final lat = data['results'][0]['geometry']['location']['lat'];
+        final lng = data['results'][0]['geometry']['location']['lng'];
+
+        GeoPoint position = GeoPoint(lat, lng);
+        emit(LocationKnown(position));
       } else {
-        throw Exception('No location found for the provided zip code.');
+        throw Exception('Failed to load geocoding data');
       }
     } catch (e) {
       throw Exception('Error getting location from zip code: $e');
     }
   }
 }
+
+//AIzaSyBVxgYIPrE6QCMoZpRc6gWPssHELQzBwqE

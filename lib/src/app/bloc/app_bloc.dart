@@ -28,11 +28,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
     if (event.user.isEmpty) {
+      print("well shoot");
       emit(const AppState.unauthenticated());
     } else if (_authenticationRepository.isAnonymous) {
+      print("yep yep");
       emit(AppState.authenticated(
           event.user.copyWith(accountType: AccountType.guest)));
     } else {
+      print('yee yee');
       emit(AppState.authenticated(event.user));
     }
   }

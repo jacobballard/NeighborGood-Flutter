@@ -7,14 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1030211861772:android:33869bdbf07c2128a65d29",
+        "mobilesdk_app_id": "1:1030211861772:android:b67922651e002fa0a65d29",
         "android_client_info": {
-          "package_name": "com.example.pastry"
+          "package_name": "app.neighborgood.flutter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1030211861772-jptqr40kea2d5katia1rqv6jt9ddtcvb.apps.googleusercontent.com",
+          "client_id": "1030211861772-qtqdrkr147o9eoi1rce500quk6hp6cq3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

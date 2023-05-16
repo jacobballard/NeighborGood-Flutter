@@ -1,4 +1,4 @@
-package com.example.pastry
+package app.neighborgood.flutter
 
 import io.flutter.embedding.android.FlutterActivity
 

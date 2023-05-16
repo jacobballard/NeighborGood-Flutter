@@ -36,15 +36,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc:
-  flutter_facebook_auth:
-  flutter_rating_bar:
-  fluttertoast:
   font_awesome_flutter:
   google_maps_flutter:
   google_sign_in:
-  image_picker: ^0.8.7+1
-  meta:
-  rxdart:
   shared_preferences:
   sign_in_with_apple: ^4.3.0
   authentication_repository:
@@ -58,7 +52,6 @@ dependencies:
   flow_builder:
   google_fonts:
   http: ^0.13.5
-  geoflutterfire: ^3.0.2
   file_picker: ^5.2.7
   formz: ^0.4.0
   firebase_core: ^1.24.0

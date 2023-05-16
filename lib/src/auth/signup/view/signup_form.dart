@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/account/bloc/profile_bloc.dart';
+import 'package:pastry/src/app/app.dart';
 
 import '../cubit/signup_cubit.dart';
 
@@ -34,8 +35,25 @@ class SignUpForm extends StatelessWidget {
             _ConfirmPasswordInput(),
             const SizedBox(height: 8),
             _SignUpButton(),
+            const SizedBox(height: 8),
+            _LoginButton(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return TextButton(
+      key: const Key('signUpForm_login_flatButton'),
+      onPressed: () => context.read<AuthPopupCubit>().showLogin(),
+      child: Text(
+        'LOGIN',
+        style: TextStyle(color: theme.primaryColor),
       ),
     );
   }

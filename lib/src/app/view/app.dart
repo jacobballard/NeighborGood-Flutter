@@ -6,6 +6,7 @@ import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 import 'package:pastry/src/app/location/view/location.dart';
 import 'package:pastry/src/app/view/tab_bar.dart';
 import 'package:pastry/src/auth/login/login.dart';
+import 'package:pastry/src/auth/signup/signup.dart';
 import 'package:pastry/theme.dart';
 
 class App extends StatelessWidget {
@@ -60,7 +61,7 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
       listener: (context, state) {
         if (state.status == AppStatus.unauthenticated) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            _showLoginPopup(context);
+            showAuthDialog(context);
           });
         } else if (state.status == AppStatus.authenticated) {
           final locationState = context.read<LocationCubit>().state;
@@ -75,28 +76,75 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
     );
   }
 
-  Future<void> _showLoginPopup(BuildContext context) async {
+  // Future<void> _showLoginPopup(BuildContext context) async {
+  //   final result = await showDialog<bool>(
+  //     context: context,
+  //     barrierDismissible: true, // barrier is dismissible
+  //     builder: (BuildContext context) {
+  //       return BlocProvider(
+  //         create: (context) =>
+  //             LoginCubit(context.read<AuthenticationRepository>()),
+  //         child: Builder(
+  //           builder: (BuildContext innerContext) {
+  //             return GestureDetector(
+  //               onTap: () async {
+  //                 await innerContext.read<LoginCubit>().signInAnonymously();
+  //                 if (context.mounted) Navigator.of(innerContext).pop();
+  //               },
+  //               child: Container(
+  //                 color: Colors.transparent,
+  //                 child: const Center(
+  //                   child: LoginPage(),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  Future<void> showAuthDialog(BuildContext context) async {
+    final authPopupCubit = AuthPopupCubit();
     final result = await showDialog<bool>(
       context: context,
-      barrierDismissible: true, // barrier is dismissible
+      barrierDismissible: true,
       builder: (BuildContext context) {
-        return BlocProvider(
-          create: (context) =>
-              LoginCubit(context.read<AuthenticationRepository>()),
-          child: Builder(
-            builder: (BuildContext innerContext) {
-              return GestureDetector(
-                onTap: () async {
-                  await innerContext.read<LoginCubit>().signInAnonymously();
-                  if (context.mounted) Navigator.of(innerContext).pop();
-                },
-                child: Container(
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => AuthPopupCubit(),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  LoginCubit(context.read<AuthenticationRepository>()),
+            ),
+          ],
+          child: BlocBuilder<AuthPopupCubit, AuthPopupState>(
+            builder: (context, state) {
+              if (state == AuthPopupState.login) {
+                return GestureDetector(
+                  onTap: () async {
+                    await context.read<LoginCubit>().signInAnonymously();
+                    if (context.mounted) Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: const Center(
+                      child: LoginPage(),
+                    ),
+                  ),
+                );
+              } else if (state == AuthPopupState.signUp) {
+                return Container(
                   color: Colors.transparent,
                   child: const Center(
-                    child: LoginPage(),
+                    child: SignUpPage(),
                   ),
-                ),
-              );
+                );
+              }
+              return Container(); // This should never happen
             },
           ),
         );
@@ -131,4 +179,13 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
       },
     );
   }
+}
+
+enum AuthPopupState { login, signUp }
+
+class AuthPopupCubit extends Cubit<AuthPopupState> {
+  AuthPopupCubit() : super(AuthPopupState.login);
+
+  void showSignUp() => emit(AuthPopupState.signUp);
+  void showLogin() => emit(AuthPopupState.login);
 }

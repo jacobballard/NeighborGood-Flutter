@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:goods_rapid/create_product/create_product_cubit.dart';
-import 'package:goods_rapid/create_product/modifier.dart';
-import 'package:goods_rapid/create_product/modifier_cubit.dart';
-import 'package:goods_rapid/create_product/product_details_cubit.dart';
-import 'package:goods_rapid/create_store/delivery_method_cubit.dart';
-import 'package:goods_rapid/create_store/delivery_methods.dart';
-import 'package:goods_rapid/create_store/file_reader_service.dart';
-import 'package:goods_rapid/create_store/image_uploader.dart';
-import 'package:goods_rapid/create_store/image_uploader_cubit.dart';
-import 'package:goods_rapid/create_store/image_uploader_repository.dart';
 
+import '../../utilities/delivery_methods/delivery_method_cubit.dart';
+import '../../utilities/delivery_methods/delivery_methods.dart';
+import '../../utilities/image_upload/file_reader_service.dart';
+import '../../utilities/image_upload/image_uploader.dart';
+import '../../utilities/image_upload/image_uploader_cubit.dart';
+import '../../utilities/image_upload/image_uploader_repository.dart';
+import '../cubit/create_product_cubit.dart';
+import '../cubit/modifier_cubit.dart';
+import '../cubit/product_details_cubit.dart';
+import 'modifier.dart';
 import 'product_details.dart';
 
 class CreateProductPage extends StatelessWidget {

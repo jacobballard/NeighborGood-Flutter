@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:goods_rapid/create_product/validation.dart';
+
+import '../model/validation.dart';
 
 part 'modifier_state.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:goods_rapid/create_store/store_details_cubit.dart';
 
-import 'create_store_cubit.dart';
+import '../cubit/create_store_cubit.dart';
+import '../cubit/store_details_cubit.dart';
 
 class StoreDetailsView extends StatelessWidget {
   @override

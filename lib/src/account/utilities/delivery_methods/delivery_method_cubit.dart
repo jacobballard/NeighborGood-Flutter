@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:goods_rapid/create_store/validation.dart';
+
+import '../../create_store/model/validation.dart';
 
 part 'delivery_method_state.dart';
 

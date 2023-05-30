@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:goods_rapid/create_store/store_address_cubit.dart';
 
-import 'create_store_cubit.dart';
+import '../cubit/store_address_cubit.dart';
 
 class StoreAddressView extends StatelessWidget {
   const StoreAddressView({super.key, required this.storeAddressCubit});

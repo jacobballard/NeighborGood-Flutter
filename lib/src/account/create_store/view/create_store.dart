@@ -2,18 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:goods_rapid/create_store/file_reader_service.dart';
-import 'package:goods_rapid/create_store/image_uploader.dart';
-import 'package:goods_rapid/create_store/image_uploader_cubit.dart';
-import 'package:goods_rapid/create_store/image_uploader_repository.dart';
-import 'package:goods_rapid/create_store/store_address.dart';
-import 'package:goods_rapid/create_store/store_address_cubit.dart';
-import 'package:goods_rapid/create_store/store_details.dart';
-import 'package:goods_rapid/create_store/store_details_cubit.dart';
+import 'package:pastry/src/account/create_store/view/store_address.dart';
+import 'package:pastry/src/account/create_store/view/store_details.dart';
 
-import 'create_store_cubit.dart';
-import 'delivery_method_cubit.dart';
-import 'delivery_methods.dart';
+import '../../utilities/delivery_methods/delivery_method_cubit.dart';
+import '../../utilities/delivery_methods/delivery_methods.dart';
+import '../../utilities/image_upload/file_reader_service.dart';
+import '../../utilities/image_upload/image_uploader.dart';
+import '../../utilities/image_upload/image_uploader_cubit.dart';
+import '../../utilities/image_upload/image_uploader_repository.dart';
+import '../cubit/create_store_cubit.dart';
+import '../cubit/store_address_cubit.dart';
+import '../cubit/store_details_cubit.dart';
 
 class CreateStoreView extends StatelessWidget {
   const CreateStoreView({super.key});

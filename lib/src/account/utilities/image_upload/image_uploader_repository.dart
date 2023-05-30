@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 // import 'package:firebase_storage/firebase_storage.dart';
-import 'package:goods_rapid/create_store/file_reader_service.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 import 'package:flutter/services.dart' show rootBundle;
+
+import 'file_reader_service.dart';
 
 abstract class ImageUploaderRepository {
   final FileReaderService fileReaderService;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:goods_rapid/create_store/create_store_cubit.dart';
 
+import '../../create_store/cubit/create_store_cubit.dart';
 import 'image_uploader_cubit.dart';
 
 class ImageUploadForm extends StatelessWidget {

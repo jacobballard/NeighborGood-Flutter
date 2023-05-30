@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:goods_rapid/create_store/validation.dart';
+
+import '../model/validation.dart';
 
 part 'store_address_state.dart';
 

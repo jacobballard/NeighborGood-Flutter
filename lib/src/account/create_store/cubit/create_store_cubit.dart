@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:goods_rapid/create_store/image_uploader_cubit.dart';
-import 'package:goods_rapid/create_store/store_address_cubit.dart';
-import 'package:goods_rapid/create_store/store_details_cubit.dart';
+import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
+import 'package:pastry/src/account/create_store/cubit/store_details_cubit.dart';
 
-import 'delivery_method_cubit.dart';
+import '../../utilities/delivery_methods/delivery_method_cubit.dart';
+import '../../utilities/image_upload/image_uploader_cubit.dart';
 
 part 'create_store_state.dart';
 

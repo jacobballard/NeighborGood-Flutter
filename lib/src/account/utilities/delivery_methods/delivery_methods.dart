@@ -127,8 +127,9 @@ class LocalPickupMethodItem extends StatelessWidget {
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Wrap(
+            spacing: 8,
+            direction: Axis.horizontal,
             children: [
               IconButton(
                 icon: const Icon(Icons.close),

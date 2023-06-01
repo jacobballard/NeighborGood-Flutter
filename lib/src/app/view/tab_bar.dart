@@ -34,14 +34,7 @@ class MyTabBarState extends State<MyTabBar> {
       child: const MyAllProductsPage(),
     ),
 
-    BlocProvider(
-      create: (BuildContext context) => ProfileBloc(
-          profileRepository: ProfileRepository(
-              userId: context.read<AppBloc>().state.user.id,
-              authenticationRepository:
-                  context.read<AuthenticationRepository>())),
-      child: const AccountSettingsView(),
-    ),
+    const AccountSettingsView(),
   ];
 
   @override

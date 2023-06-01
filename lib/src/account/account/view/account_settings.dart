@@ -17,6 +17,7 @@ class AccountSettingsView extends StatelessWidget {
         if (state is ProfileBuyer) {
           settingsPage = const BuyerSettingsPage();
         } else if (state is ProfileGuest) {
+          print("why am I here??????");
           settingsPage = const GuestSettingsPage();
         } else if (state is ProfileSeller) {
           settingsPage = const SellerSettingsPage();

@@ -16,7 +16,7 @@ import '../cubit/store_address_cubit.dart';
 import '../cubit/store_details_cubit.dart';
 
 class CreateStoreView extends StatelessWidget {
-  const CreateStoreView({super.key});
+  const CreateStoreView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,11 @@ class CreateStoreView extends StatelessWidget {
         storeDetailsCubit: StoreDetailsCubit(),
         storeAddressCubit: StoreAddressCubit(),
         deliveryMethodsCubit: DeliveryMethodsCubit()..addMethod(),
-        imageUploaderCubit: ImageUploaderCubit(StoreImageUploaderRepository(
-            kIsWeb ? FileReaderServiceWeb() : FileReaderServiceMobile())),
+        imageUploaderCubit: ImageUploaderCubit(
+          StoreImageUploaderRepository(
+            kIsWeb ? FileReaderServiceWeb() : FileReaderServiceMobile(),
+          ),
+        ),
       ),
       child: BlocConsumer<CreateStoreCubit, CreateStoreState>(
         listener: (context, state) {
@@ -37,24 +40,35 @@ class CreateStoreView extends StatelessWidget {
         builder: (context, state) {
           final createStoreCubit = context.read<CreateStoreCubit>();
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                StoreDetailsView(),
-                StoreAddressView(
-                  storeAddressCubit: createStoreCubit.storeAddressCubit,
-                ),
-                DeliveryMethodsView(
-                  deliveryMethodsCubit: createStoreCubit.deliveryMethodsCubit,
-                ),
-                ImageUploadForm(
-                  imageUploaderCubit: createStoreCubit.imageUploaderCubit,
-                ),
-                ElevatedButton(
-                  onPressed: state.isValidated ? createStoreCubit.submit : null,
-                  child: const Text('Submit'),
-                ),
-              ],
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  StoreDetailsView(),
+                  StoreAddressView(
+                    storeAddressCubit: createStoreCubit.storeAddressCubit,
+                  ),
+                  DeliveryMethodsView(
+                    deliveryMethodsCubit: createStoreCubit.deliveryMethodsCubit,
+                  ),
+                  ImageUploadForm(
+                    imageUploaderCubit: createStoreCubit.imageUploaderCubit,
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        state.isValidated ? createStoreCubit.submit : null,
+                    child: const Text('Submit'),
+                  ),
+                ],
+              ),
             ),
           );
         },

@@ -8,6 +8,9 @@ import 'package:pastry/src/app/view/tab_bar.dart';
 import 'package:pastry/src/auth/login/login.dart';
 import 'package:pastry/src/auth/signup/signup.dart';
 import 'package:pastry/theme.dart';
+import 'package:repositories/repositories.dart';
+
+import '../../account/account/bloc/profile_bloc.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -47,7 +50,14 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MyTabBar();
+    return BlocProvider(
+      create: (BuildContext context) => ProfileBloc(
+          profileRepository: ProfileRepository(
+              userId: context.read<AppBloc>().state.user.id,
+              authenticationRepository:
+                  context.read<AuthenticationRepository>())),
+      child: const MyTabBar(),
+    );
   }
 }
 

@@ -40,11 +40,11 @@ class User extends Equatable {
   // In the User class
   User.fromDocument(DocumentSnapshot doc)
       : id = doc.id,
-        email = (doc.data() as Map<String, dynamic>)?['email'] as String?,
-        name = (doc.data() as Map<String, dynamic>)?['name'] as String?,
-        photo = (doc.data() as Map<String, dynamic>)?['photo'] as String?,
+        email = (doc.data() as Map<String, dynamic>)['email'] as String?,
+        name = (doc.data() as Map<String, dynamic>)['name'] as String?,
+        photo = (doc.data() as Map<String, dynamic>)['photo'] as String?,
         accountType = _accountTypeFromString(
-            (doc.data() as Map<String, dynamic>)?['role'] as String?);
+            (doc.data() as Map<String, dynamic>)['role'] as String?);
 
   static AccountType? _accountTypeFromString(String? accountTypeString) {
     if (accountTypeString == null) return null;

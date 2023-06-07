@@ -18,7 +18,6 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
   ) async {
     emit(StoreListLoading());
     try {
-      print("trying StoreListBloc getter");
       List<Store> stores = await fetchStoresFromFirestore(
         maxDistance: event.maxDistance,
         // searchQuery: event.searchQuery,
@@ -39,7 +38,7 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
   }) async {
     // Initialize Geoflutterfire
     // final geo = Geoflutterfire();
-    final collectionRef = FirebaseFirestore.instance.collection('stores');
+    // final collectionRef = FirebaseFirestore.instance.collection('stores');
     // final geoRef = geo.collection(collectionRef: collectionRef);
 
     // Create a center point from the given latitude and longitude

@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:typed_data';
-// import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as Path;
-import 'package:flutter/services.dart' show rootBundle;
 
-import 'file_reader_service.dart';
+import 'abstract_file_reader_service.dart';
 
 abstract class ImageUploaderRepository {
   final FileReaderService fileReaderService;
@@ -33,6 +30,7 @@ class ProductImageUploaderRepository extends ImageUploaderRepository {
     List<String> downloadUrls = [];
 
     for (var file in pickedFiles) {
+      //TODO : Finish this
       Uint8List data = await readBytes(file.path);
       // var snapshot = await _storage
       //     .ref('$userId/products/${Path.basename(file.path)}')
@@ -65,6 +63,7 @@ class StoreImageUploaderRepository extends ImageUploaderRepository {
 
     for (var file in pickedFiles) {
       Uint8List data = await readBytes(file.path);
+      // TODO: Finish this
       // var snapshot = await _storage
       //     .ref('$userId/store/${Path.basename(file.path)}')
       //     .putData(data);

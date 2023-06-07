@@ -8,7 +8,7 @@ class StoreDetailsState extends Equatable {
   final String facebook;
   final FormzStatus status;
 
-  StoreDetailsState({
+  const StoreDetailsState({
     this.title = const StoreTitle.pure(),
     this.description = const StoreDescription.pure(),
     this.instagram = "",

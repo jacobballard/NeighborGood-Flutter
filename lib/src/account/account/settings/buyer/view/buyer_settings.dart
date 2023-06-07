@@ -1,10 +1,9 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/account/account/settings/utils/custom_buttons.dart';
 
 import 'package:pastry/src/account/create_store/view/create_store.dart';
-import 'package:repositories/repositories.dart';
+import 'package:pastry/src/app/bloc/app_bloc.dart';
 
 class BuyerSettingsPage extends StatelessWidget {
   const BuyerSettingsPage({Key? key}) : super(key: key);
@@ -43,6 +42,12 @@ class BuyerSettingsPage extends StatelessWidget {
             // Navigate to contact support page
             Navigator.pushNamed(context, '/contact_support');
           },
+        ),
+        ElevatedButton(
+          onPressed: () {
+            BlocProvider.of<AppBloc>(context).add(const AppLogoutRequested());
+          },
+          child: const Text('Logout'),
         ),
       ],
     );

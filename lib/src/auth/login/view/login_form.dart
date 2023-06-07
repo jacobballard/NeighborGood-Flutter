@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
-import 'package:pastry/src/app/app.dart';
 
-import '../../signup/signup.dart';
+import 'package:pastry/src/app/bloc/auth_popup_cubit.dart';
+
 import '../login.dart';
 
 class LoginForm extends StatelessWidget {
@@ -117,8 +117,8 @@ class _PasswordInput extends StatelessWidget {
 }
 
 class _LoginButton extends StatelessWidget {
-  const _LoginButton({Key? key, this.isAlreadyGuest = false}) : super(key: key);
-  final bool isAlreadyGuest;
+  const _LoginButton({Key? key}) : super(key: key);
+  // final bool isAlreadyGuest;
 
   @override
   Widget build(BuildContext context) {
@@ -151,9 +151,8 @@ class _LoginButton extends StatelessWidget {
 }
 
 class _GoogleLoginButton extends StatelessWidget {
-  const _GoogleLoginButton({Key? key, this.isAlreadyGuest = false})
-      : super(key: key);
-  final bool isAlreadyGuest;
+  const _GoogleLoginButton({Key? key}) : super(key: key);
+  // final bool isAlreadyGuest;
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,6 @@ class MyAllProductsPage extends StatelessWidget {
         body: BlocBuilder<LocationCubit, GetLocationState>(
           builder: (context, locationState) {
             if (locationState is LocationKnown) {
-              print("Known location :)");
               context
                   .read<ProductListBloc>()
                   .add(ProductListSubscriptionRequested(
@@ -29,15 +28,13 @@ class MyAllProductsPage extends StatelessWidget {
               return BlocBuilder<ProductListBloc, ProductListState>(
                 builder: (context, state) {
                   if (state.status == ProductListStatus.loading) {
-                    print("this is why we're spinngig ${state.status}");
                     return const Center(child: CircularProgressIndicator());
                   } else if (state.status == ProductListStatus.success) {
-                    print("wahhahahs");
                     return ProductGridView(
                       products: state.products,
                     );
                   } else if (state.status == ProductListStatus.empty) {
-                    return Center(
+                    return const Center(
                       child: Text("No products to display :("),
                     );
                   } else {
@@ -48,8 +45,7 @@ class MyAllProductsPage extends StatelessWidget {
                 },
               );
             } else {
-              print("unknown :()");
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         ),

@@ -5,6 +5,8 @@ import '../cubit/create_store_cubit.dart';
 import '../cubit/store_details_cubit.dart';
 
 class StoreDetailsView extends StatelessWidget {
+  const StoreDetailsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final storeDetailsCubit =

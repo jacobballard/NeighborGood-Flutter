@@ -1,13 +1,17 @@
-import 'package:flutter/foundation.dart';
+import 'package:authentication_repository/authentication_repository.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/view/store_address.dart';
 import 'package:pastry/src/account/create_store/view/store_details.dart';
+import 'package:repositories/repositories.dart';
 
 import '../../utilities/delivery_methods/delivery_method_cubit.dart';
 import '../../utilities/delivery_methods/delivery_methods.dart';
-import '../../utilities/image_upload/file_reader_service.dart';
+
+import '../../utilities/image_upload/abstract_file_reader_service.dart';
 import '../../utilities/image_upload/image_uploader.dart';
 import '../../utilities/image_upload/image_uploader_cubit.dart';
 import '../../utilities/image_upload/image_uploader_repository.dart';
@@ -27,15 +31,26 @@ class CreateStoreView extends StatelessWidget {
         deliveryMethodsCubit: DeliveryMethodsCubit()..addMethod(),
         imageUploaderCubit: ImageUploaderCubit(
           StoreImageUploaderRepository(
-            kIsWeb ? FileReaderServiceWeb() : FileReaderServiceMobile(),
+            FileReaderService(),
           ),
         ),
+        authenticationRepository: context.read<AuthenticationRepository>(),
+        createStoreRepository: CreateStoreRepository(),
       ),
       child: BlocConsumer<CreateStoreCubit, CreateStoreState>(
         listener: (context, state) {
-          if (state.isValidated) {
-            // TODO : navigate to the next page or show a success message
+          if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage ?? "Creation Failure"),
+                ),
+              );
           }
+          // if (state.isValidated) {
+          //   // TODO : navigate to the next page or show a success message
+          // }
         },
         builder: (context, state) {
           final createStoreCubit = context.read<CreateStoreCubit>();
@@ -49,25 +64,28 @@ class CreateStoreView extends StatelessWidget {
                 },
               ),
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  StoreDetailsView(),
-                  StoreAddressView(
-                    storeAddressCubit: createStoreCubit.storeAddressCubit,
-                  ),
-                  DeliveryMethodsView(
-                    deliveryMethodsCubit: createStoreCubit.deliveryMethodsCubit,
-                  ),
-                  ImageUploadForm(
-                    imageUploaderCubit: createStoreCubit.imageUploaderCubit,
-                  ),
-                  ElevatedButton(
-                    onPressed:
-                        state.isValidated ? createStoreCubit.submit : null,
-                    child: const Text('Submit'),
-                  ),
-                ],
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const StoreDetailsView(),
+                    StoreAddressView(
+                      storeAddressCubit: createStoreCubit.storeAddressCubit,
+                    ),
+                    DeliveryMethodsView(
+                      deliveryMethodsCubit:
+                          createStoreCubit.deliveryMethodsCubit,
+                    ),
+                    ImageUploadForm(
+                      imageUploaderCubit: createStoreCubit.imageUploaderCubit,
+                    ),
+                    ElevatedButton(
+                      onPressed:
+                          state.isValidated ? createStoreCubit.submit : null,
+                      child: const Text('Submit'),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

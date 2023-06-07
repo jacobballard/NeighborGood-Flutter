@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 
 import '../cubit/store_address_cubit.dart';
 
@@ -11,7 +10,6 @@ class StoreAddressView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("check");
     return Material(
       child: BlocProvider.value(
         value: storeAddressCubit,
@@ -46,7 +44,7 @@ class StoreAddressView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: _StateInput(),
                     ),

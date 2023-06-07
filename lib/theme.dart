@@ -14,3 +14,22 @@ final theme = ThemeData(
     ),
   ),
 );
+
+final darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: const Color(0xFF6F6F6F),
+  primaryColorDark: Colors.black,
+  primaryColorLight: const Color(0xFF8F8F8F),
+  colorScheme: const ColorScheme.dark(secondary: Color(0xFF7F7F7F)),
+  scaffoldBackgroundColor: const Color(0xFF303030),
+  textTheme: GoogleFonts.openSansTextTheme().apply(
+    bodyColor: Colors.white,
+    displayColor: Colors.white,
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    fillColor: Colors.white,
+  ),
+);

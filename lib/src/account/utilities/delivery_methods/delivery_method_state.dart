@@ -24,7 +24,7 @@ class DeliveryMethod extends Equatable {
   final Eta eta;
   final bool showAddress;
 
-  DeliveryMethod(
+  const DeliveryMethod(
       {required this.type,
       this.range = const DeliveryRange.pure(),
       this.fee = const DeliveryFee.pure(),

@@ -10,22 +10,24 @@ class AccountSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      buildWhen: (previous, current) => previous != current,
-      builder: (context, state) {
-        Widget settingsPage;
-        if (state is ProfileBuyer) {
-          settingsPage = const BuyerSettingsPage();
-        } else if (state is ProfileGuest) {
-          print("why am I here??????");
-          settingsPage = const GuestSettingsPage();
-        } else if (state is ProfileSeller) {
-          settingsPage = const SellerSettingsPage();
-        } else {
-          settingsPage = const CircularProgressIndicator();
-        }
-        return settingsPage;
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Profile"),
+      ),
+      body: BlocBuilder<ProfileBloc, ProfileState>(
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, state) {
+          if (state is ProfileBuyer) {
+            return const BuyerSettingsPage();
+          } else if (state is ProfileGuest) {
+            return const GuestSettingsPage();
+          } else if (state is ProfileSeller) {
+            return const SellerSettingsPage();
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
+      ),
     );
   }
 }

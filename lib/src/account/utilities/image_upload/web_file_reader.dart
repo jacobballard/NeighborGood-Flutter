@@ -1,24 +1,10 @@
-import 'dart:io' as io;
 import 'dart:typed_data';
 import 'dart:async';
-import 'dart:html';
-import 'dart:typed_data';
-import 'file_reader_service.dart';
-import 'file_reader_service.dart';
+
 import 'package:flutter/services.dart';
+import 'package:universal_html/html.dart';
 
-abstract class FileReaderService {
-  Future<Uint8List> read(String path);
-}
-
-class FileReaderServiceMobile implements FileReaderService {
-  @override
-  Future<Uint8List> read(String path) async {
-    final file = io.File(path);
-
-    return await file.readAsBytes();
-  }
-}
+import 'abstract_file_reader_service.dart';
 
 class FileReaderServiceWeb implements FileReaderService {
   @override
@@ -38,3 +24,5 @@ class FileReaderServiceWeb implements FileReaderService {
     return completer.future;
   }
 }
+
+FileReaderService getFileReader() => FileReaderServiceWeb();

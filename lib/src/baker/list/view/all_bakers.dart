@@ -132,7 +132,9 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pastry/src/app/bloc/app_bloc.dart';
 import 'package:pastry/src/app/location/bloc/location_cubit.dart';
+
 import 'package:pastry/src/baker/detail/model/baker.dart';
 import 'package:pastry/src/baker/list/bloc/store_list_bloc.dart';
 
@@ -144,7 +146,6 @@ class StorePage extends StatelessWidget {
     return BlocListener<LocationCubit, GetLocationState>(
       listener: (context, locationState) {
         if (locationState is LocationKnown) {
-          print("Calling on view to fetch??");
           context.read<StoreListBloc>().add(FetchStores(
                 maxDistance: 25.0,
                 center: locationState.position,
@@ -154,6 +155,16 @@ class StorePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Stores'),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                  Icons.abc_outlined), //replace with your desired icon
+              onPressed: () {
+                BlocProvider.of<AppBloc>(context)
+                    .add(const AppLogoutRequested());
+              },
+            ),
+          ],
         ),
         body: BlocBuilder<StoreListBloc, StoreListState>(
           builder: (context, state) {
@@ -214,6 +225,8 @@ class StorePage extends StatelessWidget {
   }
 }
 
+//TODO : Do I need this?
+// ignore: unused_element
 class _StoreSearchDelegate extends SearchDelegate {
   @override
   List<Widget> buildActions(BuildContext context) {

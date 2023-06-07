@@ -103,7 +103,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await _authenticationRepository.signInWithApple();
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on SignInWithAppleFailure catch (e) {
+    } on SignInWithAppleFailure {
       emit(
         state.copyWith(
           status: FormzStatus.submissionFailure,

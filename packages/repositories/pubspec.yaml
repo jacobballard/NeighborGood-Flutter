@@ -16,6 +16,8 @@ dependencies:
   firebase_storage:
   authentication_repository:
     path: ../authentication_repository
+  form_inputs:
+    path: ../form_inputs
 
   flutter:
     sdk: flutter

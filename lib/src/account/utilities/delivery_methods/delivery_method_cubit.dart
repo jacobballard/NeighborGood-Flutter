@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
-
-import '../../create_store/model/validation.dart';
 
 part 'delivery_method_state.dart';
 
@@ -14,16 +13,17 @@ class DeliveryMethodsCubit extends Cubit<DeliveryMethodsState> {
   List<String> get availableMethods {
     final selectedMethods = state.methods.map((method) => method.type);
     return ['local pickup', 'delivery', 'shipping']
+        // ignore: iterable_contains_unrelated_type
         .where((method) => !selectedMethods.contains(method))
         .toList();
   }
 
   void addMethod() {
-    var newMethod = DeliveryMethod(
+    var newMethod = const DeliveryMethod(
       type: DeliveryMethodType.none,
-      range: const DeliveryRange.dirty(''),
-      fee: const DeliveryFee.dirty(''),
-      eta: const Eta.dirty(''),
+      range: DeliveryRange.dirty(''),
+      fee: DeliveryFee.dirty(''),
+      eta: Eta.dirty(''),
     );
     var methods = List<DeliveryMethod>.from(state.methods)..add(newMethod);
     emit(state.copyWith(
@@ -76,7 +76,6 @@ class DeliveryMethodsCubit extends Cubit<DeliveryMethodsState> {
   }
 
   void changeEta(int index, String eta) {
-    print("eta $index $eta");
     final methods = state.methods;
     final etaInput = Eta.dirty(eta);
     methods[index] = methods[index].copyWith(eta: etaInput);
@@ -104,9 +103,6 @@ class DeliveryMethodsCubit extends Cubit<DeliveryMethodsState> {
     for (var method in methods) {
       switch (method.type) {
         case DeliveryMethodType.delivery:
-          print("${method.range.valid} range.value ${method.range.value}");
-          print("${method.fee.valid} fee.value ${method.fee.value}");
-          print("${method.eta.valid} eta.value ${method.eta.value}");
           if (!method.range.valid && method.range.value != "") {
             return FormzStatus.invalid;
           }
@@ -126,7 +122,7 @@ class DeliveryMethodsCubit extends Cubit<DeliveryMethodsState> {
           //   print("yay");
           //   break;
           // }
-          print("yay");
+
           break;
         case DeliveryMethodType.local_pickup:
           if (!method.eta.valid && method.eta.value != "") {

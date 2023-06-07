@@ -7,17 +7,12 @@ class GuestSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Log In / Sign Up'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            BlocProvider.of<AppBloc>(context).add(const AppLogoutRequested());
-          },
-          child: const Text('Login In / Sign Up'),
-        ),
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          BlocProvider.of<AppBloc>(context).add(const AppLogoutRequested());
+        },
+        child: const Text('Login In'),
       ),
     );
   }

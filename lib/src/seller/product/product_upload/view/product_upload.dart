@@ -140,7 +140,7 @@ class _UploadButton extends StatelessWidget {
 class _ProductModifierInput extends StatelessWidget {
   final int index;
 
-  _ProductModifierInput({required this.index});
+  const _ProductModifierInput({required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +217,8 @@ class _PickerOptionInput extends StatelessWidget {
   final int modifierIndex;
   final int optionIndex;
 
-  _PickerOptionInput({required this.modifierIndex, required this.optionIndex});
+  const _PickerOptionInput(
+      {required this.modifierIndex, required this.optionIndex});
 
   @override
   Widget build(BuildContext context) {

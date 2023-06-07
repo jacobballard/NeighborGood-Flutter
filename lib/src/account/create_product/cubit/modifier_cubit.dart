@@ -11,10 +11,9 @@ class ModifierCubit extends Cubit<ModifierState> {
   ModifierCubit() : super(ModifierState());
 
   void addTextModifier() {
-    print("adding");
     var modifiers = List<Modifier>.from(state.modifiers)
       ..add(const TextModifier());
-    print(modifiers);
+
     emit(state.copyWith(
       modifiers: modifiers,
       status: _computeStatus(modifiers),
@@ -24,7 +23,7 @@ class ModifierCubit extends Cubit<ModifierState> {
   void addMultiChoiceModifier() {
     var modifiers = List<Modifier>.from(state.modifiers)
       ..add(const MultiChoiceModifier());
-    print(modifiers);
+
     emit(state.copyWith(
       modifiers: modifiers,
       status: _computeStatus(modifiers),

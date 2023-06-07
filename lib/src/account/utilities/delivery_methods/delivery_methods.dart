@@ -10,6 +10,35 @@ class DeliveryMethodsView extends StatelessWidget {
   final DeliveryMethodsCubit deliveryMethodsCubit;
 
   final bool required;
+  Widget _buildMethodItem(
+      BuildContext context, DeliveryMethod method, int index) {
+    switch (method.type) {
+      case DeliveryMethodType.local_pickup:
+        return LocalPickupMethodItem(
+          method: method,
+          index: index,
+        );
+      case DeliveryMethodType.delivery:
+        return DeliveryMethodItem(
+          method: method,
+          index: index,
+        );
+      case DeliveryMethodType.shipping:
+        return ShippingMethodItem(
+          method: method,
+          index: index,
+        );
+      default:
+        return (context
+                .read<DeliveryMethodsCubit>()
+                .getRemainingMethods()
+                .isNotEmpty)
+            ? NoPickupMethodItem(
+                index: index,
+              )
+            : const SizedBox.shrink();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +57,7 @@ class DeliveryMethodsView extends StatelessWidget {
                         required
                             ? "Delivery Methods"
                             : "Delivery Methods (optional)",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     if (state.methods.length < 3)
                       IconButton(
@@ -44,22 +73,11 @@ class DeliveryMethodsView extends StatelessWidget {
                   itemCount: state.methods.length,
                   itemBuilder: (context, index) {
                     final method = state.methods[index];
-                    switch (method.type) {
-                      case DeliveryMethodType.local_pickup:
-                        return LocalPickupMethodItem(
-                            method: method, index: index);
-                      case DeliveryMethodType.delivery:
-                        return DeliveryMethodItem(method: method, index: index);
-                      case DeliveryMethodType.shipping:
-                        return ShippingMethodItem(method: method, index: index);
-                      default:
-                        return (context
-                                .read<DeliveryMethodsCubit>()
-                                .getRemainingMethods()
-                                .isNotEmpty)
-                            ? NoPickupMethodItem(index: index)
-                            : const SizedBox.shrink();
-                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0), // or any other value you want
+                      child: _buildMethodItem(context, method, index),
+                    );
                   },
                 ),
               ],
@@ -74,7 +92,7 @@ class DeliveryMethodsView extends StatelessWidget {
 class NoPickupMethodItem extends StatelessWidget {
   final int index;
 
-  NoPickupMethodItem({
+  const NoPickupMethodItem({
     super.key,
     required this.index,
   });
@@ -115,7 +133,7 @@ class LocalPickupMethodItem extends StatelessWidget {
   final DeliveryMethod method;
   final int index;
 
-  LocalPickupMethodItem({
+  const LocalPickupMethodItem({
     super.key,
     required this.method,
     required this.index,
@@ -140,18 +158,12 @@ class LocalPickupMethodItem extends StatelessWidget {
                 "Local Pickup",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(
-                width: 8,
-              ),
               const Text("Keep address hidden"),
               Checkbox(
                 value: method.showAddress,
                 onChanged: (newValue) {
                   context.read<DeliveryMethodsCubit>().changeShowAddress(index);
                 },
-              ),
-              const SizedBox(
-                width: 8,
               ),
               DeliveryMethodTextField(
                 onChanged: (p0) =>
@@ -171,7 +183,7 @@ class DeliveryMethodItem extends StatelessWidget {
   final DeliveryMethod method;
   final int index;
 
-  DeliveryMethodItem({
+  const DeliveryMethodItem({
     super.key,
     required this.method,
     required this.index,
@@ -183,8 +195,7 @@ class DeliveryMethodItem extends StatelessWidget {
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Wrap(
             children: [
               IconButton(
                 icon: const Icon(Icons.close),
@@ -236,7 +247,7 @@ class ShippingMethodItem extends StatelessWidget {
   final DeliveryMethod method;
   final int index;
 
-  ShippingMethodItem({
+  const ShippingMethodItem({
     super.key,
     required this.method,
     required this.index,
@@ -248,8 +259,7 @@ class ShippingMethodItem extends StatelessWidget {
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Wrap(
             children: [
               IconButton(
                 icon: const Icon(Icons.close),
@@ -291,7 +301,7 @@ class DeliveryMethodTextField extends StatelessWidget {
   final String label;
   final String defaultValue;
 
-  DeliveryMethodTextField({
+  const DeliveryMethodTextField({
     super.key,
     required this.onChanged,
     required this.label,
@@ -300,17 +310,15 @@ class DeliveryMethodTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: FractionallySizedBox(
-        widthFactor: 1,
-        child: TextField(
-          decoration: InputDecoration(
-            labelText: label,
-            hintText: defaultValue,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-          ),
-          onChanged: onChanged,
+    return SizedBox(
+      width: 100, // Taking up all the available width
+      child: TextField(
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: defaultValue,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
         ),
+        onChanged: onChanged,
       ),
     );
   }

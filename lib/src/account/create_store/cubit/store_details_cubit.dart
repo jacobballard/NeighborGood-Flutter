@@ -6,7 +6,7 @@ import 'package:formz/formz.dart';
 part 'store_details_state.dart';
 
 class StoreDetailsCubit extends Cubit<StoreDetailsState> {
-  StoreDetailsCubit() : super(StoreDetailsState());
+  StoreDetailsCubit() : super(const StoreDetailsState());
 
   void titleChanged(String value) {
     final title = StoreTitle.dirty(value);

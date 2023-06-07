@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pastry/src/baker/detail/model/baker.dart';
+
 import 'package:pastry/src/product/list/model/product_summary.dart';
 
 part 'product_list_event.dart';
@@ -16,13 +16,10 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     ProductListSubscriptionRequested event,
     Emitter<ProductListState> emit,
   ) async {
-    print("test.,..");
     emit(state.copyWith(status: () => ProductListStatus.loading));
 
-    print("Loading...");
-
     // First, get the nearby stores within the desired distance
-    List<Store>? nearbyStores;
+    // List<Store>? nearbyStores;
     // await _fetchNearbyStores(event.maxDistance, event.location);
 
     // Initialize an empty list to store product summaries
@@ -42,9 +39,9 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     //     }
     //   }
     // }
-    print("Do I ever make it here?");
+
     // Update the state with the fetched product summaries and update the status
-    if (!productSummaries.isEmpty) {
+    if (productSummaries.isNotEmpty) {
       emit(state.copyWith(
         status: () => ProductListStatus.success,
         products: () => productSummaries,

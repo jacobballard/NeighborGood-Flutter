@@ -27,10 +27,10 @@ class ImageUploadForm extends StatelessWidget {
           ),
           BlocBuilder<ImageUploaderCubit, ImageUploaderState>(
             builder: (context, state) {
-              if (state.status == ImageUploaderStatus.uploading) {
+              if (state.uploadStatus == ImageUploaderStatus.uploading) {
                 return const CircularProgressIndicator();
               }
-              if (state.status == ImageUploaderStatus.failure) {
+              if (state.uploadStatus == ImageUploaderStatus.failure) {
                 return const Text('Image upload failed.');
               }
               return NonScrollableGridView(
@@ -70,10 +70,10 @@ class NonScrollableGridView extends StatelessWidget {
           width: width,
           height: height,
           child: GridView.count(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: crossAxisCount,
-            children: children,
             childAspectRatio: childAspectRatio,
+            children: children,
           ),
         );
       },

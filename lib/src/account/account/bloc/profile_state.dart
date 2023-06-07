@@ -21,3 +21,9 @@ class ProfileGuest extends ProfileState {
 
   final User user;
 }
+
+class ProfileNone extends ProfileState {
+  const ProfileNone(this.user);
+
+  final User user;
+}

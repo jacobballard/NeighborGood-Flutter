@@ -1,30 +1,51 @@
-import 'dart:convert';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_storage/firebase_storage.dart';
+
+// import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileRepository {
   ProfileRepository(
-      {required String userId, required this.authenticationRepository})
-      : userId = userId,
-        _userDocument =
-            FirebaseFirestore.instance.collection('users').doc(userId),
-        _firebaseStorage = FirebaseStorage.instance;
+      {required this.userId, required this.authenticationRepository})
+      : _userDocument = userId != null
+            ? FirebaseFirestore.instance.collection('users').doc(userId)
+            : null;
+  // _firebaseStorage = FirebaseStorage.instance;
 
-  final DocumentReference<Map<String, dynamic>> _userDocument;
-  final FirebaseStorage _firebaseStorage;
+  final DocumentReference<Map<String, dynamic>>? _userDocument;
+  // final FirebaseStorage _firebaseStorage;
   final AuthenticationRepository authenticationRepository;
-  final String userId;
+  final String? userId;
 
+  // Stream<User> get user {
+  //   print(userId);
+  //   print("id");
+  //   if (_userDocument != null) {
+  //     return _userDocument!.snapshots().map((snapshot) {
+  //       final data = snapshot.data();
+  //       return data != null ? User.fromDocument(snapshot) : User.empty;
+  //     });
+  //   } else {
+  //     // Return a stream that only emits User.empty
+  //     return Stream<User>.value(User.empty);
+  //   }
+  // }
   Stream<User> get user {
-    return _userDocument.snapshots().map((snapshot) {
-      final data = snapshot.data();
-      return data != null ? User.fromDocument(snapshot) : User.empty;
-    });
+    print(userId);
+    print("id");
+    if (_userDocument != null) {
+      return _userDocument!.snapshots().map((snapshot) {
+        final data = snapshot.data();
+        return data != null ? User.fromDocument(snapshot) : User.empty;
+      }).handleError((error, stackTrace) {
+        // If an error occurs, wait for a delay and then retry.
+        print("retry");
+        return Future.delayed(Duration(seconds: 3), () => user);
+      });
+    } else {
+      // Return a stream that only emits User.empty
+      return Stream<User>.value(User.empty);
+    }
   }
-
   // Future<void> createStore({
   //   required String id,
   //   required String title,
@@ -63,77 +84,33 @@ class ProfileRepository {
   //     throw Exception('Failed to create store: ${e.toString()}');
   //   }
   // }
-  Future<void> createStore({
-    required String title,
-    required String description,
-    required String instagram,
-    required String tiktok,
-    required String facebook,
-    required double latitude,
-    required double longitude,
-    required double deliveryRadius,
-    required List<String> deliveryMethods,
-  }) async {
-    if (title.isEmpty) {
-      throw Exception('Title is required');
-    }
 
-    try {
-      final idToken = await authenticationRepository.getIdToken();
+  // Future<void> updateUser(User user) async {
+  //   if (user.isEmpty) {
+  //     throw Exception('Cannot update empty user');
+  //   }
 
-      final url = Uri.parse('http://localhost:8080/create_store');
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $idToken',
-      };
-      final body = jsonEncode({
-        'title': title,
-        'description': description,
-        'instagram': instagram,
-        'tiktok': tiktok,
-        'facebook': facebook,
-        'latitude': latitude,
-        'longitude': longitude,
-        'delivery_radius': deliveryRadius,
-        'delivery_methods': deliveryMethods,
-      });
+  //   try {
+  //     // Upload the image to Firebase Storage and get the download URL, if a new image is provided
+  //     String? photoUrl;
+  //     if (user.photo != null && user.photo!.isNotEmpty) {
+  //       final ref = _firebaseStorage.ref('user_photos/${user.id}');
+  //       final uploadTask =
+  //           ref.putString(user.photo!, format: PutStringFormat.dataUrl);
+  //       await uploadTask;
+  //       photoUrl = await ref.getDownloadURL();
+  //     }
 
-      final response = await http.post(url, headers: headers, body: body);
-
-      if (response.statusCode != 200) {
-        throw Exception('Failed to create store: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to create store: ${e.toString()}');
-    }
-  }
-
-  Future<void> updateUser(User user) async {
-    if (user.isEmpty) {
-      throw Exception('Cannot update empty user');
-    }
-
-    try {
-      // Upload the image to Firebase Storage and get the download URL, if a new image is provided
-      String? photoUrl;
-      if (user.photo != null && user.photo!.isNotEmpty) {
-        final ref = _firebaseStorage.ref('user_photos/${user.id}');
-        final uploadTask =
-            ref.putString(user.photo!, format: PutStringFormat.dataUrl);
-        await uploadTask;
-        photoUrl = await ref.getDownloadURL();
-      }
-
-      // Update the user document in Firestore
-      await _userDocument.set(
-        {
-          ...user.copyWith(photo: photoUrl).toMap(),
-        },
-        SetOptions(merge: true),
-      );
-    } catch (e) {
-      print(e);
-      throw Exception('Error updating user information');
-    }
-  }
+  //     // Update the user document in Firestore
+  //     await _userDocument.set(
+  //       {
+  //         ...user.copyWith(photo: photoUrl).toMap(),
+  //       },
+  //       SetOptions(merge: true),
+  //     );
+  //   } catch (e) {
+  //     print(e);
+  //     throw Exception('Error updating user information');
+  //   }
+  // }
 }

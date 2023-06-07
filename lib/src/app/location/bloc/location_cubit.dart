@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
+
 import 'package:geolocator/geolocator.dart';
+// ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,12 +20,12 @@ class LocationCubit extends Cubit<GetLocationState> {
 
   initLocation() async {
     emit(LocationLoading());
-    bool isServiceEnabled;
+    // bool isServiceEnabled;
     LocationPermission permission;
 
-    isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    await Geolocator.isLocationServiceEnabled();
     permission = await Geolocator.checkPermission();
-    print("init location $isServiceEnabled");
+
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever ||
         permission == LocationPermission.unableToDetermine) {
@@ -42,7 +43,6 @@ class LocationCubit extends Cubit<GetLocationState> {
   }
 
   Future<void> getLocation() async {
-    print("Did we ever get here??");
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((position) {
       this.position = GeoPoint(position.latitude, position.longitude);

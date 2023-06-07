@@ -39,7 +39,6 @@ class ImageUploaderCubit extends Cubit<ImageUploaderState> {
 
   Future<void> pickAndUploadImage() async {
     try {
-      print("here");
       emit(state.copyWith(uploadStatus: ImageUploaderStatus.uploading));
       // TODO : pass auth uid
       final List<String> urls =

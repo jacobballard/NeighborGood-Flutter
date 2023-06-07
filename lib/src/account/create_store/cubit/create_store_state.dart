@@ -1,20 +1,53 @@
 part of 'create_store_cubit.dart';
 
-class CreateStoreState {
+class CreateStoreState extends Equatable {
   final FormzStatus storeDetailsStatus;
   final FormzStatus storeAddressStatus;
   final FormzStatus deliveryMethodsStatus;
   final FormzStatus imageUploaderStatus;
+  final FormzStatus status;
+  final String? errorMessage;
 
-  CreateStoreState(
+  const CreateStoreState(
       {this.storeDetailsStatus = FormzStatus.pure,
       this.storeAddressStatus = FormzStatus.pure,
       this.deliveryMethodsStatus = FormzStatus.pure,
-      this.imageUploaderStatus = FormzStatus.pure});
+      this.imageUploaderStatus = FormzStatus.pure,
+      this.status = FormzStatus.pure,
+      this.errorMessage});
 
   bool get isValidated =>
       storeDetailsStatus == FormzStatus.valid &&
       storeAddressStatus == FormzStatus.valid &&
       deliveryMethodsStatus == FormzStatus.valid &&
       imageUploaderStatus == FormzStatus.valid;
+
+  CreateStoreState copyWith({
+    FormzStatus? storeDetailsStatus,
+    FormzStatus? storeAddressStatus,
+    FormzStatus? deliveryMethodsStatus,
+    FormzStatus? imageUploaderStatus,
+    FormzStatus? status,
+    String? errorMessage,
+  }) {
+    return CreateStoreState(
+      storeDetailsStatus: storeDetailsStatus ?? this.storeDetailsStatus,
+      storeAddressStatus: storeAddressStatus ?? this.storeAddressStatus,
+      deliveryMethodsStatus:
+          deliveryMethodsStatus ?? this.deliveryMethodsStatus,
+      imageUploaderStatus: imageUploaderStatus ?? this.imageUploaderStatus,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        storeDetailsStatus,
+        storeAddressStatus,
+        deliveryMethodsStatus,
+        imageUploaderStatus,
+        status,
+        errorMessage,
+      ];
 }

@@ -9,10 +9,6 @@ class StoreAddressState {
   final FormzStatus status;
 
   FormzStatus get isZipcodeOnlyOrAllFieldsValid {
-    print(zipCode.status);
-    print(stateName);
-    print("print value ${addressLine1.value}");
-    print("status valid");
     if (zipCode.status == FormzInputStatus.valid &&
         addressLine1.value == "" &&
         addressLine2.value == "" &&

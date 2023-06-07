@@ -9,8 +9,8 @@ class ModifiersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Column(children: const [
+    return const Material(
+      child: Column(children: [
         _BuildModifierView(),
       ]),
     );
@@ -76,13 +76,9 @@ class _BuildModifierView extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: (state.modifiers.length + 1),
             itemBuilder: (context, index) {
-              print("index $index");
-
               if (index < state.modifiers.length) {
                 final mod = state.modifiers[index];
                 if (mod is TextModifier) {
-                  print(
-                      'is text modifier -=12-=1-=2=-12-2=1-=12-12-=21=--=1-12-12-=21=-21=-=12-=12=-1=2-=');
                   return _TextModifierView(modIndex: index);
                 } else if (mod is MultiChoiceModifier) {
                   return _MultichoiceModifierView(modIndex: index);
@@ -90,6 +86,7 @@ class _BuildModifierView extends StatelessWidget {
               } else {
                 return const _AddModifierView();
               }
+              return null;
             },
           );
         },
@@ -188,7 +185,7 @@ class _TextModifierView extends StatelessWidget {
 }
 
 class _MultichoiceModifierView extends StatelessWidget {
-  _MultichoiceModifierView({
+  const _MultichoiceModifierView({
     Key? key,
     required this.modIndex,
   }) : super(key: key);
@@ -242,9 +239,6 @@ class _MultichoiceModifierView extends StatelessWidget {
                           (state.modifiers[modIndex] as MultiChoiceModifier)
                               .choices
                               ?.length) {
-                        final choice =
-                            (state.modifiers[modIndex] as MultiChoiceModifier)
-                                .choices?[choiceIndex];
                         return Row(
                           children: [
                             IconButton(
@@ -321,10 +315,10 @@ class _ModifierTextField extends StatelessWidget {
           label: _labelWidget(context),
           hintText: defaultValue,
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          enabledBorder: UnderlineInputBorder(
+          enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black),
           ),
-          disabledBorder: UnderlineInputBorder(
+          disabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
           ),
           filled: true,

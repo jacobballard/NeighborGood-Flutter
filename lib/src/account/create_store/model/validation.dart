@@ -1,48 +1,5 @@
 import 'package:formz/formz.dart';
 
-enum StoreTitleValidationError { invalid }
-
-class StoreTitle extends FormzInput<String, StoreTitleValidationError> {
-  const StoreTitle.pure() : super.pure("");
-
-  const StoreTitle.dirty([String value = '']) : super.dirty(value);
-
-  static final unicodeRegex =
-      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}]*$', unicode: true);
-
-  @override
-  StoreTitleValidationError? validator(String? value) {
-    if (value == null ||
-        value.isEmpty ||
-        value.length < 2 ||
-        !unicodeRegex.hasMatch(value)) {
-      return StoreTitleValidationError.invalid;
-    }
-    return null;
-  }
-}
-
-enum StoreDescriptionValidationError { invalid }
-
-class StoreDescription
-    extends FormzInput<String, StoreDescriptionValidationError> {
-  const StoreDescription.pure() : super.pure("");
-  const StoreDescription.dirty([String value = '']) : super.dirty(value);
-
-  static final unicodeRegex =
-      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}]*$', unicode: true);
-
-  @override
-  StoreDescriptionValidationError? validator(String? value) {
-    if (value != null && value.length > 1500) {
-      return StoreDescriptionValidationError.invalid;
-    }
-    return unicodeRegex.hasMatch(value ?? '')
-        ? null
-        : StoreDescriptionValidationError.invalid;
-  }
-}
-
 enum LastNameValidationError { invalid }
 
 class LastName extends FormzInput<String, LastNameValidationError> {
@@ -68,35 +25,6 @@ class FirstName extends FormzInput<String, FirstNameValidationError> {
     return _fullNameRegExp.hasMatch(value ?? '')
         ? null
         : FirstNameValidationError.invalid;
-  }
-}
-
-enum AddressValidationError { invalid }
-
-class Address extends FormzInput<String, AddressValidationError> {
-  const Address.pure() : super.pure('');
-  const Address.dirty([String value = '']) : super.dirty(value);
-  // Here you can adjust the regular expression to match your desired validation criteria for the address.
-  static final _addressRegExp = RegExp(r'^[a-zA-Z0-9\s,]*$');
-  @override
-  AddressValidationError? validator(String? value) {
-    return _addressRegExp.hasMatch(value ?? '')
-        ? null
-        : AddressValidationError.invalid;
-  }
-}
-
-enum ZipCodeValidationError { invalid }
-
-class ZipCode extends FormzInput<String, ZipCodeValidationError> {
-  const ZipCode.pure() : super.pure('');
-  const ZipCode.dirty([String value = '']) : super.dirty(value);
-  static final _zipCodeRegExp = RegExp(r'^\d{5}$');
-  @override
-  ZipCodeValidationError? validator(String? value) {
-    return _zipCodeRegExp.hasMatch(value ?? '')
-        ? null
-        : ZipCodeValidationError.invalid;
   }
 }
 
@@ -139,22 +67,6 @@ class DateOfBirth extends FormzInput<String, DateOfBirthValidationError> {
     return _dateOfBirthRegExp.hasMatch(value ?? '')
         ? null
         : DateOfBirthValidationError.invalid;
-  }
-}
-
-enum CityValidationError { invalid }
-
-class City extends FormzInput<String, CityValidationError> {
-  const City.pure() : super.pure('');
-  const City.dirty([String value = '']) : super.dirty(value);
-
-  static final _cityRegExp = RegExp(r"^[a-zA-Z\s\-']+$");
-
-  @override
-  CityValidationError? validator(String? value) {
-    return _cityRegExp.hasMatch(value ?? '')
-        ? null
-        : CityValidationError.invalid;
   }
 }
 

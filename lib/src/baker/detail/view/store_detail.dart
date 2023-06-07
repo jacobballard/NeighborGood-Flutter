@@ -101,8 +101,8 @@ class StoreDetailPage extends StatelessWidget {
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                return Column(
-                  children: const [
+                return const Column(
+                  children: [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(

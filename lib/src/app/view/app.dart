@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:pastry/theme.dart';
 import 'package:repositories/repositories.dart';
 
 import '../../account/account/bloc/profile_bloc.dart';
+import '../bloc/auth_popup_cubit.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -38,6 +41,7 @@ class App extends StatelessWidget {
         ],
         child: MaterialApp(
           theme: theme,
+          darkTheme: darkTheme,
           home: const AppWithAuthAndLocationListener(),
         ),
       ),
@@ -50,14 +54,7 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => ProfileBloc(
-          profileRepository: ProfileRepository(
-              userId: context.read<AppBloc>().state.user.id,
-              authenticationRepository:
-                  context.read<AuthenticationRepository>())),
-      child: const MyTabBar(),
-    );
+    return const MyTabBar();
   }
 }
 
@@ -82,41 +79,45 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
           }
         }
       },
-      child: const AppView(),
+      child: BlocBuilder<AppBloc, AppState>(
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, state) {
+          print("builder");
+
+          if (state.status == AppStatus.authenticated) {
+            print("Should reBuild");
+            return BlocProvider.value(
+              value: ProfileBloc(
+                appBloc: context.read<AppBloc>(),
+                profileRepository: ProfileRepository(
+                  userId: state.user.id,
+                  authenticationRepository:
+                      context.read<AuthenticationRepository>(),
+                ),
+              ),
+              child: const AppView(),
+            );
+          } else {
+            print("else :(");
+            return BlocProvider.value(
+              value: ProfileBloc(
+                appBloc: context.read<AppBloc>(),
+                profileRepository: ProfileRepository(
+                  userId: null,
+                  authenticationRepository:
+                      context.read<AuthenticationRepository>(),
+                ),
+              ),
+              child: const AppView(),
+            );
+          }
+        },
+      ),
     );
   }
 
-  // Future<void> _showLoginPopup(BuildContext context) async {
-  //   final result = await showDialog<bool>(
-  //     context: context,
-  //     barrierDismissible: true, // barrier is dismissible
-  //     builder: (BuildContext context) {
-  //       return BlocProvider(
-  //         create: (context) =>
-  //             LoginCubit(context.read<AuthenticationRepository>()),
-  //         child: Builder(
-  //           builder: (BuildContext innerContext) {
-  //             return GestureDetector(
-  //               onTap: () async {
-  //                 await innerContext.read<LoginCubit>().signInAnonymously();
-  //                 if (context.mounted) Navigator.of(innerContext).pop();
-  //               },
-  //               child: Container(
-  //                 color: Colors.transparent,
-  //                 child: const Center(
-  //                   child: LoginPage(),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   Future<void> showAuthDialog(BuildContext context) async {
-    final authPopupCubit = AuthPopupCubit();
+    // ignore: unused_local_variable
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
@@ -124,16 +125,19 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => AuthPopupCubit(),
+              create: (context) => AuthPopupCubit(
+                authenticationRepository:
+                    context.read<AuthenticationRepository>(),
+              ),
             ),
             BlocProvider(
               create: (context) =>
                   LoginCubit(context.read<AuthenticationRepository>()),
             ),
           ],
-          child: BlocBuilder<AuthPopupCubit, AuthPopupState>(
+          child: BlocBuilder<AuthPopupCubit, AuthPopupType>(
             builder: (context, state) {
-              if (state == AuthPopupState.login) {
+              if (state == AuthPopupType.login) {
                 return GestureDetector(
                   onTap: () async {
                     await context.read<LoginCubit>().signInAnonymously();
@@ -146,7 +150,7 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
                     ),
                   ),
                 );
-              } else if (state == AuthPopupState.signUp) {
+              } else if (state == AuthPopupType.signUp) {
                 return Container(
                   color: Colors.transparent,
                   child: const Center(
@@ -154,6 +158,14 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
                   ),
                 );
               }
+              // else if (state == AuthPopupType.verify) {
+              //   return Container(
+              //     color: Colors.transparent,
+              //     child: const Center(
+              //       child: EmailVerificationPage(),
+              //     ),
+              //   );
+              // }
               return Container(); // This should never happen
             },
           ),
@@ -191,11 +203,12 @@ class AppWithAuthAndLocationListener extends StatelessWidget {
   }
 }
 
-enum AuthPopupState { login, signUp }
 
-class AuthPopupCubit extends Cubit<AuthPopupState> {
-  AuthPopupCubit() : super(AuthPopupState.login);
 
-  void showSignUp() => emit(AuthPopupState.signUp);
-  void showLogin() => emit(AuthPopupState.login);
-}
+// class AuthPopupCubit extends Cubit<AuthPopupState> {
+//   AuthPopupCubit() : super(AuthPopupState.login);
+
+//   void showVerify() => emit(AuthPopupState.verify);
+//   void showSignUp() => emit(AuthPopupState.signUp);
+//   void showLogin() => emit(AuthPopupState.login);
+// }

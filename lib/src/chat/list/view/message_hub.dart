@@ -28,10 +28,10 @@ class MessageHubPageState extends State<MessageHubPage> {
           builder: (context) => Container(), // TODO : push conversation
         ),
       ),
-      child: Card(
+      child: const Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [Text("test")],
+          children: [Text("test")],
         ),
       ),
     );

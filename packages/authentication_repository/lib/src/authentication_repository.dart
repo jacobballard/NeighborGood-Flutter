@@ -175,7 +175,10 @@ class AuthenticationRepository {
     GoogleSignIn? googleSignIn,
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard() {
+        _googleSignIn = googleSignIn ??
+            GoogleSignIn(
+                clientId:
+                    "1030211861772-qtqdrkr147o9eoi1rce500quk6hp6cq3.apps.googleusercontent.com") {
     checkForExistingUser();
   }
 
@@ -247,6 +250,8 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
+
+      await sendEmailVerification();
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -359,6 +364,39 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> sendEmailVerification() async {
+    final firebaseUser = _firebaseAuth.currentUser;
+
+    if (firebaseUser != null && !firebaseUser.emailVerified) {
+      await firebaseUser.sendEmailVerification();
+    }
+  }
+
+  final _emailVerificationController = StreamController<bool>();
+  Stream<bool> get isEmailVerified => _emailVerificationController.stream;
+
+  // ignore: unused_element
+  void _checkEmailVerificationStatus() async {
+    // Stop checking if the controller has been closed.
+    if (_emailVerificationController.isClosed) return;
+
+    final firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser != null) {
+      await firebaseUser.reload();
+      _emailVerificationController.add(firebaseUser.emailVerified);
+
+      if (!firebaseUser.emailVerified) {
+        // Check again after a delay.
+        await Future.delayed(Duration(seconds: 5));
+        _checkEmailVerificationStatus();
+      }
+    }
+  }
+  //This will always exist so probably useless?
+  // void dispose() {
+  //   _emailVerificationController.close();
+  // }
+
   /// Signs out the current user which will emit
   /// [User.empty] from the [user] Stream.
   ///
@@ -369,6 +407,8 @@ class AuthenticationRepository {
         _firebaseAuth.signOut(),
         _googleSignIn.signOut(),
       ]);
+
+      _emailVerificationController.close();
     } catch (_) {
       throw LogOutFailure();
     }

@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
 import 'package:pastry/src/account/create_store/cubit/store_details_cubit.dart';
+import 'package:repositories/models/address.dart';
+import 'package:repositories/repositories.dart';
 
 import '../../utilities/delivery_methods/delivery_method_cubit.dart';
 import '../../utilities/image_upload/image_uploader_cubit.dart';
@@ -15,6 +19,8 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
   final StoreAddressCubit storeAddressCubit;
   final DeliveryMethodsCubit deliveryMethodsCubit;
   final ImageUploaderCubit imageUploaderCubit;
+  final CreateStoreRepository createStoreRepository;
+  final AuthenticationRepository authenticationRepository;
   late final StreamSubscription _storeDetailsSubscription;
   late final StreamSubscription _storeAddressSubscription;
   late final StreamSubscription _deliveryMethodsSubscription;
@@ -24,7 +30,9 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
     required this.storeAddressCubit,
     required this.deliveryMethodsCubit,
     required this.imageUploaderCubit,
-  }) : super(CreateStoreState()) {
+    required this.createStoreRepository,
+    required this.authenticationRepository,
+  }) : super(const CreateStoreState()) {
     _storeDetailsSubscription = storeDetailsCubit.stream.listen((state) {
       emit(CreateStoreState(
           storeDetailsStatus: state.status,
@@ -66,8 +74,35 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
     return super.close();
   }
 
-  void submit() {
+  Future<void> submit() async {
     if (!state.isValidated) return;
-    // TODO : Call repo to submit here
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    try {
+      await createStoreRepository.create(
+          token: await authenticationRepository.getIdToken(),
+          title: storeDetailsCubit.state.title.value,
+          address: Address(
+            storeAddressCubit.state.addressLine1.value,
+            storeAddressCubit.state.addressLine2.value,
+            storeAddressCubit.state.city.value,
+            storeAddressCubit.state.stateName,
+            storeAddressCubit.state.zipCode.value,
+          ));
+
+      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+    } on CreateStoreFailure catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.message,
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+    }
   }
 }

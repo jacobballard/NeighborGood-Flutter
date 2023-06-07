@@ -5,6 +5,8 @@ import '../cubit/create_product_cubit.dart';
 import '../cubit/product_details_cubit.dart';
 
 class ProductDetailsView extends StatelessWidget {
+  const ProductDetailsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final productDetailsCubit =
@@ -26,8 +28,8 @@ class ProductDetailsView extends StatelessWidget {
                         text: TextSpan(
                           text: "Product Title",
                           style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            const TextSpan(
+                          children: const <TextSpan>[
+                            TextSpan(
                                 text: ' *',
                                 style: TextStyle(color: Colors.red)),
                           ],
@@ -44,8 +46,8 @@ class ProductDetailsView extends StatelessWidget {
                         text: TextSpan(
                           text: "Product Price",
                           style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            const TextSpan(
+                          children: const <TextSpan>[
+                            TextSpan(
                                 text: ' *',
                                 style: TextStyle(color: Colors.red)),
                           ],

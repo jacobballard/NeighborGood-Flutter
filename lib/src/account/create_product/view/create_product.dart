@@ -119,8 +119,24 @@ class CreateProductPage extends StatelessWidget {
             },
             child: BlocConsumer<CreateProductCubit, CreateProductState>(
               listener: (context, state) {
-                if (state.isValidated) {
-                  // TODO : Doosies
+                if (state.status.isSubmissionFailure) {
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(
+                        content: Text(state.errorMessage ?? "Creation Failure"),
+                      ),
+                    );
+                }
+                if (state.status.isSubmissionSuccess) {
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(
+                        content: Text("Product Created!"),
+                      ),
+                    );
+                  Navigator.of(context).pop();
                 }
               },
               builder: (context, state) {

@@ -11,7 +11,7 @@ class ProductListState extends Equatable {
   });
 
   final ProductListStatus status;
-  final List<ProductSummary> products;
+  final List<Product> products;
   final double maxDistance;
   // final ProductListFilter filter;
 
@@ -19,7 +19,7 @@ class ProductListState extends Equatable {
 
   ProductListState copyWith({
     ProductListStatus Function()? status,
-    List<ProductSummary> Function()? products,
+    List<Product> Function()? products,
     // ProductListFilter Function()? filter,
   }) {
     return ProductListState(

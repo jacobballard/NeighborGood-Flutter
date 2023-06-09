@@ -31,7 +31,7 @@ class CreateProductRepository {
       'price': double.tryParse(price),
       if (modifiers != []) 'modifiers': Modifier.toJsonList(modifiers),
       if (deliveryMethods != [])
-        'deliveryMethods':
+        'delivery_methods':
             deliveryMethods?.map((method) => method.toJson()).toList(),
     };
     print("oh no");
@@ -40,7 +40,8 @@ class CreateProductRepository {
     try {
       // Send a POST request
       var response = await http.post(
-        Uri.parse('http://127.0.0.1:8081/'), // Replace with your URL
+        Uri.parse(
+            'https://us-central1-pastry-6b817.cloudfunctions.net/create_product'), // Replace with your URL
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
@@ -48,7 +49,7 @@ class CreateProductRepository {
         body: jsonEncode(body),
       );
       // print(response.body);
-      print("response");
+      // print("response");
       // if (response.statusCode != 201) {
       //   print("it was00");
       //   var error = jsonDecode(response.body);

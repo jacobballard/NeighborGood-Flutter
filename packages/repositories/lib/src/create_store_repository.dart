@@ -25,7 +25,8 @@ class CreateStoreRepository {
     try {
       // Send a POST request
       var response = await http.post(
-        Uri.parse('http://127.0.0.1:8080/'), // Replace with your URL
+        Uri.parse(
+            'https://us-central1-pastry-6b817.cloudfunctions.net/create_store'), // Replace with your URL
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

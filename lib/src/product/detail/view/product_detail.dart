@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pastry/src/product/detail/model/product.dart';
+import 'package:repositories/models/product.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Product product;
@@ -10,7 +11,7 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.productName),
+        title: Text(product.name),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -19,13 +20,13 @@ class ProductDetailPage extends StatelessWidget {
             SizedBox(
               height: 300,
               child: PageView.builder(
-                itemCount: product.imageURLs.length,
+                // itemCount: product.imageURLs.length,
                 itemBuilder: (context, index) {
-                  final imageUrl = product.imageURLs[index];
-                  return Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                  );
+                  // final imageUrl = product.imageURLs[index];
+                  // return Image.network(
+                  //   imageUrl,
+                  //   fit: BoxFit.cover,
+                  // );
                 },
               ),
             ),
@@ -34,26 +35,26 @@ class ProductDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    product.productName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  // Text(
+                  //   // product.productName,
+                  //   style: const TextStyle(
+                  //     fontSize: 24,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
-                  Text(
-                    '\$${product.basePrice.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  // Text(
+                  //   '\$${product.basePrice.toStringAsFixed(2)}',
+                  //   style: const TextStyle(
+                  //     fontSize: 20,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
-                  Text(
-                    product.description ?? "",
-                    style: const TextStyle(fontSize: 16),
-                  ),
+                  // Text(
+                  //   product.description ?? "",
+                  //   style: const TextStyle(fontSize: 16),
+                  // ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

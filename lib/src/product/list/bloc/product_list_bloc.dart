@@ -1,14 +1,26 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:pastry/src/product/detail/model/product.dart';
 
-import 'package:pastry/src/product/list/model/product_summary.dart';
+import 'package:repositories/repositories.dart';
+
+import '../../../app/location/bloc/location_cubit.dart';
 
 part 'product_list_event.dart';
 part 'product_list_state.dart';
 
 class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
-  ProductListBloc() : super(const ProductListState()) {
+  final ProductRepository productRepository;
+  final LocationCubit locationCubit;
+  final AuthenticationRepository authenticationRepository;
+
+  ProductListBloc({
+    required this.productRepository,
+    required this.locationCubit,
+    required this.authenticationRepository,
+  }) : super(const ProductListState()) {
     on<ProductListSubscriptionRequested>(_onSubscriptionRequested);
   }
 
@@ -18,76 +30,36 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
   ) async {
     emit(state.copyWith(status: () => ProductListStatus.loading));
 
-    // First, get the nearby stores within the desired distance
-    // List<Store>? nearbyStores;
-    // await _fetchNearbyStores(event.maxDistance, event.location);
+    try {
+      if (locationCubit.state is LocationKnown) {
+        final position = (locationCubit.state as LocationKnown).position;
 
-    // Initialize an empty list to store product summaries
-    List<ProductSummary> productSummaries = [];
+        List<Product> products = await productRepository.getAllProducts(
+          token: await authenticationRepository.getIdToken(),
+          lat: position.latitude,
+          lng: position.longitude,
+          radius: 20,
+          filterShipping: true,
+          filterDelivery: true,
+          filterPickup: true,
+        );
 
-    // For each store, query its products and create product summaries
-    // for (final store in nearbyStores) {
-    //   final productsQuery = FirebaseFirestore.instance
-    //       .collection('products')
-    //       .where('storeID', isEqualTo: store.userID)
-    //       .snapshots();
-
-    //   await for (final snapshot in productsQuery) {
-    //     for (final doc in snapshot.docs) {
-    //       final productSummary = ProductSummary.fromDocument(doc);
-    //       productSummaries.add(productSummary);
-    //     }
-    //   }
-    // }
-
-    // Update the state with the fetched product summaries and update the status
-    if (productSummaries.isNotEmpty) {
-      emit(state.copyWith(
-        status: () => ProductListStatus.success,
-        products: () => productSummaries,
-      ));
-    } else {
-      emit(state.copyWith(
-        status: () => ProductListStatus.empty,
-        products: () => productSummaries,
-      ));
+        if (products.isNotEmpty) {
+          emit(state.copyWith(
+            status: () => ProductListStatus.success,
+            products: () => products,
+          ));
+        } else {
+          emit(state.copyWith(
+            status: () => ProductListStatus.empty,
+            products: () => [],
+          ));
+        }
+      } else {
+        emit(state.copyWith(status: () => ProductListStatus.failure));
+      }
+    } catch (e) {
+      emit(state.copyWith(status: () => ProductListStatus.failure));
     }
   }
-
-  // Future<List<Store>> _fetchNearbyStores(
-
-  // double maxDistance, GeoPoint center) async {
-  // final geoRef = Geoflutterfire()
-  //     .geoFirestore
-  //     .collection(FirebaseFirestore.instance.collection('stores'));
-  // print("_fetchNearbyStores");
-  // final geo = Geoflutterfire();
-
-  // final collectionRef = FirebaseFirestore.instance.collection('stores');
-  // final geoRef = geo.collection(collectionRef: collectionRef);
-
-  // final centerPoint = GeoFirePoint(center.latitude, center.longitude);
-
-  // final queryStream = geoRef.within(
-  //   center: centerPoint,
-  //   radius: maxDistance / 1000, // Convert to kilometers
-  //   field:
-  //       'location', // The field containing the GeoPoint in your Firestore documents
-  //   strictMode: true,
-  // );
-  // // .map((event) =>
-  // // event.docs.map((doc) => Store.fromDocument(doc)).toList());
-
-  // List<Store> stores = [];
-  // await for (final documentSnapshotIterable in queryStream) {
-  //   if (documentSnapshotIterable.isEmpty) {
-  //     return stores; // Return an empty list if the query result is empty
-  //   }
-  //   for (final doc in documentSnapshotIterable) {
-  //     stores.add(Store.fromDocument(doc));
-  //   }
-  // }
-
-  // return stores;
-  // }
 }

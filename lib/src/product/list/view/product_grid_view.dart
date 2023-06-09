@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pastry/src/product/list/model/product_summary.dart';
+import 'package:repositories/models/product.dart';
 
 class ProductGridView extends StatelessWidget {
-  final List<ProductSummary> products;
+  final List<Product> products;
 
   const ProductGridView({super.key, required this.products});
 
@@ -38,7 +39,7 @@ class ProductGridView extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Image.network(
-                    product.firstImageURL,
+                    product.image_urls[0],
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -48,14 +49,14 @@ class ProductGridView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        product.productName,
+                        product.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        product.productName,
+                        product.price.toString(),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

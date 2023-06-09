@@ -1,8 +1,10 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 import 'package:pastry/src/product/list/bloc/product_list_bloc.dart';
 import 'package:pastry/src/product/list/view/product_grid_view.dart';
+import 'package:repositories/repositories.dart';
 
 class MyAllProductsPage extends StatelessWidget {
   const MyAllProductsPage({Key? key}) : super(key: key);
@@ -10,7 +12,10 @@ class MyAllProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductListBloc(),
+      create: (context) => ProductListBloc(
+          authenticationRepository: context.read<AuthenticationRepository>(),
+          locationCubit: context.read<LocationCubit>(),
+          productRepository: ProductRepository()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('All Products'),

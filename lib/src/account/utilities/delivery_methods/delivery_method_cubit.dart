@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
+import 'package:repositories/models/delivery_method.dart';
 
 part 'delivery_method_state.dart';
 
@@ -19,11 +20,11 @@ class DeliveryMethodsCubit extends Cubit<DeliveryMethodsState> {
   }
 
   void addMethod() {
-    var newMethod = const DeliveryMethod(
+    var newMethod = DeliveryMethod(
       type: DeliveryMethodType.none,
-      range: DeliveryRange.dirty(''),
-      fee: DeliveryFee.dirty(''),
-      eta: Eta.dirty(''),
+      range: const DeliveryRange.dirty(''),
+      fee: const DeliveryFee.dirty(''),
+      eta: const Eta.dirty(''),
     );
     var methods = List<DeliveryMethod>.from(state.methods)..add(newMethod);
     emit(state.copyWith(

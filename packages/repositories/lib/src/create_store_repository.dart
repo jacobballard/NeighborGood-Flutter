@@ -16,7 +16,7 @@ class CreateStoreRepository {
       'title': title,
       'description': description,
       'address': address.toJson(),
-      'deliveryMethods':
+      'delivery_methods':
           deliveryMethods?.map((method) => method.toJson()).toList(),
     };
 
@@ -32,12 +32,15 @@ class CreateStoreRepository {
         },
         body: jsonEncode(body),
       );
-
-      if (response.statusCode != 201) {
-        var error = jsonDecode(response.body);
-        throw CreateStoreFailure.fromCode(error['code']);
-      }
+      // print(response.body);
+      print("response");
+      // if (response.statusCode != 201) {
+      //   print("it was00");
+      //   var error = jsonDecode(response.body);
+      //   throw CreateStoreFailure.fromCode(error['code']);
+      // }
     } catch (e) {
+      print(e);
       // If the call to the server was unsuccessful, throw a general error
       if (e is CreateStoreFailure) {
         throw e;

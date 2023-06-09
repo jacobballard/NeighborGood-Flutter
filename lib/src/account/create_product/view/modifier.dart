@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repositories/models/modifier.dart';
 
 import '../cubit/create_product_cubit.dart';
 import '../cubit/modifier_cubit.dart';
@@ -111,10 +112,6 @@ class _TextModifierView extends StatelessWidget {
       child: BlocBuilder<ModifierCubit, ModifierState>(
         builder: (context, state) {
           return Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              color: Colors.white,
-            ),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -201,10 +198,6 @@ class _MultichoiceModifierView extends StatelessWidget {
       child: BlocBuilder<ModifierCubit, ModifierState>(
         builder: (context, state) {
           return Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              color: Colors.white,
-            ),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -311,8 +304,9 @@ class _ModifierTextField extends StatelessWidget {
     return Flexible(
       child: TextField(
         enabled: enabled,
+        style: TextStyle(color: Colors.black), // Setting text color
         decoration: InputDecoration(
-          label: _labelWidget(context),
+          labelText: label,
           hintText: defaultValue,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           enabledBorder: const UnderlineInputBorder(
@@ -322,22 +316,12 @@ class _ModifierTextField extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey),
           ),
           filled: true,
-          fillColor: enabled ? Colors.white : Colors.grey.shade200,
+          fillColor: Colors.white, // Setting fill color
+          hintStyle: TextStyle(color: Colors.grey), // Setting hint text color
+          labelStyle:
+              TextStyle(color: Colors.black), // Setting label text color
         ),
         onChanged: enabled ? onChanged : null,
-      ),
-    );
-  }
-
-  Widget _labelWidget(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        text: label,
-        style: DefaultTextStyle.of(context).style,
-        children: <TextSpan>[
-          if (required)
-            const TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
-        ],
       ),
     );
   }

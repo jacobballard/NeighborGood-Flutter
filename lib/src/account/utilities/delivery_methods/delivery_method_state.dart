@@ -1,7 +1,6 @@
 part of 'delivery_method_cubit.dart';
 
 // ignore: constant_identifier_names
-enum DeliveryMethodType { none, local_pickup, delivery, shipping }
 
 String enumToString(DeliveryMethodType methodType) {
   String result = methodType.toString().split('.').last;
@@ -15,40 +14,6 @@ DeliveryMethodType stringToEnum(String methodTypeString) {
     (element) => enumToString(element) == methodTypeString,
     orElse: () => DeliveryMethodType.none,
   );
-}
-
-class DeliveryMethod extends Equatable {
-  final DeliveryMethodType type;
-  final DeliveryRange range;
-  final DeliveryFee fee;
-  final Eta eta;
-  final bool showAddress;
-
-  const DeliveryMethod(
-      {required this.type,
-      this.range = const DeliveryRange.pure(),
-      this.fee = const DeliveryFee.pure(),
-      this.eta = const Eta.pure(),
-      this.showAddress = true});
-
-  @override
-  List<Object> get props => [type, range, fee, eta, showAddress];
-
-  // Add this
-  DeliveryMethod copyWith({
-    DeliveryMethodType? type,
-    DeliveryRange? range,
-    DeliveryFee? fee,
-    Eta? eta,
-    bool? showAddress,
-  }) {
-    return DeliveryMethod(
-        type: type ?? this.type,
-        range: range ?? this.range,
-        fee: fee ?? this.fee,
-        eta: eta ?? this.eta,
-        showAddress: showAddress ?? this.showAddress);
-  }
 }
 
 class DeliveryMethodsState {

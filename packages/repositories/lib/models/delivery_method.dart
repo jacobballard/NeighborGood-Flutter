@@ -36,20 +36,23 @@ class DeliveryMethod extends Equatable {
   factory DeliveryMethod.fromJson(Map<String, dynamic> json) {
     return DeliveryMethod(
       type: stringToEnum(json['type']),
-      range: json['range'],
-      fee: json['fee'],
-      eta: json['eta'],
+      range: DeliveryRange.dirty(json['range']),
+      fee: DeliveryFee.dirty(json['fee']),
+      eta: Eta.dirty(json['eta']),
       showAddress: json['showAddress'] as bool,
     );
   }
 
   Map<String, dynamic> toJson() {
+    print("to json");
+
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['type'] = enumToString(this.type);
     data['range'] = this.range.value;
     data['fee'] = this.fee.value;
     data['eta'] = this.eta.value;
     data['showAddress'] = this.showAddress;
+    print(data);
     return data;
   }
 }

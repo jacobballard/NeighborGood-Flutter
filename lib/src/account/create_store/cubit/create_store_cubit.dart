@@ -87,7 +87,9 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
             storeAddressCubit.state.city.value,
             storeAddressCubit.state.stateName,
             storeAddressCubit.state.zipCode.value,
-          ));
+          ),
+          deliveryMethods: deliveryMethodsCubit.state.methods,
+          description: storeDetailsCubit.state.description.value);
 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on CreateStoreFailure catch (e) {

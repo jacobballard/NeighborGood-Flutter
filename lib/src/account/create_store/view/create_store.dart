@@ -24,14 +24,17 @@ class CreateStoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("uid: ${context.read<AuthenticationRepository>().currentUser.id}");
     return BlocProvider(
       create: (_) => CreateStoreCubit(
         storeDetailsCubit: StoreDetailsCubit(),
         storeAddressCubit: StoreAddressCubit(),
         deliveryMethodsCubit: DeliveryMethodsCubit()..addMethod(),
         imageUploaderCubit: ImageUploaderCubit(
-          StoreImageUploaderRepository(
-            FileReaderService(),
+          imageUploaderRepository: ConcreteImageUploaderRepository(
+            fileReaderService: FileReaderService(),
+            uploadPath:
+                "/stores/${context.read<AuthenticationRepository>().currentUser.id}",
           ),
         ),
         authenticationRepository: context.read<AuthenticationRepository>(),
@@ -48,9 +51,16 @@ class CreateStoreView extends StatelessWidget {
                 ),
               );
           }
-          // if (state.isValidated) {
-          //   // TODO : navigate to the next page or show a success message
-          // }
+          if (state.status.isSubmissionSuccess) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text("Store Created!"),
+                ),
+              );
+            Navigator.of(context).pop();
+          }
         },
         builder: (context, state) {
           final createStoreCubit = context.read<CreateStoreCubit>();
@@ -65,27 +75,40 @@ class CreateStoreView extends StatelessWidget {
               ),
             ),
             body: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const StoreDetailsView(),
-                    StoreAddressView(
-                      storeAddressCubit: createStoreCubit.storeAddressCubit,
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const StoreDetailsView(),
+                        StoreAddressView(
+                          storeAddressCubit: createStoreCubit.storeAddressCubit,
+                        ),
+                        DeliveryMethodsView(
+                          deliveryMethodsCubit:
+                              createStoreCubit.deliveryMethodsCubit,
+                        ),
+                        ImageUploadForm(
+                          imageUploaderCubit:
+                              createStoreCubit.imageUploaderCubit,
+                        ),
+                        ElevatedButton(
+                          onPressed: state.isValidated
+                              ? createStoreCubit.submit
+                              : null,
+                          child: const Text('Submit'),
+                        ),
+                      ],
                     ),
-                    DeliveryMethodsView(
-                      deliveryMethodsCubit:
-                          createStoreCubit.deliveryMethodsCubit,
+                  ),
+                  if (state.status == FormzStatus.submissionInProgress)
+                    Container(
+                      color: Colors.black.withOpacity(0.5), // Optional
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
-                    ImageUploadForm(
-                      imageUploaderCubit: createStoreCubit.imageUploaderCubit,
-                    ),
-                    ElevatedButton(
-                      onPressed:
-                          state.isValidated ? createStoreCubit.submit : null,
-                      child: const Text('Submit'),
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
           );

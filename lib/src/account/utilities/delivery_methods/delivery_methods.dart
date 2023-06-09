@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:repositories/models/delivery_method.dart' as enumTo;
+import 'package:repositories/models/delivery_method.dart';
 import 'delivery_method_cubit.dart';
 
 class DeliveryMethodsView extends StatelessWidget {
@@ -28,6 +29,7 @@ class DeliveryMethodsView extends StatelessWidget {
           method: method,
           index: index,
         );
+
       default:
         return (context
                 .read<DeliveryMethodsCubit>()
@@ -114,7 +116,7 @@ class NoPickupMethodItem extends StatelessWidget {
             items: remainingMethods.map((methodType) {
               return DropdownMenuItem<DeliveryMethodType>(
                 value: methodType,
-                child: Text(enumToString(methodType)),
+                child: Text(enumTo.enumToString(methodType)),
               );
             }).toList(),
             onChanged: (newMethodType) {

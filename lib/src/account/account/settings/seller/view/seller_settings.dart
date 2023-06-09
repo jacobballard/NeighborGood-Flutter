@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/account/account/settings/utils/custom_buttons.dart';
+import 'package:pastry/src/account/create_product/view/create_product.dart';
+import 'package:pastry/src/app/bloc/app_bloc.dart';
 
 class SellerSettingsPage extends StatelessWidget {
   const SellerSettingsPage({Key? key}) : super(key: key);
@@ -9,6 +12,18 @@ class SellerSettingsPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        TextButton(
+          onPressed: () {
+            // Navigate to become a seller page
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CreateProductPage(),
+              ),
+            );
+          },
+          child: const Text('Create a Product'),
+        ),
         EditAccountDetailsButton(
           onPressed: () {
             // Navigate to edit account details page
@@ -47,6 +62,12 @@ class SellerSettingsPage extends StatelessWidget {
             // Navigate to contact support page
             Navigator.pushNamed(context, '/contact_support');
           },
+        ),
+        ElevatedButton(
+          onPressed: () {
+            BlocProvider.of<AppBloc>(context).add(const AppLogoutRequested());
+          },
+          child: const Text('Logout'),
         ),
       ],
     );

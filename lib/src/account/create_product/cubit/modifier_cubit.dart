@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
+import 'package:repositories/models/modifier.dart';
 
 import '../model/validation.dart';
 
@@ -177,24 +179,44 @@ class ModifierCubit extends Cubit<ModifierState> {
   FormzStatus _computeStatus(List<Modifier> modifiers) {
     if (modifiers.isEmpty) return FormzStatus.valid;
 
+    print("modifiers");
+    print(modifiers);
+
     for (var mod in modifiers) {
       if (mod is TextModifier) {
-        if (!(mod.characterLimit.valid &&
-            mod.price.valid &&
-            mod.fillText.valid &&
-            mod.title.valid)) {
-          return FormzStatus.invalid;
+        if (mod.required) {
+          if (!((mod.characterLimit.valid || mod.characterLimit.value == "") &&
+              (mod.price.value == "") &&
+              (mod.fillText.valid || mod.fillText.value == "") &&
+              mod.title.valid)) {
+            return FormzStatus.invalid;
+          }
+        } else {
+          if (!((mod.characterLimit.valid || mod.characterLimit.value == "") &&
+              (mod.price.valid || mod.price.value == "") &&
+              (mod.fillText.valid || mod.fillText.value == "") &&
+              mod.title.valid)) {
+            print("invalid mod text");
+            return FormzStatus.invalid;
+          }
         }
       } else if (mod is MultiChoiceModifier) {
+        bool areAllChoicesPriced = mod.choices?.every(
+                (choice) => choice.price.valid && choice.price.value != "") ==
+            true;
         if (!mod.title.valid ||
-            mod.choices?.every((choice) =>
+            mod.choices?.any((choice) =>
                     choice.title.valid &&
                     (choice.price.valid || choice.price.value == "")) ==
-                false) {
+                false ||
+            areAllChoicesPriced) {
+          print("invalid mod choice");
           return FormzStatus.invalid;
         }
       }
     }
+
+    print("finally here>>?");
 
     return FormzStatus.valid;
   }

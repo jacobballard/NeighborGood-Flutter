@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pastry/src/product/detail/view/product_detail.dart';
 import 'package:pastry/src/product/list/model/product_summary.dart';
 import 'package:repositories/models/product.dart';
 
@@ -26,12 +27,12 @@ class ProductGridView extends StatelessWidget {
         final product = products[index];
         return InkWell(
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => // Rewrite to pull from db ProductDetailPage(product: product),
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailPage(product: product),
+              ),
+            );
           },
           child: Card(
             child: Column(
@@ -56,7 +57,7 @@ class ProductGridView extends StatelessWidget {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        product.price.toString(),
+                        "\$${product.price.toString()}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

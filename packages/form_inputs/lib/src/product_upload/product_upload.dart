@@ -8,7 +8,7 @@ class ProductTitle extends FormzInput<String, ProductTitleValidationError> {
   const ProductTitle.dirty([super.value = '']) : super.dirty();
 
   static final unicodeRegex =
-      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}]*$', unicode: true);
+      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}\p{Z}\s]*$', unicode: true);
 
   @override
   ProductTitleValidationError? validator(String? value) {
@@ -73,7 +73,7 @@ class ModifierTitle extends FormzInput<String, ModifierTitleValidationError> {
   const ModifierTitle.dirty([String value = '']) : super.dirty(value);
 
   static final _validTitle =
-      RegExp(r'^[\p{L}\p{N}\p{P}\p{Z}\p{Sm}]*$', unicode: true);
+      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}\p{Z}\s]*$', unicode: true);
 
   @override
   ModifierTitleValidationError? validator(String? value) {
@@ -81,6 +81,26 @@ class ModifierTitle extends FormzInput<String, ModifierTitleValidationError> {
         value.isEmpty ||
         value.length < 2 ||
         !_validTitle.hasMatch(value)) {
+      return ModifierTitleValidationError.invalid;
+    }
+    return null;
+  }
+}
+
+enum ModifierChoiceTitleValidationError { invalid }
+
+class ModifierChoiceTitle
+    extends FormzInput<String, ModifierTitleValidationError> {
+  const ModifierChoiceTitle.pure() : super.pure("");
+
+  const ModifierChoiceTitle.dirty([String value = '']) : super.dirty(value);
+
+  static final _validTitle =
+      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}\p{Z}\s]*$', unicode: true);
+
+  @override
+  ModifierTitleValidationError? validator(String? value) {
+    if (value == null || value.isEmpty || !_validTitle.hasMatch(value)) {
       return ModifierTitleValidationError.invalid;
     }
     return null;

@@ -2,10 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pastry/src/product/detail/model/product.dart';
-
 import 'package:repositories/repositories.dart';
-
 import '../../../app/location/bloc/location_cubit.dart';
 
 part 'product_list_event.dart';

@@ -21,8 +21,7 @@ class ProductRepository {
   }) async {
     print("called");
     final response = await http.post(
-      Uri.parse(
-          "https://us-central1-pastry-6b817.cloudfunctions.net/get_products_list"),
+      Uri.parse("http://192.168.4.25:8083/"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

@@ -1,29 +1,71 @@
-// class Product {
-//   String title;
-//   String description;
-//   double price;
-//   int stock;
-//   List<String> deliveryMethods;
-//   List<Map<String, dynamic>> productModifiers;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repositories/models/presentation/cart_delivery_method.dart';
+import 'presentation/cart_modifier.dart';
 
-//   Product({
-//     required this.title,
-//     required this.description,
-//     required this.price,
-//     required this.stock,
-//     required this.deliveryMethods,
-//     required this.productModifiers,
-//   });
+class ProductDetails {
+  final String id;
+  final String seller_id;
+  final double price;
+  final String name;
+  final String description;
+  final List<CartModifier>? modifiers;
+  final List<CartDeliveryMethod>? deliveryMethods;
+  final List<String> image_urls;
 
-//   Map<String, dynamic> toJson() => {
-//         'title': title,
-//         'description': description,
-//         'price': price,
-//         'stock': stock,
-//         'delivery_methods': deliveryMethods,
-//         'product_modifiers': productModifiers,
-//       };
-// }
+  ProductDetails({
+    required this.id,
+    required this.seller_id,
+    required this.price,
+    required this.name,
+    required this.description,
+    this.modifiers,
+    this.deliveryMethods,
+    required this.image_urls,
+  });
+
+  factory ProductDetails.fromDocument(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+    // Parse modifiers (assuming it's a list of maps)
+
+    List<CartModifier>? modifiers;
+    if (data['modifiers'] != null) {
+      print("not nnull");
+      modifiers = CartModifier.parseModifiersFromJson(data['modifiers']);
+    }
+
+    print(modifiers);
+    print('modifiers');
+    var test =
+        (data['image_urls'] as List).map((item) => item as String).toList();
+
+    print(test);
+    print(test.runtimeType);
+    print("test");
+    // Parse deliveryMethods (assuming it's a list of maps)
+    List<CartDeliveryMethod>? deliveryMethods;
+    if (data['delivery_methods'] != null) {
+      deliveryMethods = List<CartDeliveryMethod>.from(data['delivery_methods']
+          .map((item) => CartDeliveryMethod.fromJson(item)));
+    }
+    // print("past delivery methods");
+    // print(data['image_urls']);
+    // print(List.from(data['image_urls']));
+    // print(List.from(data['image_urls']).runtimeType);
+    print(data);
+    return ProductDetails(
+      id: doc.id,
+      seller_id: data['seller_id'] ?? '',
+      price: data['price'] ?? 0.0,
+      name: data['title'] ?? '',
+      description: data['description'] ?? '',
+      modifiers: modifiers,
+      deliveryMethods: deliveryMethods,
+      image_urls:
+          (data['image_urls'] as List).map((item) => item as String).toList(),
+    );
+  }
+}
 
 class Product {
   final String id;

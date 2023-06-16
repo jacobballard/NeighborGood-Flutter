@@ -40,8 +40,7 @@ class CreateProductRepository {
     try {
       // Send a POST request
       var response = await http.post(
-        Uri.parse(
-            'https://us-central1-pastry-6b817.cloudfunctions.net/create_product'), // Replace with your URL
+        Uri.parse('http://127.0.0.1:8084/'), // Replace with your URL
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

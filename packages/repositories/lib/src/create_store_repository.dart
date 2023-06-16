@@ -26,15 +26,17 @@ class CreateStoreRepository {
       // Send a POST request
       var response = await http.post(
         Uri.parse(
-            'https://us-central1-pastry-6b817.cloudfunctions.net/create_store'), // Replace with your URL
+            // 'https://us-central1-pastry-6b817.cloudfunctions.net/create_store'), // Replace with your URL
+            'http://192.168.4.25:8085/'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
         },
         body: jsonEncode(body),
       );
-      // print(response.body);
+      print(response.body);
       print("response");
+
       // if (response.statusCode != 201) {
       //   print("it was00");
       //   var error = jsonDecode(response.body);

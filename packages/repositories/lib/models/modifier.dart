@@ -8,25 +8,25 @@ abstract class Modifier extends Equatable {
 
   Modifier copyWith({ModifierTitle? title, bool? required});
   Map<String, dynamic> toJson();
-  static List<Modifier> parseModifiersFromJson(List<dynamic> jsonArray) {
-    List<Modifier> modifiers = [];
+  // static List<Modifier> parseModifiersFromJson(List<dynamic> jsonArray) {
+  //   List<Modifier> modifiers = [];
 
-    for (var item in jsonArray) {
-      Map<String, dynamic> itemMap = item as Map<String, dynamic>;
+  //   for (var item in jsonArray) {
+  //     Map<String, dynamic> itemMap = item as Map<String, dynamic>;
 
-      // Here, you could use a specific key in the JSON to determine the type of Modifier.
-      // For example, if you have a "type" key in the JSON, you could check its value.
-      // Assuming your JSON contains a "type" key with values "text" or "multi_choice".
+  //     // Here, you could use a specific key in the JSON to determine the type of Modifier.
+  //     // For example, if you have a "type" key in the JSON, you could check its value.
+  //     // Assuming your JSON contains a "type" key with values "text" or "multi_choice".
 
-      if (itemMap['type'] == 'text') {
-        modifiers.add(TextModifier.fromJson(itemMap));
-      } else if (itemMap['type'] == 'multi_choice') {
-        modifiers.add(MultiChoiceModifier.fromJson(itemMap));
-      }
-    }
+  //     if (itemMap['type'] == 'text') {
+  //       modifiers.add(TextModifier.fromJson(itemMap));
+  //     } else if (itemMap['type'] == 'multi_choice') {
+  //       modifiers.add(MultiChoiceModifier.fromJson(itemMap));
+  //     }
+  //   }
 
-    return modifiers;
-  }
+  //   return modifiers;
+  // }
 
   static List<Map<String, dynamic>> toJsonList(List<Modifier>? modifiers) {
     return modifiers?.map((modifier) => modifier.toJson()).toList() ?? [];
@@ -53,18 +53,19 @@ class TextModifier extends Modifier {
   @override
   List<Object?> get props => [characterLimit, price, fillText, title, required];
 
-  factory TextModifier.fromJson(Map<String, dynamic> json) {
-    return TextModifier(
-      characterLimit: TextModifierCharacterLimit.dirty(json['characterLimit']),
-      price: ProductPrice.dirty(json['price']),
-      fillText: TextModifierFillText.dirty(json['fillText']),
-      title: ModifierTitle.dirty(json['title']),
-      required: json['required'] as bool,
-    );
-  }
+  // factory TextModifier.fromJson(Map<String, dynamic> json) {
+  //   return TextModifier(
+  //     characterLimit: TextModifierCharacterLimit.dirty(json['characterLimit']),
+  //     price: ProductPrice.dirty(json['price']),
+  //     fillText: TextModifierFillText.dirty(json['fillText']),
+  //     title: ModifierTitle.dirty(json['title']),
+  //     required: json['required'] as bool,
+  //   );
+  // }
 
   Map<String, dynamic> toJson() {
     return {
+      'type': 'text',
       'characterLimit': this.characterLimit.value,
       'price': this.price.value,
       'fillText': this.fillText.value,
@@ -93,31 +94,32 @@ class TextModifier extends Modifier {
 
 class MultiChoiceModifier extends Modifier {
   final List<Choice>? choices;
-  final int? defaultChoice;
+  final int defaultChoice;
 
   const MultiChoiceModifier({
     this.choices = const [],
-    this.defaultChoice,
+    this.defaultChoice = -1,
     ModifierTitle title = const ModifierTitle.pure(),
-    bool required = false,
+    bool required = true,
   }) : super(title, required);
 
   @override
   List<Object?> get props => [choices, defaultChoice, title, required];
 
-  factory MultiChoiceModifier.fromJson(Map<String, dynamic> json) {
-    return MultiChoiceModifier(
-      choices: (json['choices'] as List)
-          .map((e) => Choice.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      defaultChoice: json['defaultChoice'] as int,
-      title: ModifierTitle.dirty(json['title']),
-      required: json['required'],
-    );
-  }
+  // factory MultiChoiceModifier.fromJson(Map<String, dynamic> json) {
+  //   return MultiChoiceModifier(
+  //     choices: (json['choices'] as List)
+  //         .map((e) => Choice.fromJson(e as Map<String, dynamic>))
+  //         .toList(),
+  //     defaultChoice: json['defaultChoice'] as int,
+  //     title: ModifierTitle.dirty(json['title']),
+  //     required: json['required'],
+  //   );
+  // }
 
   Map<String, dynamic> toJson() {
     return {
+      'type': 'multi_choice',
       'choices': this.choices?.map((e) => e.toJson()).toList(),
       'defaultChoice': this.defaultChoice,
       'title': this.title.value,
@@ -142,11 +144,11 @@ class MultiChoiceModifier extends Modifier {
 }
 
 class Choice extends Equatable {
-  final ModifierTitle title;
+  final ModifierChoiceTitle title;
   final ProductPrice price;
 
   const Choice({
-    this.title = const ModifierTitle.pure(),
+    this.title = const ModifierChoiceTitle.pure(),
     this.price = const ProductPrice.pure(),
   });
 
@@ -158,7 +160,7 @@ class Choice extends Equatable {
 
   factory Choice.fromJson(Map<String, dynamic> json) {
     return Choice(
-      title: ModifierTitle.dirty(json['title']),
+      title: ModifierChoiceTitle.dirty(json['title']),
       price: ProductPrice.dirty(json['price']),
     );
   }
@@ -171,7 +173,7 @@ class Choice extends Equatable {
   }
 
   Choice copyWith({
-    ModifierTitle? title,
+    ModifierChoiceTitle? title,
     ProductPrice? price,
   }) {
     return Choice(

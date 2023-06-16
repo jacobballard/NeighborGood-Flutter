@@ -139,9 +139,15 @@ class ModifierCubit extends Cubit<ModifierState> {
   void changeChoiceTitle(int modIndex, int choiceIndex, String value) {
     var modifiers = state.modifiers;
 
-    final titleInput = ModifierTitle.dirty(value);
-    modifiers[modIndex] = (modifiers[modIndex] as MultiChoiceModifier)
-      ..choices![choiceIndex].copyWith(title: titleInput);
+    final titleInput = ModifierChoiceTitle.dirty(value);
+
+    var modifiedModifier = modifiers[modIndex] as MultiChoiceModifier;
+    var modifiedChoice =
+        modifiedModifier.choices![choiceIndex].copyWith(title: titleInput);
+
+    modifiedModifier.choices![choiceIndex] = modifiedChoice;
+
+    modifiers[modIndex] = modifiedModifier;
 
     emit(state.copyWith(
       modifiers: List.from(modifiers),
@@ -153,8 +159,14 @@ class ModifierCubit extends Cubit<ModifierState> {
     var modifiers = state.modifiers;
 
     final priceInput = ProductPrice.dirty(value);
-    modifiers[modIndex] = (modifiers[modIndex] as MultiChoiceModifier)
-      ..choices![choiceIndex].copyWith(price: priceInput);
+
+    var modifiedModifier = modifiers[modIndex] as MultiChoiceModifier;
+    var modifiedChoice =
+        modifiedModifier.choices![choiceIndex].copyWith(price: priceInput);
+
+    modifiedModifier.choices![choiceIndex] = modifiedChoice;
+
+    modifiers[modIndex] = modifiedModifier;
 
     emit(state.copyWith(
       modifiers: List.from(modifiers),
@@ -163,15 +175,32 @@ class ModifierCubit extends Cubit<ModifierState> {
   }
 
   void changeDefaultChoice(int modIndex, int choiceIndex) {
-    var modifiers = state.modifiers;
+    // var modifiers = state.modifiers;
 
-    var prevChoice = (modifiers[modIndex] as MultiChoiceModifier).defaultChoice;
+    // var prevChoice = (modifiers[modIndex] as MultiChoiceModifier).defaultChoice;
 
-    modifiers[modIndex] = (modifiers[modIndex] as MultiChoiceModifier).copyWith(
-        defaultChoice: (prevChoice == choiceIndex) ? null : choiceIndex);
+    // modifiers[modIndex] = (modifiers[modIndex] as MultiChoiceModifier).copyWith(
+    //     defaultChoice: (prevChoice == choiceIndex) ? null : choiceIndex);
 
+    // emit(state.copyWith(
+    //   modifiers: List.from(modifiers),
+    //   status: _computeStatus(modifiers),
+    // ));
+    List<Modifier> modifiers =
+        List.from(state.modifiers); // Create a copy of modifiers list
+
+    MultiChoiceModifier currentModifier =
+        modifiers[modIndex] as MultiChoiceModifier;
+
+    // Toggle defaultChoice between choiceIndex and null
+    if (currentModifier.defaultChoice == choiceIndex) {
+      currentModifier = currentModifier.copyWith(defaultChoice: -1);
+    } else {
+      currentModifier = currentModifier.copyWith(defaultChoice: choiceIndex);
+    }
+    modifiers[modIndex] = currentModifier;
     emit(state.copyWith(
-      modifiers: List.from(modifiers),
+      modifiers: modifiers,
       status: _computeStatus(modifiers),
     ));
   }
@@ -201,14 +230,46 @@ class ModifierCubit extends Cubit<ModifierState> {
           }
         }
       } else if (mod is MultiChoiceModifier) {
-        bool areAllChoicesPriced = mod.choices?.every(
-                (choice) => choice.price.valid && choice.price.value != "") ==
-            true;
-        if (!mod.title.valid ||
-            mod.choices?.any((choice) =>
-                    choice.title.valid &&
-                    (choice.price.valid || choice.price.value == "")) ==
-                false ||
+        print("multi choice");
+        print(mod.choices);
+
+        if ((mod.choices?.length ?? 0) < 2) {
+          return FormzStatus.invalid;
+        }
+        // bool areAllChoicesPriced = (mod.choices?.every((choice) =>
+        //             choice.price.valid && choice.price.value != "") ??
+        //         false) ==
+        //     true;
+
+        // print("all choice $areAllChoicesPriced");
+
+        // print("mod.title.valid ${mod.title.valid}");
+        // if (!(mod.title.valid && mod.title.value.isNotEmpty) ||
+        //     mod.choices?.any((choice) =>
+        //             (choice.title.valid && choice.title.value != "") &&
+        //             (choice.price.valid || choice.price.value == "")) ==
+        //         false ||
+        //     areAllChoicesPriced) {
+        //   print("invalid mod choice");
+        //   return FormzStatus.invalid;
+        // }
+        // Check if every choice has a valid and non-empty title
+        bool areAllChoicesTitled = mod.choices?.every((choice) =>
+                choice.title.valid && choice.title.value.isNotEmpty) ??
+            false;
+
+        // Check if every choice has a valid and non-empty price
+        bool areAllChoicesPriced = mod.choices?.every((choice) =>
+                choice.price.valid && choice.price.value.isNotEmpty) ??
+            false;
+
+        // Modifier's title must also be valid and non-empty
+        bool isModifierTitleValid =
+            mod.title.valid && mod.title.value.isNotEmpty;
+
+        // Check all the conditions to decide if the form is valid
+        if (!isModifierTitleValid ||
+            !areAllChoicesTitled ||
             areAllChoicesPriced) {
           print("invalid mod choice");
           return FormzStatus.invalid;

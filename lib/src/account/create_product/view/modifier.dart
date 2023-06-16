@@ -210,10 +210,28 @@ class _MultichoiceModifierView extends StatelessWidget {
                     ),
                   ],
                 ),
-                _ModifierTextField(
-                  label: "Title",
-                  required: true,
-                  onChanged: (p0) => modifierCubit.titleChanged(modIndex, p0),
+                Row(
+                  children: [
+                    _ModifierTextField(
+                      label: "Title",
+                      required: true,
+                      onChanged: (p0) =>
+                          modifierCubit.titleChanged(modIndex, p0),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Column(
+                      children: [
+                        const Text("Required"),
+                        Checkbox(
+                          value: state.modifiers[modIndex].required,
+                          onChanged: (value) =>
+                              modifierCubit.requiredChanged(modIndex),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 8,
@@ -234,15 +252,20 @@ class _MultichoiceModifierView extends StatelessWidget {
                               ?.length) {
                         return Row(
                           children: [
-                            IconButton(
-                              onPressed: () => modifierCubit
-                                  .changeDefaultChoice(modIndex, choiceIndex),
-                              icon: ((state.modifiers[modIndex]
-                                              as MultiChoiceModifier)
-                                          .defaultChoice ==
-                                      choiceIndex)
-                                  ? const Icon(Icons.star)
-                                  : const Icon(Icons.star_border_outlined),
+                            Column(
+                              children: [
+                                Checkbox(
+                                  value:
+                                      (modifierCubit.state.modifiers[modIndex]
+                                                  as MultiChoiceModifier)
+                                              .defaultChoice ==
+                                          choiceIndex,
+                                  onChanged: (value) =>
+                                      modifierCubit.changeDefaultChoice(
+                                          modIndex, choiceIndex),
+                                ),
+                                const Text("Default"),
+                              ],
                             ),
                             _ModifierTextField(
                               onChanged: (value) =>
@@ -304,23 +327,10 @@ class _ModifierTextField extends StatelessWidget {
     return Flexible(
       child: TextField(
         enabled: enabled,
-        style: TextStyle(color: Colors.black), // Setting text color
         decoration: InputDecoration(
           labelText: label,
-          hintText: defaultValue,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-          ),
-          disabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          filled: true,
-          fillColor: Colors.white, // Setting fill color
-          hintStyle: TextStyle(color: Colors.grey), // Setting hint text color
-          labelStyle:
-              TextStyle(color: Colors.black), // Setting label text color
-        ),
+        ), // Setting text color
+
         onChanged: enabled ? onChanged : null,
       ),
     );

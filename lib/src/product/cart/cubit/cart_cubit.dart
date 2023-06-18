@@ -14,6 +14,25 @@ class CartCubit extends Cubit<CartState> {
     required this.cartRepository,
   }) : super(const CartState());
 
+  void updateCartQuantity(int position, int? newValue) {
+    if (newValue == null) return;
+
+    List<CartItem> updatedItems = List.from(state.checkoutItems);
+    CartItem updatedItem = updatedItems[position].copyWith(quantity: newValue);
+
+    updatedItems[position] = updatedItem;
+
+    emit(state.copyWith(checkoutItems: updatedItems));
+  }
+
+  void removeFromCart(int position) {
+    List<CartItem> updatedItems = List.from(state.checkoutItems);
+
+    updatedItems.removeAt(position);
+
+    emit(state.copyWith(checkoutItems: updatedItems));
+  }
+
   void addToCart(ProductDetails? productDetails,
       List<CartModifierSelection>? cartModifierSelections) {
     if (productDetails == null) return;

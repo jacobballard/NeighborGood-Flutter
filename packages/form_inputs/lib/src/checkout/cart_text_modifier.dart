@@ -23,7 +23,6 @@ class CartTextModifierInput
     if (required) {
       if (value == null ||
           value.isEmpty ||
-          value.length < 2 ||
           value.length > characterLimit! ||
           !_validInput.hasMatch(value)) {
         return CartTextModifierInputValidationError.invalid;

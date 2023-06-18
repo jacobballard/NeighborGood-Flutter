@@ -107,7 +107,14 @@ class CreateProductPage extends StatelessWidget {
                     CreateProductRepository(productId: productId),
                 productDetailsCubit: ProductDetailsCubit(),
                 modifierCubit: ModifierCubit(),
-                deliveryMethodsCubit: DeliveryMethodsCubit(required: false),
+                deliveryMethodsCubit: DeliveryMethodsCubit(
+                    required: false,
+                    getDeliveryMethodsRepository: GetDeliveryMethodsRepository(
+                        sellerId: context
+                            .read<AuthenticationRepository>()
+                            .currentUser
+                            .id))
+                  ..loadMethods(),
                 imageUploaderCubit: ImageUploaderCubit(
                   imageUploaderRepository: ConcreteImageUploaderRepository(
                     fileReaderService: FileReaderService(),

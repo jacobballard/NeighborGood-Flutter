@@ -10,13 +10,10 @@ class ProductGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return SingleChildScrollView(
-    //   physics: const ClampingScrollPhysics(),
     return GridView.builder(
       shrinkWrap: true,
       primary: false,
       physics: const ScrollPhysics(),
-      padding: const EdgeInsets.only(top: kToolbarHeight),
       itemCount: products.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: MediaQuery.of(context).size.width > 600 ? 5 : 2,
@@ -34,39 +31,37 @@ class ProductGridView extends StatelessWidget {
               ),
             );
           },
-          child: Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                if (product.image_urls.isNotEmpty)
-                  Expanded(
-                    child: Image.network(
-                      product.image_urls[0],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        product.name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        "\$${product.price.toString()}",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              if (product.image_urls.isNotEmpty)
+                Expanded(
+                  child: Image.network(
+                    product.image_urls[0],
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ],
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      product.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      "\$${product.price.toString()}",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },

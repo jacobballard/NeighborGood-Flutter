@@ -3,11 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
 import 'package:repositories/models/delivery_method.dart';
+import 'package:repositories/repositories.dart';
 
 part 'delivery_method_state.dart';
 
 class DeliveryMethodsCubit extends Cubit<DeliveryMethodsState> {
-  DeliveryMethodsCubit({this.required = true}) : super(DeliveryMethodsState());
+  final GetDeliveryMethodsRepository? getDeliveryMethodsRepository;
+  DeliveryMethodsCubit(
+      {this.required = true, required this.getDeliveryMethodsRepository})
+      : super(DeliveryMethodsState());
 
   final bool required;
 
@@ -31,6 +35,11 @@ class DeliveryMethodsCubit extends Cubit<DeliveryMethodsState> {
       methods: methods,
       status: _computeStatus(methods),
     ));
+  }
+
+  Future<void> loadMethods() async {
+    List<DeliveryMethod> methods = await getDeliveryMethodsRepository!.get();
+    emit(state.copyWith(methods: methods));
   }
 
   void removeMethod(int index) {

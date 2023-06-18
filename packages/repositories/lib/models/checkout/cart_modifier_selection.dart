@@ -4,9 +4,11 @@ import 'package:form_inputs/form_inputs.dart';
 abstract class CartModifierSelection extends Equatable {
   final String id;
   final bool required;
-  const CartModifierSelection(this.id, this.required);
+  final String? price;
+  const CartModifierSelection(this.id, this.required, this.price);
   Map<String, dynamic> toJson();
   CartModifierSelection copyWith({
+    String? price,
     String? id,
     bool? required,
   });
@@ -23,7 +25,8 @@ class CartMultiChoiceModifierSelection extends CartModifierSelection {
     this.choiceId = '',
     required String id,
     required bool required,
-  }) : super(id, required);
+    required String? price,
+  }) : super(id, required, price);
 
   @override
   Map<String, dynamic> toJson() {
@@ -39,8 +42,10 @@ class CartMultiChoiceModifierSelection extends CartModifierSelection {
     String? id,
     String? choiceId,
     bool? required,
+    String? price,
   }) {
     return CartMultiChoiceModifierSelection(
+      price: price ?? this.price,
       id: id ?? this.id,
       choiceId: choiceId ?? this.choiceId,
       required: required ?? this.required,
@@ -52,6 +57,7 @@ class CartMultiChoiceModifierSelection extends CartModifierSelection {
         id,
         choiceId,
         required,
+        price,
       ];
 }
 
@@ -61,10 +67,12 @@ class CartTextModifierSelection extends CartModifierSelection {
   CartTextModifierSelection(
       {this.cartTextModifierInput = const CartTextModifierInput.pure(),
       required String id,
+      required String? price,
       required bool required})
       : super(
           id,
           required,
+          price,
         );
 
   @override
@@ -72,6 +80,7 @@ class CartTextModifierSelection extends CartModifierSelection {
         cartTextModifierInput,
         id,
         required,
+        price,
       ];
 
   @override
@@ -85,11 +94,13 @@ class CartTextModifierSelection extends CartModifierSelection {
 
   @override
   CartTextModifierSelection copyWith({
+    String? price,
     String? id,
     CartTextModifierInput? cartTextModifierInput,
     bool? required,
   }) {
     return CartTextModifierSelection(
+      price: price ?? this.price,
       id: id ?? this.id,
       cartTextModifierInput:
           cartTextModifierInput ?? this.cartTextModifierInput,

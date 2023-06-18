@@ -55,12 +55,12 @@ class DeliveryMethodsView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                        required
-                            ? "Delivery Methods"
-                            : "Delivery Methods (optional)",
-                        style: const TextStyle(
+                    const Text("Delivery Methods",
+                        style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
+                    if (!required)
+                      const Text(
+                          '(overrides your store\' global delivery methods)'),
                     if (state.methods.length < 3)
                       IconButton(
                         icon: const Icon(Icons.add),

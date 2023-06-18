@@ -29,7 +29,11 @@ class CreateStoreView extends StatelessWidget {
       create: (_) => CreateStoreCubit(
         storeDetailsCubit: StoreDetailsCubit(),
         storeAddressCubit: StoreAddressCubit(),
-        deliveryMethodsCubit: DeliveryMethodsCubit()..addMethod(),
+        deliveryMethodsCubit: DeliveryMethodsCubit(
+          getDeliveryMethodsRepository: GetDeliveryMethodsRepository(
+            sellerId: context.read<AuthenticationRepository>().currentUser.id,
+          ),
+        )..addMethod(),
         imageUploaderCubit: ImageUploaderCubit(
           imageUploaderRepository: ConcreteImageUploaderRepository(
             fileReaderService: FileReaderService(),

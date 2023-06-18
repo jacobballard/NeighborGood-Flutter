@@ -32,14 +32,19 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
 
   void addModifiersToState(List<CartModifier>? cartModifierSelections) {
     List<CartModifierSelection> translated = [];
+    if (cartModifierSelections == null || cartModifierSelections.isEmpty) {
+      emit(state.copyWith(inputStatus: FormzStatus.valid));
+    }
     for (CartModifier mod in cartModifierSelections ?? []) {
       if (mod is CartTextModifier) {
         translated.add(CartTextModifierSelection(
+          price: mod.price,
           id: mod.id,
           required: mod.required,
         ));
-      } else {
+      } else if (mod is CartMultiChoiceModifier) {
         translated.add(CartMultiChoiceModifierSelection(
+          price: null,
           id: mod.id,
           required: mod.required,
         ));
@@ -49,13 +54,35 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
     emit(state.copyWith(cartModifierSelections: translated));
   }
 
+  void _computePrice() {
+    var totalPrice = state.productDetails!.price;
+
+    for (CartModifier mod in state.productDetails!.modifiers ?? []) {}
+
+    for (CartModifierSelection mod in state.cartModifierSelections ?? []) {
+      if (mod is CartMultiChoiceModifierSelection) {
+        if (mod.price != null && mod.price!.isNotEmpty) {
+          totalPrice += double.tryParse(mod.price!) ?? 0.0;
+        }
+      } else if (mod is CartTextModifierSelection) {
+        if (mod.price != null &&
+            mod.price!.isNotEmpty &&
+            mod.cartTextModifierInput.valid &&
+            mod.cartTextModifierInput.value.isNotEmpty) {
+          totalPrice += double.tryParse(mod.price!) ?? 0.0;
+        }
+      }
+    }
+
+    String displayPrice = totalPrice
+        .toStringAsFixed(2); // Convert to String with 2 decimal places
+    emit(state.copyWith(displayPrice: displayPrice));
+  }
+
   void multiChoiceModifierSelectionChanged(int index, String value) {
     if (state.cartModifierSelections == null) return;
 
     final mods = state.cartModifierSelections!;
-
-    mods[index] = (mods[index] as CartMultiChoiceModifierSelection)
-        .copyWith(choiceId: value);
 
     final priceToAdd =
         (state.productDetails!.modifiers![index] as CartMultiChoiceModifier)
@@ -64,16 +91,13 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
             .first
             .price;
 
-    print("price to Add $priceToAdd");
+    mods[index] = (mods[index] as CartMultiChoiceModifierSelection)
+        .copyWith(choiceId: value, price: priceToAdd);
 
-    final totalPrice =
-        state.productDetails!.price + (double.tryParse(priceToAdd) ?? 0);
-
-    print("total price $totalPrice");
     emit(state.copyWith(
-        displayPrice: totalPrice.toString(),
-        cartModifierSelections: mods,
-        inputStatus: _computeStatus(mods)));
+        cartModifierSelections: mods, inputStatus: _computeStatus(mods)));
+
+    _computePrice();
   }
 
   void textModifierSelectionChanged(int index, String value) {
@@ -86,11 +110,11 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
 
     var priceToAdd =
         (state.productDetails!.modifiers![index] as CartTextModifier).price;
-    var totalPrice;
-    if (!(totalPrice == "" || totalPrice == "0")) {
-      totalPrice =
-          state.productDetails!.price + (double.tryParse(priceToAdd) ?? 0);
-    }
+    // var totalPrice;
+    // if (!(totalPrice == "" || totalPrice == "0")) {
+    //   totalPrice =
+    //       state.productDetails!.price + (double.tryParse(priceToAdd) ?? 0);
+    // }
 
     final textInput = CartTextModifierInput.dirty(
       value: value,
@@ -99,10 +123,12 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
     );
 
     mods[index] = (mods[index] as CartTextModifierSelection)
-        .copyWith(cartTextModifierInput: textInput);
+        .copyWith(cartTextModifierInput: textInput, price: priceToAdd);
 
     emit(state.copyWith(
         cartModifierSelections: mods, inputStatus: _computeStatus(mods)));
+
+    _computePrice();
   }
 
   FormzStatus _computeStatus(List<CartModifierSelection> selections) {

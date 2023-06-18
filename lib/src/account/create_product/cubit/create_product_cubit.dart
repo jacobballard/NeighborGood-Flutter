@@ -35,9 +35,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     required this.productId,
   }) : super(const CreateProductState()) {
     _productDetailsSubscription = productDetailsCubit.stream.listen((state) {
-      print("prod det");
-      print(state.title.value);
-      print(this.state.productModifiersStatus);
       emit(CreateProductState(
           productDetailsStatus: state.status,
           productModifiersStatus: this.state.productModifiersStatus,
@@ -46,8 +43,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     });
 
     _modifierSubscription = modifierCubit.stream.listen((state) {
-      print("mod sub");
-      print(state.status);
       emit(CreateProductState(
           productDetailsStatus: this.state.productDetailsStatus,
           productModifiersStatus: state.status,
@@ -83,7 +78,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   Future<void> submit() async {
     if (!state.isValidated) return;
 
-    print("submitting");
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await createProductRepository.create(
@@ -92,9 +86,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         description: productDetailsCubit.state.description.value,
         price: productDetailsCubit.state.price.value,
         deliveryMethods: deliveryMethodsCubit.state.methods,
-        modifiers: modifierCubit
-            .state.modifiers, // Assuming you have a modifiers field in state
-        // Add other product details here as needed
+        modifiers: modifierCubit.state.modifiers,
       );
 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));

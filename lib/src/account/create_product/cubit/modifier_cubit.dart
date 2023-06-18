@@ -258,6 +258,17 @@ class ModifierCubit extends Cubit<ModifierState> {
                 choice.title.valid && choice.title.value.isNotEmpty) ??
             false;
 
+        bool isTheDefaultChoicePrice;
+
+        if (mod.choices != null && mod.defaultChoice != -1) {
+          if (mod.choices![mod.defaultChoice].price.value.isNotEmpty) {
+            isTheDefaultChoicePrice = true;
+          } else {
+            isTheDefaultChoicePrice = false;
+          }
+        } else {
+          isTheDefaultChoicePrice = false;
+        }
         // Check if every choice has a valid and non-empty price
         bool areAllChoicesPriced = mod.choices?.every((choice) =>
                 choice.price.valid && choice.price.value.isNotEmpty) ??
@@ -270,7 +281,8 @@ class ModifierCubit extends Cubit<ModifierState> {
         // Check all the conditions to decide if the form is valid
         if (!isModifierTitleValid ||
             !areAllChoicesTitled ||
-            areAllChoicesPriced) {
+            areAllChoicesPriced ||
+            isTheDefaultChoicePrice) {
           print("invalid mod choice");
           return FormzStatus.invalid;
         }

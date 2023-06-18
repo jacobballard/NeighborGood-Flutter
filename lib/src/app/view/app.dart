@@ -9,6 +9,7 @@ import 'package:pastry/src/app/location/view/location.dart';
 import 'package:pastry/src/app/view/tab_bar.dart';
 import 'package:pastry/src/auth/login/login.dart';
 import 'package:pastry/src/auth/signup/signup.dart';
+import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
 import 'package:pastry/theme.dart';
 import 'package:repositories/repositories.dart';
 
@@ -54,7 +55,16 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MyTabBar();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => CartCubit(
+            cartRepository: CartRepository(),
+          ),
+        )
+      ],
+      child: const MyTabBar(),
+    );
   }
 }
 

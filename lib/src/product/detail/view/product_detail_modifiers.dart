@@ -10,10 +10,10 @@ class ModifierList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (modifiers == null) return SizedBox.shrink();
+    if (modifiers == null) return const SizedBox.shrink();
 
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -31,7 +31,7 @@ class ModifierList extends StatelessWidget {
               index: index,
             );
           }
-          return SizedBox.shrink(); // return an empty widget if no match
+          return const SizedBox.shrink(); // return an empty widget if no match
         },
       ),
     );
@@ -82,7 +82,7 @@ class TextModifierView extends StatelessWidget {
           },
           keyboardType: TextInputType.multiline,
           minLines: 1,
-          maxLines: 5,
+
           maxLength: modifierDetails.characterLimit.isNotEmpty
               ? int.parse(modifierDetails.characterLimit)
               : null,
@@ -127,10 +127,13 @@ class MultiChoiceModifierView extends StatefulWidget {
 
 class _MultiChoiceModifierViewState extends State<MultiChoiceModifierView> {
   String? dropdownValue;
+  late bool noPricingForChoices;
 
   @override
   void initState() {
     super.initState();
+    noPricingForChoices =
+        widget.modifierDetails.choices!.every((element) => element.price == "");
     print(widget.modifierDetails);
     if (widget.modifierDetails.choices != null &&
         widget.modifierDetails.choices!.isNotEmpty &&
@@ -181,7 +184,9 @@ class _MultiChoiceModifierViewState extends State<MultiChoiceModifierView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(choice.title),
-                    if (choice.price != "") Text("\$${choice.price}"),
+                    if (choice.price != "") Text("+ \$${choice.price}"),
+                    if (choice.price == "" && !noPricingForChoices)
+                      const Text("+ \$0"),
                   ],
                 ),
               );

@@ -11,20 +11,19 @@ class AddToCartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ViewProductDetailsCubit, ViewProductDetailsState>(
       builder: (context, state) {
-        return SizedBox(
-          width: double.infinity, // take full width
-          child: ElevatedButton(
-            onPressed: state.inputStatus.isValidated
-                ? () {
-                    context.read<CartCubit>().addToCart(
-                        state.productDetails, state.cartModifierSelections);
-                  }
-                : null, // disable button if not validated
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  state.inputStatus.isValidated ? Colors.blue : Colors.grey,
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity, // take full width
+            child: ElevatedButton(
+              onPressed: state.inputStatus.isValidated
+                  ? () {
+                      context.read<CartCubit>().addToCart(
+                          state.productDetails, state.cartModifierSelections);
+                    }
+                  : null,
+              child: Text("Add to Cart"),
             ),
-            child: Text("Add to Cart"),
           ),
         );
       },

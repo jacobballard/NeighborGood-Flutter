@@ -6,6 +6,8 @@ import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 
 import 'package:pastry/src/baker/list/bloc/store_list_bloc.dart';
 import 'package:pastry/src/baker/list/view/all_bakers.dart';
+import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
+import 'package:pastry/src/product/cart/view/cart.dart';
 import 'package:pastry/src/product/list/bloc/product_list_bloc.dart';
 import 'package:pastry/src/product/list/view/all_products.dart';
 import 'package:pastry/src/account/account/view/account_settings.dart';
@@ -29,15 +31,24 @@ class MyTabBarState extends State<MyTabBar> {
       create: (BuildContext context) => StoreListBloc(),
       child: const StorePage(),
     ),
-    BlocProvider(
-      create: (BuildContext context) => ProductListBloc(
-        locationCubit: context.read<LocationCubit>(),
-        productRepository: ProductRepository(),
-        authenticationRepository: context.read<AuthenticationRepository>(),
-      ),
-      child: const MyAllProductsPage(),
+    Navigator(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (BuildContext context) => ProductListBloc(
+                locationCubit: context.read<LocationCubit>(),
+                productRepository: ProductRepository(),
+                authenticationRepository:
+                    context.read<AuthenticationRepository>(),
+              ),
+              child: const MyAllProductsPage(),
+            );
+          },
+        );
+      },
     ),
-
+    const CartPage(),
     const AccountSettingsView(),
   ];
 
@@ -72,21 +83,59 @@ class MyTabBarState extends State<MyTabBar> {
       );
     } else {
       return Scaffold(
-        body: pages[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-        ),
-      );
+          body: pages[_currentIndex],
+          bottomNavigationBar: // Wrap BottomNavigationBar with BlocBuilder
+              BlocBuilder<CartCubit, CartState>(
+            builder: (context, state) {
+              return BottomNavigationBar(
+                items: [
+                  const BottomNavigationBarItem(
+                      icon: Icon(Icons.home), label: 'Home'),
+                  const BottomNavigationBarItem(
+                      icon: Icon(Icons.search), label: 'Search'),
+                  BottomNavigationBarItem(
+                    icon: Stack(
+                      children: [
+                        const Icon(Icons.shopping_cart),
+                        if (state.checkoutItems.isNotEmpty)
+                          Positioned(
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: Text(
+                                '${state.checkoutItems.length}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    label: 'Cart',
+                  ),
+                  const BottomNavigationBarItem(
+                      icon: Icon(Icons.person), label: 'Profile'),
+                ],
+                currentIndex: _currentIndex,
+                onTap: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+              );
+            },
+          ));
     }
   }
 }

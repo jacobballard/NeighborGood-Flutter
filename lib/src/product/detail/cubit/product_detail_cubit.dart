@@ -57,8 +57,23 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
     mods[index] = (mods[index] as CartMultiChoiceModifierSelection)
         .copyWith(choiceId: value);
 
+    final priceToAdd =
+        (state.productDetails!.modifiers![index] as CartMultiChoiceModifier)
+            .choices!
+            .where((element) => element.id == value)
+            .first
+            .price;
+
+    print("price to Add $priceToAdd");
+
+    final totalPrice =
+        state.productDetails!.price + (double.tryParse(priceToAdd) ?? 0);
+
+    print("total price $totalPrice");
     emit(state.copyWith(
-        cartModifierSelections: mods, inputStatus: _computeStatus(mods)));
+        displayPrice: totalPrice.toString(),
+        cartModifierSelections: mods,
+        inputStatus: _computeStatus(mods)));
   }
 
   void textModifierSelectionChanged(int index, String value) {
@@ -68,6 +83,14 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
     var characterLimit = int.tryParse(
         (state.productDetails!.modifiers![index] as CartTextModifier)
             .characterLimit);
+
+    var priceToAdd =
+        (state.productDetails!.modifiers![index] as CartTextModifier).price;
+    var totalPrice;
+    if (!(totalPrice == "" || totalPrice == "0")) {
+      totalPrice =
+          state.productDetails!.price + (double.tryParse(priceToAdd) ?? 0);
+    }
 
     final textInput = CartTextModifierInput.dirty(
       value: value,

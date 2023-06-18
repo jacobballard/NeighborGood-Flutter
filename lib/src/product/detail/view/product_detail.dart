@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/product/detail/cubit/product_detail_cubit.dart';
+import 'package:pastry/src/product/detail/view/add_to_cart_button.dart';
 import 'package:pastry/src/product/detail/view/product_detail_modifiers.dart';
 import 'package:repositories/repositories.dart';
 
@@ -64,6 +65,7 @@ class ProductDetailsBody extends StatelessWidget {
             [
               ProductDescriptionHeaderWidget(productDetails: productDetails),
               ModifierList(modifiers: productDetails.modifiers),
+              const AddToCartButton(),
               ProductDescriptionFooterWidget(productDetails: productDetails),
             ],
           ),
@@ -222,46 +224,62 @@ class ProductDescriptionHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "\$${productDetails.price.toString()}",
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  // color: theme.primaryColor, // Use the theme color
+    return BlocBuilder<ViewProductDetailsCubit, ViewProductDetailsState>(
+        buildWhen: (previous, current) =>
+            previous.displayPrice != current.displayPrice,
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    if (state.displayPrice == null)
+                      Text(
+                        "\$${productDetails.price.toString()}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          // color: theme.primaryColor, // Use the theme color
+                        ),
+                      ),
+                    if (state.displayPrice != null)
+                      Text(
+                        "\$${state.displayPrice}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          // color: theme.primaryColor, // Use the theme color
+                        ),
+                      ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    DeliveryMethodIconsWidget(
+                      deliveryMethods: productDetails.deliveryMethods
+                              ?.map((e) => e.type.toString())
+                              .toList() ??
+                          [],
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              DeliveryMethodIconsWidget(
-                deliveryMethods: productDetails.deliveryMethods
-                        ?.map((e) => e.type.toString())
-                        .toList() ??
-                    [],
-              ),
-            ],
-          ),
-          Text(
-            productDetails.name,
-            style: TextStyle(
-              fontSize: 16, // Decreased the font size
-              color: theme.textTheme.bodyLarge?.color, // Use the theme color
+                Text(
+                  productDetails.name,
+                  style: TextStyle(
+                    fontSize: 16, // Decreased the font size
+                    color:
+                        theme.textTheme.bodyLarge?.color, // Use the theme color
+                  ),
+                  maxLines: 3, // Allow the title to span multiple lines
+                  overflow: TextOverflow
+                      .ellipsis, // Add ellipsis if the title is too long
+                ),
+              ],
             ),
-            maxLines: 3, // Allow the title to span multiple lines
-            overflow:
-                TextOverflow.ellipsis, // Add ellipsis if the title is too long
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 }
 

@@ -26,6 +26,17 @@ class ProductDetailsRepository {
 
       // Convert the document to a ProductDetails object
       ProductDetails productDetails = ProductDetails.fromDocument(productDoc);
+
+      DocumentSnapshot document = await FirebaseFirestore.instance
+          .collection('stores')
+          .doc(sellerId)
+          .get();
+
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+      var title = data['title'];
+      productDetails =
+          productDetails.copyWith(seller_id: sellerId, seller_name: title);
       print("returning");
       // Return the product details
       return productDetails;

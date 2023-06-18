@@ -5,6 +5,7 @@ import 'presentation/cart_modifier.dart';
 class ProductDetails {
   final String id;
   final String seller_id;
+  final String seller_name;
   final double price;
   final String name;
   final String description;
@@ -13,6 +14,7 @@ class ProductDetails {
   final List<String> image_urls;
 
   ProductDetails({
+    required this.seller_name,
     required this.id,
     required this.seller_id,
     required this.price,
@@ -54,6 +56,7 @@ class ProductDetails {
     // print(List.from(data['image_urls']).runtimeType);
     print(data);
     return ProductDetails(
+      seller_name: '',
       id: doc.id,
       seller_id: data['seller_id'] ?? '',
       price: data['price'] ?? 0.0,
@@ -63,6 +66,30 @@ class ProductDetails {
       deliveryMethods: deliveryMethods,
       image_urls:
           (data['image_urls'] as List).map((item) => item as String).toList(),
+    );
+  }
+
+  ProductDetails copyWith({
+    String? id,
+    String? seller_id,
+    double? price,
+    String? name,
+    String? description,
+    List<CartModifier>? modifiers,
+    List<CartDeliveryMethod>? deliveryMethods,
+    List<String>? image_urls,
+    String? seller_name,
+  }) {
+    return ProductDetails(
+      seller_name: seller_name ?? this.seller_name,
+      id: id ?? this.id,
+      seller_id: seller_id ?? this.seller_id,
+      price: price ?? this.price,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      modifiers: modifiers ?? this.modifiers,
+      deliveryMethods: deliveryMethods ?? this.deliveryMethods,
+      image_urls: image_urls ?? this.image_urls,
     );
   }
 }

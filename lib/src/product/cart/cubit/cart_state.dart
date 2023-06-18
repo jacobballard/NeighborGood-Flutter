@@ -6,10 +6,22 @@ class CartState extends Equatable {
   final List<CartItem> checkoutItems;
 
   const CartState({
-    required this.status,
-    required this.errorMessage,
-    required this.checkoutItems,
+    this.status = FormzStatus.pure,
+    this.errorMessage,
+    this.checkoutItems = const [],
   });
+
+  CartState copyWith({
+    FormzStatus? status,
+    String? errorMessage,
+    List<CartItem>? checkoutItems,
+  }) {
+    return CartState(
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      checkoutItems: checkoutItems ?? this.checkoutItems,
+    );
+  }
 
   @override
   List<Object?> get props => [status, errorMessage, checkoutItems];

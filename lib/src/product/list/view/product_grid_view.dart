@@ -27,8 +27,8 @@ class ProductGridView extends StatelessWidget {
         final product = products[index];
         return InkWell(
           onTap: () {
-            Navigator.push(
-              context,
+            Navigator.of(context, rootNavigator: false).push(
+              // <-- Change this line
               MaterialPageRoute(
                 builder: (context) => ProductDetailPage(product: product),
               ),
@@ -38,12 +38,13 @@ class ProductGridView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Expanded(
-                  child: Image.network(
-                    product.image_urls[0],
-                    fit: BoxFit.cover,
+                if (product.image_urls.isNotEmpty)
+                  Expanded(
+                    child: Image.network(
+                      product.image_urls[0],
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

@@ -5,6 +5,7 @@ enum ViewProductDetailsStatus { initial, loading, success, failure }
 class ViewProductDetailsState extends Equatable {
   const ViewProductDetailsState({
     this.productDetails,
+    this.displayPrice,
     this.errorMessage,
     this.inputStatus = FormzStatus.pure,
     this.status = ViewProductDetailsStatus.initial,
@@ -14,7 +15,7 @@ class ViewProductDetailsState extends Equatable {
 
   final FormzStatus inputStatus;
   final ViewProductDetailsStatus status;
-
+  final String? displayPrice;
   final ProductDetails? productDetails;
 
   final List<CartModifierSelection>? cartModifierSelections;
@@ -28,6 +29,10 @@ class ViewProductDetailsState extends Equatable {
         status,
         productDetails,
         errorMessage,
+        cartModifierSelections,
+        deliveryMethodType,
+        inputStatus,
+        displayPrice
       ];
 
   ViewProductDetailsState copyWith({
@@ -37,12 +42,17 @@ class ViewProductDetailsState extends Equatable {
     List<CartModifierSelection>? cartModifierSelections,
     DeliveryMethodType? deliveryMethodType,
     FormzStatus? inputStatus,
+    String? displayPrice,
   }) {
     return ViewProductDetailsState(
       errorMessage: errorMessage ?? this.errorMessage,
       status: status ?? this.status,
       productDetails: productDetails ?? this.productDetails,
       inputStatus: inputStatus ?? this.inputStatus,
+      displayPrice: displayPrice ?? this.displayPrice,
+      cartModifierSelections:
+          cartModifierSelections ?? this.cartModifierSelections,
+      deliveryMethodType: deliveryMethodType ?? this.deliveryMethodType,
     );
   }
 }

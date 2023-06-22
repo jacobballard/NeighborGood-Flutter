@@ -39,6 +39,11 @@ class App extends StatelessWidget {
           BlocProvider<LocationCubit>(
             create: (_) => LocationCubit()..initLocation(),
           ),
+          BlocProvider(
+            create: (_) => CartCubit(
+              cartRepository: CartRepository(),
+            ),
+          )
         ],
         child: MaterialApp(
           theme: theme,
@@ -55,16 +60,7 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => CartCubit(
-            cartRepository: CartRepository(),
-          ),
-        )
-      ],
-      child: const MyTabBar(),
-    );
+    return const MyTabBar();
   }
 }
 

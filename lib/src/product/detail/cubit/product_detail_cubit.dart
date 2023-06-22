@@ -41,12 +41,16 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
           price: mod.price,
           id: mod.id,
           required: mod.required,
+          question: "",
+          answer: "",
         ));
       } else if (mod is CartMultiChoiceModifier) {
         translated.add(CartMultiChoiceModifierSelection(
           price: null,
           id: mod.id,
           required: mod.required,
+          question: "",
+          answer: "",
         ));
       }
     }
@@ -84,15 +88,26 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
 
     final mods = state.cartModifierSelections!;
 
-    final priceToAdd =
+    CartChoice choice =
         (state.productDetails!.modifiers![index] as CartMultiChoiceModifier)
             .choices!
             .where((element) => element.id == value)
-            .first
-            .price;
+            .first;
 
-    mods[index] = (mods[index] as CartMultiChoiceModifierSelection)
-        .copyWith(choiceId: value, price: priceToAdd);
+    final priceToAdd = choice.price;
+
+    final choice_answer = choice.title;
+
+    final choice_question =
+        (state.productDetails!.modifiers![index] as CartMultiChoiceModifier)
+            .title;
+
+    mods[index] = (mods[index] as CartMultiChoiceModifierSelection).copyWith(
+      choiceId: value,
+      price: priceToAdd,
+      question: choice_question,
+      answer: choice_answer,
+    );
 
     emit(state.copyWith(
         cartModifierSelections: mods, inputStatus: _computeStatus(mods)));
@@ -108,8 +123,14 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
         (state.productDetails!.modifiers![index] as CartTextModifier)
             .characterLimit);
 
-    var priceToAdd =
-        (state.productDetails!.modifiers![index] as CartTextModifier).price;
+    CartTextModifier textModifier =
+        state.productDetails!.modifiers![index] as CartTextModifier;
+
+    var priceToAdd = textModifier.price;
+
+    final question = textModifier.title;
+
+    // final answer =
     // var totalPrice;
     // if (!(totalPrice == "" || totalPrice == "0")) {
     //   totalPrice =
@@ -122,8 +143,11 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
       required: mods[index].required,
     );
 
-    mods[index] = (mods[index] as CartTextModifierSelection)
-        .copyWith(cartTextModifierInput: textInput, price: priceToAdd);
+    mods[index] = (mods[index] as CartTextModifierSelection).copyWith(
+        cartTextModifierInput: textInput,
+        price: priceToAdd,
+        question: question,
+        answer: textInput.value);
 
     emit(state.copyWith(
         cartModifierSelections: mods, inputStatus: _computeStatus(mods)));

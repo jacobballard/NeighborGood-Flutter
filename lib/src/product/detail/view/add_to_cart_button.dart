@@ -18,8 +18,8 @@ class AddToCartButton extends StatelessWidget {
             child: ElevatedButton(
               onPressed: state.inputStatus.isValidated
                   ? () {
-                      context.read<CartCubit>().addToCart(
-                          state.productDetails, state.cartModifierSelections);
+                      context.read<CartCubit>().addToCart(state.productDetails,
+                          state.cartModifierSelections, state.displayPrice);
                     }
                   : null,
               child: Text("Add to Cart"),

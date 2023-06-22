@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
 import 'package:pastry/src/product/cart/model/cart_item.dart';
+import 'package:pastry/src/product/cart/view/checkout_details.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -40,9 +41,12 @@ class CartPage extends StatelessWidget {
                   onPressed: state.checkoutItems.isEmpty
                       ? null
                       : () {
-                          // Place your checkout logic here
-                          // Example:
-                          // context.read<CartCubit>().checkout();
+                          context.read<CartCubit>().cartTotals();
+                          Navigator.of(context, rootNavigator: false).push(
+                            MaterialPageRoute(
+                              builder: (context) => CheckoutDetailsPage(),
+                            ),
+                          );
                         },
                   child: const Text("Checkout"),
                 ),

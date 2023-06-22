@@ -15,8 +15,7 @@ class SellerSettingsPage extends StatelessWidget {
         TextButton(
           onPressed: () {
             // Navigate to become a seller page
-            Navigator.push(
-              context,
+            Navigator.of(context, rootNavigator: false).push(
               MaterialPageRoute(
                 builder: (context) => const CreateProductPage(),
               ),

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:repositories/models/presentation/cart_delivery_method.dart';
 import 'package:repositories/repositories.dart';
 
 import '../model/cart_item.dart';
@@ -12,7 +13,9 @@ class CartCubit extends Cubit<CartState> {
 
   CartCubit({
     required this.cartRepository,
-  }) : super(const CartState());
+  }) : super(const CartState()); // {
+  //   _computeStatus();
+  // }
 
   void updateCartQuantity(int position, int? newValue) {
     if (newValue == null) return;
@@ -33,13 +36,31 @@ class CartCubit extends Cubit<CartState> {
     emit(state.copyWith(checkoutItems: updatedItems));
   }
 
-  void addToCart(ProductDetails? productDetails,
-      List<CartModifierSelection>? cartModifierSelections) {
+  void selectedDeliveryMethodChanged(int index, CartDeliveryMethod? value) {
+    var checkoutItems = state.checkoutItems;
+    var item = checkoutItems[index];
+
+    checkoutItems[index] = item.copyWith(deliveryMethod: value?.type);
+
+    CartState newState = _computeStatus();
+
+    emit(newState.copyWith(checkoutItems: checkoutItems.toList()));
+  }
+
+  void addToCart(
+      ProductDetails? productDetails,
+      List<CartModifierSelection>? cartModifierSelections,
+      String? displayPrice) {
     if (productDetails == null) return;
+
+    if (displayPrice != null) {
+      productDetails =
+          productDetails.copyWith(price: double.tryParse(displayPrice));
+    }
     var checkout_items = state.checkoutItems.toList();
 
     var unique = checkout_items.any((element) =>
-        element.productDetails.id == productDetails.id &&
+        element.productDetails.id == productDetails?.id &&
         element.cartModfiierSelections == cartModifierSelections);
 
     if (unique) {
@@ -62,8 +83,58 @@ class CartCubit extends Cubit<CartState> {
     print("Checkout items $checkout_items");
 
     emit(state.copyWith(
-      status: FormzStatus.valid,
+      status: FormzStatus.invalid,
       checkoutItems: checkout_items.toList(),
     ));
   }
+
+  void cartTotals() {
+    print("check");
+    emit(_computeStatus());
+  }
+
+  CartState _computeStatus() {
+    double totalShipping = 0.0;
+    double totalPrice = 0.0;
+    double totalPlatformFee = 0.0;
+    double totalTax = 0.0;
+
+    bool allDeliveriesFilledIn =
+        state.checkoutItems.every((element) => element.deliveryMethod != null);
+
+    for (CartItem item in state.checkoutItems) {
+      // if (item.deliveryMethod == null) break;
+      double itemShippingFee = 0.0;
+      if (item.deliveryMethod != null) {
+        itemShippingFee = double.tryParse(item.productDetails.deliveryMethods!
+                .where((element) => element.type == item.deliveryMethod)
+                .first
+                .fee) ??
+            0;
+      }
+      totalShipping += itemShippingFee * item.quantity;
+
+      double itemPrice = item.productDetails.price;
+      totalPrice += itemPrice * item.quantity;
+    }
+
+    // Assuming a 5% platform fee
+    totalPlatformFee = totalPrice * 0.05;
+
+    // Assuming a 10% tax on the subtotal
+    totalTax = totalPrice * 0.06;
+
+    // Return updated state
+    return state.copyWith(
+      subtotal: totalPrice.toStringAsFixed(2),
+      shippingPrice: totalShipping.toStringAsFixed(2),
+      totalPrice: (totalPrice + totalShipping + totalPlatformFee + totalTax)
+          .toStringAsFixed(2),
+      platformFee: totalPlatformFee.toStringAsFixed(2),
+      tax: totalTax.toStringAsFixed(2),
+      status: allDeliveriesFilledIn ? FormzStatus.valid : FormzStatus.invalid,
+    );
+  }
+
+  Future<void> checkout() async {}
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
-import 'package:pastry/src/product/cart/model/cart_item.dart';
+import 'package:repositories/models/checkout/cart_item.dart';
 import 'package:repositories/models/delivery_method.dart';
 import 'package:repositories/models/presentation/cart_delivery_method.dart';
 import 'package:repositories/repositories.dart';

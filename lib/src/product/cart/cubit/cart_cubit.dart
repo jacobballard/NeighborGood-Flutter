@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:repositories/models/delivery_method.dart';
 import 'package:repositories/models/presentation/cart_delivery_method.dart';
 import 'package:repositories/repositories.dart';
-
-import '../model/cart_item.dart';
 
 part 'cart_state.dart';
 
@@ -102,6 +101,10 @@ class CartCubit extends Cubit<CartState> {
     bool allDeliveriesFilledIn =
         state.checkoutItems.every((element) => element.deliveryMethod != null);
 
+    var cartNeedsAddress = state.checkoutItems.any((element) =>
+        element.deliveryMethod == DeliveryMethodType.shipping ||
+        element.deliveryMethod == DeliveryMethodType.delivery);
+
     for (CartItem item in state.checkoutItems) {
       // if (item.deliveryMethod == null) break;
       double itemShippingFee = 0.0;
@@ -133,6 +136,7 @@ class CartCubit extends Cubit<CartState> {
       platformFee: totalPlatformFee.toStringAsFixed(2),
       tax: totalTax.toStringAsFixed(2),
       status: allDeliveriesFilledIn ? FormzStatus.valid : FormzStatus.invalid,
+      cartNeedsAddress: cartNeedsAddress,
     );
   }
 

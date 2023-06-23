@@ -9,8 +9,10 @@ class CartState extends Equatable {
   final String totalPrice;
   final String platformFee;
   final String subtotal;
+  final bool? cartNeedsAddress;
 
   const CartState({
+    this.cartNeedsAddress,
     this.subtotal = '',
     this.platformFee = '',
     this.totalPrice = '',
@@ -30,6 +32,7 @@ class CartState extends Equatable {
     String? totalPrice,
     String? platformFee,
     String? subtotal,
+    bool? cartNeedsAddress,
   }) {
     return CartState(
       status: status ?? this.status,
@@ -40,6 +43,7 @@ class CartState extends Equatable {
       totalPrice: totalPrice ?? this.totalPrice,
       platformFee: platformFee ?? this.platformFee,
       subtotal: subtotal ?? this.subtotal,
+      cartNeedsAddress: cartNeedsAddress ?? this.cartNeedsAddress,
     );
   }
 
@@ -53,5 +57,6 @@ class CartState extends Equatable {
         totalPrice,
         platformFee,
         subtotal,
+        cartNeedsAddress,
       ];
 }

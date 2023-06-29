@@ -9,14 +9,20 @@ class CartState extends Equatable {
   final String totalPrice;
   final String platformFee;
   final String subtotal;
-  final bool? cartNeedsAddress;
+  final bool? cartNeedsShippingAddress;
+  final bool? cartNeedsDeliveryAddress;
+  final String transactionId;
+  final bool billingSameAsShipping;
 
   const CartState({
-    this.cartNeedsAddress,
+    this.transactionId = '',
+    this.cartNeedsShippingAddress,
+    this.cartNeedsDeliveryAddress,
     this.subtotal = '',
     this.platformFee = '',
     this.totalPrice = '',
     this.shippingPrice = '',
+    this.billingSameAsShipping = true,
     this.tax = '',
     this.status = FormzStatus.pure,
     this.errorMessage,
@@ -32,7 +38,10 @@ class CartState extends Equatable {
     String? totalPrice,
     String? platformFee,
     String? subtotal,
-    bool? cartNeedsAddress,
+    bool? cartNeedsShippingAddress,
+    String? transactionId,
+    bool? cartNeedsDeliveryAddress,
+    bool? billingSameAsShipping,
   }) {
     return CartState(
       status: status ?? this.status,
@@ -43,7 +52,13 @@ class CartState extends Equatable {
       totalPrice: totalPrice ?? this.totalPrice,
       platformFee: platformFee ?? this.platformFee,
       subtotal: subtotal ?? this.subtotal,
-      cartNeedsAddress: cartNeedsAddress ?? this.cartNeedsAddress,
+      cartNeedsShippingAddress:
+          cartNeedsShippingAddress ?? this.cartNeedsShippingAddress,
+      cartNeedsDeliveryAddress:
+          cartNeedsDeliveryAddress ?? this.cartNeedsDeliveryAddress,
+      billingSameAsShipping:
+          billingSameAsShipping ?? this.billingSameAsShipping,
+      transactionId: transactionId ?? this.transactionId,
     );
   }
 
@@ -57,6 +72,9 @@ class CartState extends Equatable {
         totalPrice,
         platformFee,
         subtotal,
-        cartNeedsAddress,
+        cartNeedsShippingAddress,
+        cartNeedsDeliveryAddress,
+        billingSameAsShipping,
+        transactionId,
       ];
 }

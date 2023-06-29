@@ -86,6 +86,7 @@ class CreateStoreView extends StatelessWidget {
                       children: [
                         const StoreDetailsView(),
                         StoreAddressView(
+                          isCheckout: false,
                           storeAddressCubit: createStoreCubit.storeAddressCubit,
                         ),
                         DeliveryMethodsView(

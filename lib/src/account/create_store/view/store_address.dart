@@ -4,9 +4,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/store_address_cubit.dart';
 
 class StoreAddressView extends StatelessWidget {
-  const StoreAddressView({super.key, required this.storeAddressCubit});
+  const StoreAddressView(
+      {Key? key, required this.storeAddressCubit, required this.isCheckout})
+      : super(key: key);
 
   final StoreAddressCubit storeAddressCubit;
+  final bool isCheckout;
+
+  Widget buildLabel(String text, bool required) {
+    return RichText(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(color: Colors.black),
+        children: [
+          if (required)
+            TextSpan(
+              text: ' *',
+              style: TextStyle(color: Colors.red),
+            )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +39,7 @@ class StoreAddressView extends StatelessWidget {
                 TextField(
                   onChanged: storeAddressCubit.addressLine1Changed,
                   decoration: InputDecoration(
-                    labelText: 'Address Line 1',
+                    label: buildLabel('Street address', isCheckout),
                     errorText:
                         state.addressLine1.invalid ? 'Invalid address' : null,
                   ),
@@ -28,7 +47,7 @@ class StoreAddressView extends StatelessWidget {
                 TextField(
                   onChanged: storeAddressCubit.addressLine2Changed,
                   decoration: InputDecoration(
-                    labelText: 'Address Line 2',
+                    labelText: 'Apt / Suite / Other',
                     errorText:
                         state.addressLine2.invalid ? 'Invalid address' : null,
                   ),
@@ -37,27 +56,27 @@ class StoreAddressView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
-                        onChanged: storeAddressCubit.cityChanged,
+                        onChanged: storeAddressCubit.zipCodeChanged,
                         decoration: InputDecoration(
-                          labelText: 'City',
-                          errorText: state.city.invalid ? 'Invalid city' : null,
+                          label: buildLabel('Zip Code', true),
+                          errorText:
+                              state.zipCode.invalid ? 'Invalid zip code' : null,
                         ),
                       ),
                     ),
                     const SizedBox(width: 20),
                     Expanded(
-                      child: _StateInput(),
+                      child: TextField(
+                        onChanged: storeAddressCubit.cityChanged,
+                        decoration: InputDecoration(
+                          label: buildLabel('City', isCheckout),
+                          errorText: state.city.invalid ? 'Invalid city' : null,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                TextField(
-                  onChanged: storeAddressCubit.zipCodeChanged,
-                  decoration: InputDecoration(
-                    labelText: 'Zip Code',
-                    errorText:
-                        state.zipCode.invalid ? 'Invalid zip code' : null,
-                  ),
-                )
+                _StateInput(isRequired: isCheckout),
               ],
             );
           },
@@ -127,6 +146,26 @@ class _StateInput extends StatelessWidget {
     'MP' //# Northern Mariana Islands
   ];
 
+  final bool isRequired;
+
+  _StateInput({required this.isRequired});
+
+  Widget buildLabel(String text) {
+    return RichText(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(color: Colors.black),
+        children: [
+          if (isRequired)
+            TextSpan(
+              text: ' *',
+              style: TextStyle(color: Colors.red),
+            )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StoreAddressCubit, StoreAddressState>(
@@ -146,8 +185,8 @@ class _StateInput extends StatelessWidget {
               child: Text(value),
             );
           }).toList(),
-          decoration: const InputDecoration(
-            labelText: 'State',
+          decoration: InputDecoration(
+            label: buildLabel('State'),
           ),
         );
       },

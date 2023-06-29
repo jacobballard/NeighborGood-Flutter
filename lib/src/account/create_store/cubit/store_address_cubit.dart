@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
-
+import 'package:repositories/models/address.dart' as returnAddress;
 part 'store_address_state.dart';
 
 class StoreAddressCubit extends Cubit<StoreAddressState> {
@@ -71,5 +71,14 @@ class StoreAddressCubit extends Cubit<StoreAddressState> {
         state.city,
       ]),
     ));
+  }
+
+  returnAddress.Address toAddress() {
+    return returnAddress.Address(
+        state.addressLine1.value,
+        state.addressLine2.value,
+        state.city.value,
+        state.stateName,
+        state.zipCode.value);
   }
 }

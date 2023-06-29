@@ -16,7 +16,26 @@ class CheckoutDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Finalize Checkout'),
       ),
-      body: BlocBuilder<CartCubit, CartState>(
+      body: BlocConsumer<CartCubit, CartState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(
+                      state.errorMessage ?? "Error: Please refresh your cart"),
+                ),
+              );
+          }
+          if (state.status.isSubmissionSuccess) {
+            // Navigator.of(context, rootNavigator: false).push(
+            //           MaterialPageRoute(
+            //             builder: (context) => PaymentDeta(),
+            //           ),
+            //         );
+          }
+        },
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
           if (state.checkoutItems.isEmpty) {
@@ -45,35 +64,35 @@ class CheckoutDetailsPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Subtotal:'),
+                        const Text('Subtotal:'),
                         Text('\$${state.subtotal}'),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Delivery:'),
+                        const Text('Delivery:'),
                         Text('\$${state.shippingPrice}'),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Platform Fee:'),
+                        const Text('Platform Fee:'),
                         Text('\$${state.platformFee}'),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Tax:'),
-                        Text('\$${state.tax}'),
+                        const Text('Tax:'),
+                        Text('~\$${state.tax}'),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Total:'),
+                        const Text('Total:'),
                         Text('\$${state.totalPrice}'),
                       ],
                     ),
@@ -85,11 +104,13 @@ class CheckoutDetailsPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: state.status.isValid
-                      ? () {
-                          context.read<CartCubit>().checkout();
+                      ? () async {
+                          await context.read<CartCubit>().checkout();
                         }
                       : null,
-                  child: const Text("Finish checkout"),
+                  child: state.status.isSubmissionInProgress
+                      ? const CircularProgressIndicator()
+                      : const Text("Finish checkout"),
                 ),
               ),
             ],
@@ -172,7 +193,7 @@ class _CheckoutItemWidgetState extends State<CheckoutItemWidget> {
             ),
             Row(
               children: [
-                Text("Delivery Method: "),
+                const Text("Delivery Method: "),
                 DropdownButton<CartDeliveryMethod>(
                   value: _selectedDeliveryMethod,
                   items: _deliveryMethods.map((CartDeliveryMethod value) {
@@ -183,7 +204,7 @@ class _CheckoutItemWidgetState extends State<CheckoutItemWidget> {
                         children: [
                           Text(enumToString(value.type)),
                           if (value.fee.isNotEmpty) Text('\$${value.fee}'),
-                          if (value.fee.isEmpty) Text('\$0'),
+                          if (value.fee.isEmpty) const Text('\$0'),
                           if (value.eta.isNotEmpty) Text('~${value.eta} days')
                         ],
                       ),
@@ -195,9 +216,9 @@ class _CheckoutItemWidgetState extends State<CheckoutItemWidget> {
                       return Row(
                         children: [
                           Text(enumToString(value.type)),
-                          SizedBox(width: 8.0), // This adds some spacing
+                          const SizedBox(width: 8.0), // This adds some spacing
                           if (value.fee.isNotEmpty) Text('\$${value.fee}'),
-                          if (value.fee.isEmpty) Text('\$0'),
+                          if (value.fee.isEmpty) const Text('\$0'),
                           if (value.eta.isNotEmpty) Text('~${value.eta} days')
                         ],
                       );
@@ -211,7 +232,7 @@ class _CheckoutItemWidgetState extends State<CheckoutItemWidget> {
                       _selectedDeliveryMethod = newValue;
                     });
                   },
-                  hint: Text('Select a delivery method'),
+                  hint: const Text('Select a delivery method'),
                 ),
               ],
             ),
@@ -224,17 +245,17 @@ class _CheckoutItemWidgetState extends State<CheckoutItemWidget> {
                       children: <InlineSpan>[
                         TextSpan(
                           text: "${modifier.question} ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         if (modifier.price != null &&
                             modifier.price!.isNotEmpty)
                           TextSpan(
                             text: "(\$${modifier.price}) ",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         TextSpan(
                           text: ": ${modifier.answer}",
-                          style: TextStyle(fontWeight: FontWeight.normal),
+                          style: const TextStyle(fontWeight: FontWeight.normal),
                         ),
                       ],
                     ),

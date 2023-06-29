@@ -28,6 +28,18 @@ class StoreAddressState {
     return FormzStatus.invalid;
   }
 
+  bool get isValidated {
+    if (zipCode.valid &&
+        addressLine1.valid &&
+        (addressLine2.value == "" || addressLine2.valid) &&
+        city.valid &&
+        stateName != "") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   StoreAddressState({
     this.addressLine1 = const Address.pure(),
     this.addressLine2 = const Address.pure(),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
 import 'package:pastry/src/app/bloc/app_bloc.dart';
 import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 import 'package:pastry/src/app/location/view/location.dart';
@@ -41,6 +42,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => CartCubit(
+              authenticationRepository: _authenticationRepository,
+              firstStoreAddressCubit: StoreAddressCubit(),
+              secondStoreAddressCubit: StoreAddressCubit(),
               cartRepository: CartRepository(),
             ),
           )

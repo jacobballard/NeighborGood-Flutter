@@ -1,6 +1,8 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
 import 'package:repositories/models/delivery_method.dart';
 import 'package:repositories/models/presentation/cart_delivery_method.dart';
 import 'package:repositories/repositories.dart';
@@ -9,9 +11,15 @@ part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
   final CartRepository cartRepository;
+  final AuthenticationRepository authenticationRepository;
+  final StoreAddressCubit firstStoreAddressCubit;
+  final StoreAddressCubit secondStoreAddressCubit;
 
   CartCubit({
     required this.cartRepository,
+    required this.firstStoreAddressCubit,
+    required this.secondStoreAddressCubit,
+    required this.authenticationRepository,
   }) : super(const CartState()); // {
   //   _computeStatus();
   // }
@@ -101,10 +109,10 @@ class CartCubit extends Cubit<CartState> {
     bool allDeliveriesFilledIn =
         state.checkoutItems.every((element) => element.deliveryMethod != null);
 
-    var cartNeedsAddress = state.checkoutItems.any((element) =>
-        element.deliveryMethod == DeliveryMethodType.shipping ||
-        element.deliveryMethod == DeliveryMethodType.delivery);
-
+    var cartNeedsShippingAddress = state.checkoutItems.any(
+        (element) => element.deliveryMethod == DeliveryMethodType.shipping);
+    var cartNeedsDeliveryAddress = state.checkoutItems.any(
+        (element) => element.deliveryMethod == DeliveryMethodType.delivery);
     for (CartItem item in state.checkoutItems) {
       // if (item.deliveryMethod == null) break;
       double itemShippingFee = 0.0;
@@ -136,9 +144,48 @@ class CartCubit extends Cubit<CartState> {
       platformFee: totalPlatformFee.toStringAsFixed(2),
       tax: totalTax.toStringAsFixed(2),
       status: allDeliveriesFilledIn ? FormzStatus.valid : FormzStatus.invalid,
-      cartNeedsAddress: cartNeedsAddress,
+      cartNeedsShippingAddress: cartNeedsShippingAddress,
+      cartNeedsDeliveryAddress: cartNeedsDeliveryAddress,
     );
   }
 
-  Future<void> checkout() async {}
+  bool get isShippingValidated {
+    return state.billingSameAsShipping
+        ? firstStoreAddressCubit.state.isValidated
+        : (firstStoreAddressCubit.state.isValidated &&
+            secondStoreAddressCubit.state.isValidated);
+  }
+
+  Future<void> checkout() async {
+    print("checkout");
+    emit(
+      state.copyWith(status: FormzStatus.submissionInProgress),
+    );
+    try {
+      final transactionId = await cartRepository.purchase(
+        items: state.checkoutItems,
+        billingAddress: (!state.cartNeedsDeliveryAddress! &&
+                !state.cartNeedsShippingAddress!)
+            ? firstStoreAddressCubit.toAddress()
+            : state.billingSameAsShipping
+                ? firstStoreAddressCubit.toAddress()
+                : secondStoreAddressCubit.toAddress(),
+        shippingAddress: state.billingSameAsShipping
+            ? firstStoreAddressCubit.toAddress()
+            : secondStoreAddressCubit.toAddress(),
+        token: await authenticationRepository.getIdToken(),
+      );
+
+      emit(
+        state.copyWith(
+          transactionId: transactionId,
+          status: transactionId.isEmpty
+              ? FormzStatus.submissionFailure
+              : FormzStatus.submissionSuccess,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
 }

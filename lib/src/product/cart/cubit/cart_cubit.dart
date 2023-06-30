@@ -95,6 +95,10 @@ class CartCubit extends Cubit<CartState> {
     ));
   }
 
+  void useSameAddressBoolChanged(bool? value) {
+    emit(state.copyWith(billingSameAsShipping: value));
+  }
+
   void cartTotals() {
     print("check");
     emit(_computeStatus());

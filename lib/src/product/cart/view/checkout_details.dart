@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
+import 'package:pastry/src/product/cart/view/cart_address.dart';
 import 'package:repositories/models/checkout/cart_item.dart';
 import 'package:repositories/models/delivery_method.dart';
 import 'package:repositories/models/presentation/cart_delivery_method.dart';
@@ -28,13 +29,7 @@ class CheckoutDetailsPage extends StatelessWidget {
                 ),
               );
           }
-          if (state.status.isSubmissionSuccess) {
-            // Navigator.of(context, rootNavigator: false).push(
-            //           MaterialPageRoute(
-            //             builder: (context) => PaymentDeta(),
-            //           ),
-            //         );
-          }
+          if (state.status.isSubmissionSuccess) {}
         },
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
@@ -105,7 +100,11 @@ class CheckoutDetailsPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: state.status.isValid
                       ? () async {
-                          await context.read<CartCubit>().checkout();
+                          Navigator.of(context, rootNavigator: false).push(
+                            MaterialPageRoute(
+                              builder: (context) => const CartAddressPage(),
+                            ),
+                          );
                         }
                       : null,
                   child: state.status.isSubmissionInProgress

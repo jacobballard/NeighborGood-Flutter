@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pastry/src/account/create_store/view/store_address.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
 
 class CartAddressPage extends StatelessWidget {
@@ -25,7 +26,7 @@ class CartAddressPage extends StatelessWidget {
           String addressHeaderText = "Billing Address";
           if (state.cartNeedsShippingAddress == true &&
               state.cartNeedsDeliveryAddress == true) {
-            addressHeaderText = "Delivery/Shipping Address";
+            addressHeaderText = "Delivery / Shipping Address";
           } else if (state.cartNeedsShippingAddress == true) {
             addressHeaderText = "Shipping Address";
           } else if (state.cartNeedsDeliveryAddress == true) {
@@ -44,16 +45,22 @@ class CartAddressPage extends StatelessWidget {
                       Text(addressHeaderText,
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
+                      StoreAddressView(
+                          storeAddressCubit:
+                              context.read<CartCubit>().firstStoreAddressCubit,
+                          isCheckout: true),
+
                       if (state.cartNeedsShippingAddress == true ||
                           state.cartNeedsDeliveryAddress == true) ...[
                         // Checkbox "My billing address is the same as my (text based on boolean) address"
                         Row(
                           children: [
                             Checkbox(
-                              value:
-                                  true, // This should be bound to your state management solution
+                              value: state.billingSameAsShipping,
                               onChanged: (bool? value) {
-                                // Handle the change of the checkbox here
+                                context
+                                    .read<CartCubit>()
+                                    .useSameAddressBoolChanged(value);
                               },
                             ),
                             Text(
@@ -62,6 +69,12 @@ class CartAddressPage extends StatelessWidget {
                         ),
                         // Here you can put your Billing Address Input fields when the checkbox is unchecked
                         // ...
+                        if (!state.billingSameAsShipping)
+                          StoreAddressView(
+                              storeAddressCubit: context
+                                  .read<CartCubit>()
+                                  .secondStoreAddressCubit,
+                              isCheckout: true),
                       ],
 
                       // ... existing code ...

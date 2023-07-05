@@ -21,7 +21,7 @@ class ProductRepository {
   }) async {
     print("called");
     final response = await http.post(
-      Uri.parse("http://192.168.4.25:8083/"),
+      Uri.parse("http://192.168.4.117:8083/"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

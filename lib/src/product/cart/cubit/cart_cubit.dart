@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
+import 'package:repositories/models/address.dart';
 import 'package:repositories/models/delivery_method.dart';
 import 'package:repositories/models/presentation/cart_delivery_method.dart';
 import 'package:repositories/repositories.dart';
@@ -20,8 +21,10 @@ class CartCubit extends Cubit<CartState> {
     required this.firstStoreAddressCubit,
     required this.secondStoreAddressCubit,
     required this.authenticationRepository,
-  }) : super(const CartState()); // {
-  //   _computeStatus();
+  }) : super(const CartState()); //{
+  //   emit(state.copyWith(
+  //       firstStoreAddressCubit: StoreAddressCubit(),
+  //       secondStoreAddressCubit: StoreAddressCubit()));
   // }
 
   void updateCartQuantity(int position, int? newValue) {
@@ -41,6 +44,11 @@ class CartCubit extends Cubit<CartState> {
     updatedItems.removeAt(position);
 
     emit(state.copyWith(checkoutItems: updatedItems));
+  }
+
+  void sameBillingAsShipping(bool? value) {
+    print("same billing as shipping ${value.toString()}");
+    emit(state.copyWith(billingSameAsShipping: value));
   }
 
   void selectedDeliveryMethodChanged(int index, CartDeliveryMethod? value) {
@@ -155,9 +163,9 @@ class CartCubit extends Cubit<CartState> {
 
   bool get isShippingValidated {
     return state.billingSameAsShipping
-        ? firstStoreAddressCubit.state.isValidated
-        : (firstStoreAddressCubit.state.isValidated &&
-            secondStoreAddressCubit.state.isValidated);
+        ? (firstStoreAddressCubit?.state.isValidated ?? false)
+        : ((firstStoreAddressCubit?.state.isValidated ?? false) &&
+            (secondStoreAddressCubit?.state.isValidated ?? false));
   }
 
   Future<void> checkout() async {
@@ -165,29 +173,60 @@ class CartCubit extends Cubit<CartState> {
     emit(
       state.copyWith(status: FormzStatus.submissionInProgress),
     );
+
+    final billingFirst =
+        (!state.cartNeedsDeliveryAddress! && !state.cartNeedsShippingAddress!)
+            ? true
+            : state.billingSameAsShipping
+                ? true
+                : false;
     try {
       final transactionId = await cartRepository.purchase(
         items: state.checkoutItems,
         billingAddress: (!state.cartNeedsDeliveryAddress! &&
                 !state.cartNeedsShippingAddress!)
-            ? firstStoreAddressCubit.toAddress()
+            ? firstStoreAddressCubit!.toAddress()
             : state.billingSameAsShipping
-                ? firstStoreAddressCubit.toAddress()
-                : secondStoreAddressCubit.toAddress(),
+                ? firstStoreAddressCubit!.toAddress()
+                : secondStoreAddressCubit!.toAddress(),
         shippingAddress: state.billingSameAsShipping
-            ? firstStoreAddressCubit.toAddress()
-            : secondStoreAddressCubit.toAddress(),
+            ? firstStoreAddressCubit!.toAddress()
+            : (!state.cartNeedsDeliveryAddress! &&
+                    !state.cartNeedsShippingAddress!)
+                ? secondStoreAddressCubit!.toAddress()
+                : firstStoreAddressCubit!.toAddress(),
         token: await authenticationRepository.getIdToken(),
       );
 
-      emit(
-        state.copyWith(
-          transactionId: transactionId,
-          status: transactionId.isEmpty
-              ? FormzStatus.submissionFailure
-              : FormzStatus.submissionSuccess,
-        ),
-      );
+      if (!transactionId) {
+        if (billingFirst) {
+          firstStoreAddressCubit
+              .addSuggestedAddress(cartRepository.suggestedBillingAddress);
+          secondStoreAddressCubit
+              .addSuggestedAddress(cartRepository.suggestedShippingAddress);
+        } else {
+          firstStoreAddressCubit
+              .addSuggestedAddress(cartRepository.suggestedShippingAddress);
+          secondStoreAddressCubit
+              .addSuggestedAddress(cartRepository.suggestedBillingAddress);
+        }
+        cartRepository.suggestedBillingAddress = null;
+        cartRepository.suggestedShippingAddress = null;
+        emit(state.copyWith(status: FormzStatus.valid));
+      } else {
+        emit(state.copyWith(
+            transactionId: cartRepository.transactionId,
+            status: FormzStatus.submissionSuccess));
+      }
+
+      // emit(
+      //   state.copyWith(
+      //     // transactionId: transactionId,
+      //     status: !transactionId
+      //         ? FormzStatus.submissionFailure
+      //         : FormzStatus.submissionSuccess,
+      //   ),
+      // );
     } catch (e) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }

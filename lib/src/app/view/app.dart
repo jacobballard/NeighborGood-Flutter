@@ -42,9 +42,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => CartCubit(
-              authenticationRepository: _authenticationRepository,
               firstStoreAddressCubit: StoreAddressCubit(),
               secondStoreAddressCubit: StoreAddressCubit(),
+              authenticationRepository: _authenticationRepository,
               cartRepository: CartRepository(),
             ),
           )

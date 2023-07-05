@@ -91,7 +91,17 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
           deliveryMethods: deliveryMethodsCubit.state.methods,
           description: storeDetailsCubit.state.description.value);
 
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      if (createStoreRepository.suggestedAddress != null) {
+        print("there's something suggest");
+        storeAddressCubit
+            .addSuggestedAddress(createStoreRepository.suggestedAddress);
+        createStoreRepository.suggestedAddress = null;
+        emit(state.copyWith(
+            status: FormzStatus.submissionFailure,
+            errorMessage: "Verify your address"));
+      } else {
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      }
     } on CreateStoreFailure catch (e) {
       emit(
         state.copyWith(

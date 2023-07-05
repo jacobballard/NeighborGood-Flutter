@@ -24,15 +24,20 @@ final theme = ThemeData(
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      foregroundColor: Colors.black, // This sets the text color
-      backgroundColor: Colors.white, // This sets the button color
+      foregroundColor: Colors.black, // Text color
+      backgroundColor: Colors.transparent, // Transparent background
+    ).copyWith(
+      // Adding only the bottom border
+      side: MaterialStateProperty.all(
+        const BorderSide(color: Colors.black, width: 1.0),
+      ),
     ),
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     selectedItemColor: Colors.black,
-    unselectedItemColor: Colors.grey,
+    unselectedItemColor: Color.fromARGB(255, 12, 12, 12),
   ),
-  progressIndicatorTheme: ProgressIndicatorThemeData(
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
       circularTrackColor: Colors.white, color: Colors.black),
   checkboxTheme: CheckboxThemeData(
     checkColor: MaterialStateProperty.resolveWith((states) => Colors.white),
@@ -43,18 +48,14 @@ final theme = ThemeData(
   textSelectionTheme: const TextSelectionThemeData(
     cursorColor: Colors.black, // This sets the global cursor color
   ),
-  inputDecorationTheme: InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+  inputDecorationTheme: const InputDecorationTheme(
+    border: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.black, width: 1.0),
     ),
-    fillColor: Colors.white,
-
-    labelStyle: const TextStyle(color: Colors.black), // Black input text
-    focusedBorder: OutlineInputBorder(
-      borderSide:
-          const BorderSide(color: Colors.black), // Black border when focused
-      borderRadius: BorderRadius.circular(8),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.black, width: 2.0),
     ),
+    labelStyle: TextStyle(color: Colors.black), // Black input text
   ),
 );
 final darkTheme = ThemeData(
@@ -82,17 +83,22 @@ final darkTheme = ThemeData(
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      primary: Colors.white, // This sets the text color to white
-      backgroundColor: Color(0xFF6F6F6F), // This sets the button color to grey
+      foregroundColor: Colors.white, // Text color
+      backgroundColor: Colors.transparent, // Transparent background
+    ).copyWith(
+      // Adding only the bottom border
+      side: MaterialStateProperty.all(
+        const BorderSide(color: Colors.grey, width: 1.0),
+      ),
     ),
   ),
-  progressIndicatorTheme: ProgressIndicatorThemeData(
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
     circularTrackColor: Color(0xFF6F6F6F),
     color: Colors.white, // White progress indicator
   ),
   checkboxTheme: CheckboxThemeData(
     checkColor: MaterialStateProperty.resolveWith(
-        (states) => Color(0xFF6F6F6F)), // Grey check
+        (states) => const Color(0xFF6F6F6F)), // Grey check
     fillColor: MaterialStateProperty.resolveWith(
       (states) => states.contains(MaterialState.selected)
           ? Colors.white
@@ -102,15 +108,13 @@ final darkTheme = ThemeData(
   textSelectionTheme: const TextSelectionThemeData(
     cursorColor: Colors.white, // White cursor
   ),
-  inputDecorationTheme: InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+  inputDecorationTheme: const InputDecorationTheme(
+    border: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey, width: 1.0),
     ),
-    labelStyle: const TextStyle(color: Colors.white), // White input text
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white), // White border when focused
-      borderRadius: BorderRadius.circular(8),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey, width: 2.0),
     ),
-    fillColor: Color(0xFF6F6F6F), // Grey input background
+    labelStyle: TextStyle(color: Colors.white), // White input text
   ),
 );

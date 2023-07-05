@@ -8,7 +8,7 @@ class StoreTitle extends FormzInput<String, StoreTitleValidationError> {
   const StoreTitle.dirty([String value = '']) : super.dirty(value);
 
   static final unicodeRegex =
-      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}]*$', unicode: true);
+      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P} ]*$', unicode: true);
 
   @override
   StoreTitleValidationError? validator(String? value) {
@@ -30,7 +30,7 @@ class StoreDescription
   const StoreDescription.dirty([String value = '']) : super.dirty(value);
 
   static final unicodeRegex =
-      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P}]*$', unicode: true);
+      RegExp(r'^[\p{L}\p{M}\p{S}\p{N}\p{P} ]*$', unicode: true);
 
   @override
   StoreDescriptionValidationError? validator(String? value) {
@@ -63,7 +63,10 @@ enum ZipCodeValidationError { invalid }
 class ZipCode extends FormzInput<String, ZipCodeValidationError> {
   const ZipCode.pure() : super.pure('');
   const ZipCode.dirty([String value = '']) : super.dirty(value);
-  static final _zipCodeRegExp = RegExp(r'^\d{5}$');
+
+  // Modified regular expression
+  static final _zipCodeRegExp = RegExp(r'^\d{5}(-\d{4})?$');
+
   @override
   ZipCodeValidationError? validator(String? value) {
     return _zipCodeRegExp.hasMatch(value ?? '')

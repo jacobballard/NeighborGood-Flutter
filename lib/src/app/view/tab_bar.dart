@@ -27,10 +27,10 @@ class MyTabBarState extends State<MyTabBar> {
 
   final List<Widget> pages = [
     // MyHomePage(title: "Test"),
-    BlocProvider(
-      create: (BuildContext context) => StoreListBloc(),
-      child: const StorePage(),
-    ),
+    // BlocProvider(
+    //   create: (BuildContext context) => StoreListBloc(),
+    //   child: const StorePage(),
+    // ),
     Navigator(
       onGenerateRoute: (settings) {
         return MaterialPageRoute(
@@ -62,7 +62,7 @@ class MyTabBarState extends State<MyTabBar> {
       return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            // BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
@@ -89,8 +89,8 @@ class MyTabBarState extends State<MyTabBar> {
             builder: (context, state) {
               return BottomNavigationBar(
                 items: [
-                  const BottomNavigationBarItem(
-                      icon: Icon(Icons.home), label: 'Home'),
+                  // const BottomNavigationBarItem(
+                  // icon: Icon(Icons.home), label: 'Home'),
                   const BottomNavigationBarItem(
                       icon: Icon(Icons.search), label: 'Search'),
                   BottomNavigationBarItem(

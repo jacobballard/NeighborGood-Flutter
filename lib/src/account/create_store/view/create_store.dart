@@ -82,28 +82,47 @@ class CreateStoreView extends StatelessWidget {
               child: Stack(
                 children: [
                   SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const StoreDetailsView(),
-                        StoreAddressView(
-                          isCheckout: false,
-                          storeAddressCubit: createStoreCubit.storeAddressCubit,
-                        ),
-                        DeliveryMethodsView(
-                          deliveryMethodsCubit:
-                              createStoreCubit.deliveryMethodsCubit,
-                        ),
-                        ImageUploadForm(
-                          imageUploaderCubit:
-                              createStoreCubit.imageUploaderCubit,
-                        ),
-                        ElevatedButton(
-                          onPressed: state.isValidated
-                              ? createStoreCubit.submit
-                              : null,
-                          child: const Text('Submit'),
-                        ),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const StoreDetailsView(),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          StoreAddressView(
+                            isCheckout: true,
+                            storeAddressCubit:
+                                createStoreCubit.storeAddressCubit,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          DeliveryMethodsView(
+                            deliveryMethodsCubit:
+                                createStoreCubit.deliveryMethodsCubit,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          ImageUploadForm(
+                            imageUploaderCubit:
+                                createStoreCubit.imageUploaderCubit,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          ElevatedButton(
+                            onPressed: state.isValidated
+                                ? createStoreCubit.submit
+                                : null,
+                            child: const Text('Submit'),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   if (state.status == FormzStatus.submissionInProgress)

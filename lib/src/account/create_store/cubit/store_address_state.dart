@@ -1,12 +1,14 @@
 part of 'store_address_cubit.dart';
 
-class StoreAddressState {
+class StoreAddressState extends Equatable {
   final Address addressLine1;
   final Address addressLine2;
   final ZipCode zipCode;
   final City city;
   final String stateName;
   final FormzStatus status;
+  final bool hasSuggestedAddress;
+  final returnAddress.Address? suggestedAddress;
 
   FormzStatus get isZipcodeOnlyOrAllFieldsValid {
     if (zipCode.status == FormzInputStatus.valid &&
@@ -47,6 +49,8 @@ class StoreAddressState {
     this.city = const City.pure(),
     this.stateName = "",
     this.status = FormzStatus.pure,
+    this.hasSuggestedAddress = false,
+    this.suggestedAddress,
   });
 
   StoreAddressState copyWith({
@@ -56,6 +60,8 @@ class StoreAddressState {
     City? city,
     String? stateName,
     FormzStatus? status,
+    bool? hasSuggestedAddress,
+    returnAddress.Address? suggestedAddress,
   }) {
     return StoreAddressState(
       addressLine1: addressLine1 ?? this.addressLine1,
@@ -64,6 +70,20 @@ class StoreAddressState {
       city: city ?? this.city,
       stateName: stateName ?? this.stateName,
       status: status ?? this.status,
+      suggestedAddress: suggestedAddress ?? this.suggestedAddress,
+      hasSuggestedAddress: hasSuggestedAddress ?? this.hasSuggestedAddress,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        addressLine1,
+        addressLine2,
+        zipCode,
+        city,
+        stateName,
+        status,
+        suggestedAddress,
+        hasSuggestedAddress,
+      ];
 }

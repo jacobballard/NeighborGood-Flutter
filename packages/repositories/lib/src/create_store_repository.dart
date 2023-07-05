@@ -4,6 +4,8 @@ import 'package:repositories/models/address.dart';
 import 'package:repositories/models/delivery_method.dart';
 
 class CreateStoreRepository {
+  Address? suggestedAddress;
+
   Future<void> create(
       {required String token,
       required String title,
@@ -27,7 +29,7 @@ class CreateStoreRepository {
       var response = await http.post(
         Uri.parse(
             // 'https://us-central1-pastry-6b817.cloudfunctions.net/create_store'), // Replace with your URL
-            'http://192.168.4.25:8085/'),
+            'http://192.168.4.117:8085/'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
@@ -36,6 +38,19 @@ class CreateStoreRepository {
       );
       print(response.body);
       print("response");
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        print(data.toString());
+        if (data['code'] == 'suggested_address') {
+          if (data.containsKey('suggested_address')) {
+            var adr = data['suggested_address'];
+            suggestedAddress = Address(adr['Address1'], adr['Address2'],
+                adr['City'], adr['State'], (adr['Zip5'] + '-' + adr['Zip4']));
+            print(suggestedAddress!.toJson());
+          }
+        }
+      }
 
       // if (response.statusCode != 201) {
       //   print("it was00");

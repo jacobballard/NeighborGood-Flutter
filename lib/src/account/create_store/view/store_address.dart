@@ -4,12 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/store_address_cubit.dart';
 
 class StoreAddressView extends StatelessWidget {
-  const StoreAddressView(
-      {Key? key, required this.storeAddressCubit, required this.isCheckout})
+  StoreAddressView({Key? key, this.storeAddressCubit, required this.isCheckout})
       : super(key: key);
 
-  final StoreAddressCubit storeAddressCubit;
+  final StoreAddressCubit? storeAddressCubit;
   final bool isCheckout;
+
+  final TextEditingController addressLine1Controller = TextEditingController();
+  final TextEditingController addressLine2Controller = TextEditingController();
+  final TextEditingController zipCodeController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
 
   Widget buildLabel(String text, bool required) {
     return RichText(
@@ -29,34 +33,73 @@ class StoreAddressView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (storeAddressCubit == null) {
+      return SizedBox
+          .shrink(); // return an empty widget if storeAddressCubit is null
+    }
+
     return Material(
       child: BlocProvider.value(
-        value: storeAddressCubit,
+        value: storeAddressCubit!,
         child: BlocBuilder<StoreAddressCubit, StoreAddressState>(
           builder: (context, state) {
+            // Update the controller's text if different from the state and set cursor to end
+            if (addressLine1Controller.text != state.addressLine1.value) {
+              addressLine1Controller.text = state.addressLine1.value;
+              addressLine1Controller.selection = TextSelection.fromPosition(
+                  TextPosition(offset: addressLine1Controller.text.length));
+            }
+
+            if (addressLine2Controller.text != state.addressLine2.value) {
+              addressLine2Controller.text = state.addressLine2.value;
+              addressLine2Controller.selection = TextSelection.fromPosition(
+                  TextPosition(offset: addressLine2Controller.text.length));
+            }
+
+            if (zipCodeController.text != state.zipCode.value) {
+              zipCodeController.text = state.zipCode.value;
+              zipCodeController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: zipCodeController.text.length));
+            }
+
+            if (cityController.text != state.city.value) {
+              cityController.text = state.city.value;
+              cityController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: cityController.text.length));
+            }
+
             return Column(
               children: [
                 TextField(
-                  onChanged: storeAddressCubit.addressLine1Changed,
+                  controller: addressLine1Controller,
+                  onChanged: storeAddressCubit!.addressLine1Changed,
                   decoration: InputDecoration(
                     label: buildLabel('Street address', isCheckout),
                     errorText:
                         state.addressLine1.invalid ? 'Invalid address' : null,
                   ),
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
                 TextField(
-                  onChanged: storeAddressCubit.addressLine2Changed,
+                  controller: addressLine2Controller,
+                  onChanged: storeAddressCubit!.addressLine2Changed,
                   decoration: InputDecoration(
                     labelText: 'Apt / Suite / Other',
                     errorText:
                         state.addressLine2.invalid ? 'Invalid address' : null,
                   ),
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
                 Row(
                   children: [
                     Expanded(
                       child: TextField(
-                        onChanged: storeAddressCubit.zipCodeChanged,
+                        controller: zipCodeController,
+                        onChanged: storeAddressCubit!.zipCodeChanged,
                         decoration: InputDecoration(
                           label: buildLabel('Zip Code', true),
                           errorText:
@@ -64,10 +107,11 @@ class StoreAddressView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
-                        onChanged: storeAddressCubit.cityChanged,
+                        controller: cityController,
+                        onChanged: storeAddressCubit!.cityChanged,
                         decoration: InputDecoration(
                           label: buildLabel('City', isCheckout),
                           errorText: state.city.invalid ? 'Invalid city' : null,
@@ -76,7 +120,43 @@ class StoreAddressView extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
                 _StateInput(isRequired: isCheckout),
+                if (state.hasSuggestedAddress) ...[
+                  const SizedBox(height: 10),
+                  const Text('Suggested Address:',
+                      style: TextStyle(fontSize: 16)),
+                  Text(
+                      state.suggestedAddress != null
+                          ? (state.suggestedAddress!.address_line_1 != null
+                                  ? '${state.suggestedAddress!.address_line_1}\n'
+                                  : '') +
+                              (state.suggestedAddress!.address_line_2 != null &&
+                                      state.suggestedAddress!.address_line_2!
+                                          .isNotEmpty
+                                  ? '${state.suggestedAddress!.address_line_2}\n'
+                                  : '') +
+                              (state.suggestedAddress!.city != null
+                                  ? '${state.suggestedAddress!.city}, '
+                                  : '') +
+                              (state.suggestedAddress!.state != null
+                                  ? '${state.suggestedAddress!.state}\n'
+                                  : '') +
+                              (state.suggestedAddress!.zip != null
+                                  ? '${state.suggestedAddress!.zip}'
+                                  : '')
+                          : '',
+                      style: const TextStyle(fontSize: 14)),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<StoreAddressCubit>().confirmAddress();
+                    },
+                    child: const Text('Confirm Address'),
+                  ),
+                ],
               ],
             );
           },
@@ -173,10 +253,11 @@ class _StateInput extends StatelessWidget {
       builder: (context, state) {
         return DropdownButtonFormField<String>(
           key: const Key('onboardingForm_stateInput_dropdown'),
+          value: state.stateName.isEmpty
+              ? null
+              : state.stateName, // This can be null if nothing is selected
           onChanged: (value) {
-            if (value != null) {
-              context.read<StoreAddressCubit>().stateChanged(value);
-            }
+            context.read<StoreAddressCubit>().stateChanged(value ?? '');
           },
           items: statesAndTerritories
               .map<DropdownMenuItem<String>>((String value) {

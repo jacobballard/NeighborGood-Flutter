@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pastry/src/baker/detail/model/baker.dart';
+import 'package:pastry/src/store/detail/model/baker.dart';
 // import 'package:geoflutterfire/geoflutterfire.dart';
 part 'store_list_event.dart';
 part 'store_list_state.dart';

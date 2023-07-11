@@ -21,7 +21,7 @@ class ProductRepository {
   }) async {
     print("called");
     final response = await http.post(
-      Uri.parse("http://192.168.4.117:8083/"),
+      Uri.parse("http://192.168.4.25:8083/"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -46,9 +46,11 @@ class ProductRepository {
               Product.fromJson(productJson as Map<String, dynamic>))
           .toList();
 
+      print("to list");
+
       for (var product in products) {
         final doc = await _firestore
-            .collection('users')
+            .collection('stores')
             .doc(product.seller_id)
             .collection('products')
             .doc(product.id)

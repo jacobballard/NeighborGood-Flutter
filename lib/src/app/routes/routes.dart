@@ -1,16 +1,33 @@
-import 'package:flutter/widgets.dart';
-import 'package:pastry/src/app/bloc/app_bloc.dart';
-import 'package:pastry/src/auth/login/login.dart';
-import 'package:pastry/src/app/view/tab_bar.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pastry/src/app/view/app.dart';
+import 'package:pastry/src/product/detail/view/product_detail.dart';
+import 'package:repositories/repositories.dart';
 
-List<Page<dynamic>> onGenerateAppViewPages(
-  AppStatus state,
-  List<Page<dynamic>> pages,
-) {
-  switch (state) {
-    case AppStatus.authenticated:
-      return [MyTabBar.page()];
-    case AppStatus.unauthenticated:
-      return [LoginPage.page()];
+class GoRouterProvider {
+  GoRouter get goRouter {
+    return GoRouter(routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const AppView(),
+        // routes: [GoRoute(path: '')])
+      ),
+      // GoRoute(
+      //   path: '/store/:id',
+      //   name: 'store',
+      //   // builder: (context, state) => ,
+      // ),
+      GoRoute(
+          path: '/store/:store_id/product/:id',
+          name: 'product',
+          builder: (context, state) => ProductDetailPage(
+                  product: Product(
+                id: state.queryParameters['id'].toString(),
+                seller_id: state.queryParameters['store_id'].toString(),
+                name: "",
+                latitude: double.nan,
+                longitude: double.nan,
+                price: double.nan,
+              )))
+    ]);
   }
 }

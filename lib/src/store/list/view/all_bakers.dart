@@ -135,8 +135,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/app/bloc/app_bloc.dart';
 import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 
-import 'package:pastry/src/baker/detail/model/baker.dart';
-import 'package:pastry/src/baker/list/bloc/store_list_bloc.dart';
+import 'package:pastry/src/store/detail/model/baker.dart';
+import 'package:pastry/src/store/list/bloc/store_list_bloc.dart';
 
 class StorePage extends StatelessWidget {
   const StorePage({Key? key}) : super(key: key);

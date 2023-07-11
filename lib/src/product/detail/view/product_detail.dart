@@ -12,17 +12,26 @@ import 'package:repositories/repositories.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Product product;
-
-  const ProductDetailPage({Key? key, required this.product}) : super(key: key);
+  final ProductDetails? details;
+  const ProductDetailPage({
+    Key? key,
+    required this.product,
+    this.details,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var viewProductDetailsCubit = ViewProductDetailsCubit(
+      productDetailsRepository: ProductDetailsRepository(
+          productId: product.id, sellerId: product.seller_id),
+      authenticationRepository: context.read<AuthenticationRepository>(),
+    );
+
+    // TODO: This is shanky I feel like my repo needs to handle instead
+    if (details == null) viewProductDetailsCubit.getProductDetails;
+    if (details != null) viewProductDetailsCubit.setProductDetails(details!);
     return BlocProvider(
-      create: (context) => ViewProductDetailsCubit(
-        productDetailsRepository: ProductDetailsRepository(
-            productId: product.id, sellerId: product.seller_id),
-        authenticationRepository: context.read<AuthenticationRepository>(),
-      )..getProductDetails(),
+      create: (context) => viewProductDetailsCubit,
       child: Scaffold(
         appBar: AppBar(title: const Text('Product Details')),
         body: BlocBuilder<ViewProductDetailsCubit, ViewProductDetailsState>(
@@ -112,7 +121,7 @@ class CarouselWidget extends StatefulWidget {
 }
 
 class CarouselWidgetState extends State<CarouselWidget> {
-  int _current = 0;
+  // int _current = 0;
   List<double> imageRatios = [];
   List<String> sortedImages = [];
 
@@ -205,9 +214,9 @@ class CarouselWidgetState extends State<CarouselWidget> {
           height: carouselHeight,
           viewportFraction: 1.0,
           onPageChanged: (index, reason) {
-            setState(() {
-              _current = index;
-            });
+            // setState(() {
+            //   _current = index;
+            // });
           },
         ),
       ),

@@ -5,22 +5,27 @@ class CreateStoreState extends Equatable {
   final FormzStatus storeAddressStatus;
   final FormzStatus deliveryMethodsStatus;
   final FormzStatus imageUploaderStatus;
+  final FormzStatus onboardingStatus;
   final FormzStatus status;
+
   final String? errorMessage;
 
-  const CreateStoreState(
-      {this.storeDetailsStatus = FormzStatus.pure,
-      this.storeAddressStatus = FormzStatus.pure,
-      this.deliveryMethodsStatus = FormzStatus.pure,
-      this.imageUploaderStatus = FormzStatus.pure,
-      this.status = FormzStatus.pure,
-      this.errorMessage});
+  const CreateStoreState({
+    this.storeDetailsStatus = FormzStatus.pure,
+    this.storeAddressStatus = FormzStatus.pure,
+    this.deliveryMethodsStatus = FormzStatus.pure,
+    this.imageUploaderStatus = FormzStatus.pure,
+    this.onboardingStatus = FormzStatus.pure,
+    this.status = FormzStatus.pure,
+    this.errorMessage,
+  });
 
   bool get isValidated =>
       storeDetailsStatus == FormzStatus.valid &&
       storeAddressStatus == FormzStatus.valid &&
       deliveryMethodsStatus == FormzStatus.valid &&
-      imageUploaderStatus == FormzStatus.valid;
+      imageUploaderStatus == FormzStatus.valid &&
+      onboardingStatus == FormzStatus.valid;
 
   CreateStoreState copyWith({
     FormzStatus? storeDetailsStatus,
@@ -47,6 +52,7 @@ class CreateStoreState extends Equatable {
         storeAddressStatus,
         deliveryMethodsStatus,
         imageUploaderStatus,
+        onboardingStatus,
         status,
         errorMessage,
       ];

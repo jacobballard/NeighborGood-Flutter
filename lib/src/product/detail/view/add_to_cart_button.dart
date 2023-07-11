@@ -22,7 +22,7 @@ class AddToCartButton extends StatelessWidget {
                           state.cartModifierSelections, state.displayPrice);
                     }
                   : null,
-              child: Text("Add to Cart"),
+              child: const Text("Add to Cart"),
             ),
           ),
         );

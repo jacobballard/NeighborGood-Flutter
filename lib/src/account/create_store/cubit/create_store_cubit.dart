@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pastry/src/account/create_store/cubit/onboarding_cubit.dart';
 import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
 import 'package:pastry/src/account/create_store/cubit/store_details_cubit.dart';
 import 'package:repositories/models/address.dart';
@@ -19,49 +20,74 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
   final StoreAddressCubit storeAddressCubit;
   final DeliveryMethodsCubit deliveryMethodsCubit;
   final ImageUploaderCubit imageUploaderCubit;
+  final OnboardingCubit onboardingCubit;
   final CreateStoreRepository createStoreRepository;
+
   final AuthenticationRepository authenticationRepository;
   late final StreamSubscription _storeDetailsSubscription;
   late final StreamSubscription _storeAddressSubscription;
   late final StreamSubscription _deliveryMethodsSubscription;
   late final StreamSubscription _imageUploaderSubscription;
+  late final StreamSubscription _onboardingSubscription;
   CreateStoreCubit({
     required this.storeDetailsCubit,
     required this.storeAddressCubit,
     required this.deliveryMethodsCubit,
     required this.imageUploaderCubit,
+    required this.onboardingCubit,
     required this.createStoreRepository,
     required this.authenticationRepository,
   }) : super(const CreateStoreState()) {
     _storeDetailsSubscription = storeDetailsCubit.stream.listen((state) {
       emit(CreateStoreState(
-          storeDetailsStatus: state.status,
-          storeAddressStatus: this.state.storeAddressStatus,
-          deliveryMethodsStatus: this.state.deliveryMethodsStatus,
-          imageUploaderStatus: this.state.imageUploaderStatus));
+        storeDetailsStatus: state.status,
+        storeAddressStatus: this.state.storeAddressStatus,
+        deliveryMethodsStatus: this.state.deliveryMethodsStatus,
+        imageUploaderStatus: this.state.imageUploaderStatus,
+        onboardingStatus: this.state.onboardingStatus,
+      ));
     });
 
     _storeAddressSubscription = storeAddressCubit.stream.listen((state) {
       emit(CreateStoreState(
-          storeDetailsStatus: this.state.storeDetailsStatus,
-          storeAddressStatus: state.isZipcodeOnlyOrAllFieldsValid,
-          deliveryMethodsStatus: this.state.deliveryMethodsStatus,
-          imageUploaderStatus: this.state.imageUploaderStatus));
+        storeDetailsStatus: this.state.storeDetailsStatus,
+        storeAddressStatus: state.isZipcodeOnlyOrAllFieldsValid,
+        deliveryMethodsStatus: this.state.deliveryMethodsStatus,
+        imageUploaderStatus: this.state.imageUploaderStatus,
+        onboardingStatus: this.state.onboardingStatus,
+      ));
     });
     _imageUploaderSubscription = imageUploaderCubit.stream.listen((state) {
       emit(CreateStoreState(
-          storeDetailsStatus: this.state.storeDetailsStatus,
-          storeAddressStatus: this.state.storeAddressStatus,
-          deliveryMethodsStatus: this.state.deliveryMethodsStatus,
-          imageUploaderStatus: state.status));
+        storeDetailsStatus: this.state.storeDetailsStatus,
+        storeAddressStatus: this.state.storeAddressStatus,
+        deliveryMethodsStatus: this.state.deliveryMethodsStatus,
+        imageUploaderStatus: state.status,
+        onboardingStatus: this.state.onboardingStatus,
+      ));
     });
 
     _deliveryMethodsSubscription = deliveryMethodsCubit.stream.listen((state) {
       emit(CreateStoreState(
-          storeDetailsStatus: this.state.storeDetailsStatus,
-          storeAddressStatus: this.state.storeAddressStatus,
-          deliveryMethodsStatus: state.status,
-          imageUploaderStatus: this.state.imageUploaderStatus));
+        storeDetailsStatus: this.state.storeDetailsStatus,
+        storeAddressStatus: this.state.storeAddressStatus,
+        deliveryMethodsStatus: state.status,
+        imageUploaderStatus: this.state.imageUploaderStatus,
+        onboardingStatus: this.state.onboardingStatus,
+      ));
+    });
+
+    _onboardingSubscription = onboardingCubit.stream.listen((state) {
+      print(state.status);
+      print(state.status.isValid);
+      print("status");
+      emit(CreateStoreState(
+        storeDetailsStatus: this.state.storeDetailsStatus,
+        storeAddressStatus: this.state.storeAddressStatus,
+        deliveryMethodsStatus: this.state.deliveryMethodsStatus,
+        imageUploaderStatus: this.state.imageUploaderStatus,
+        onboardingStatus: state.status,
+      ));
     });
   }
 
@@ -71,6 +97,7 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
     _storeAddressSubscription.cancel();
     _deliveryMethodsSubscription.cancel();
     _imageUploaderSubscription.cancel();
+    _onboardingSubscription.cancel();
     return super.close();
   }
 

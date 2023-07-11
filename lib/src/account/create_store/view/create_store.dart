@@ -6,44 +6,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/view/store_address.dart';
 import 'package:pastry/src/account/create_store/view/store_details.dart';
-import 'package:repositories/repositories.dart';
 
-import '../../utilities/delivery_methods/delivery_method_cubit.dart';
 import '../../utilities/delivery_methods/delivery_methods.dart';
 
-import '../../utilities/image_upload/abstract_file_reader_service.dart';
 import '../../utilities/image_upload/image_uploader.dart';
-import '../../utilities/image_upload/image_uploader_cubit.dart';
-import '../../utilities/image_upload/image_uploader_repository.dart';
 import '../cubit/create_store_cubit.dart';
-import '../cubit/store_address_cubit.dart';
-import '../cubit/store_details_cubit.dart';
 
 class CreateStoreView extends StatelessWidget {
-  const CreateStoreView({Key? key}) : super(key: key);
+  final CreateStoreCubit createStoreCubit;
+  const CreateStoreView({
+    Key? key,
+    required this.createStoreCubit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print("gonna read");
+
     print("uid: ${context.read<AuthenticationRepository>().currentUser.id}");
-    return BlocProvider(
-      create: (_) => CreateStoreCubit(
-        storeDetailsCubit: StoreDetailsCubit(),
-        storeAddressCubit: StoreAddressCubit(),
-        deliveryMethodsCubit: DeliveryMethodsCubit(
-          getDeliveryMethodsRepository: GetDeliveryMethodsRepository(
-            sellerId: context.read<AuthenticationRepository>().currentUser.id,
-          ),
-        )..addMethod(),
-        imageUploaderCubit: ImageUploaderCubit(
-          imageUploaderRepository: ConcreteImageUploaderRepository(
-            fileReaderService: FileReaderService(),
-            uploadPath:
-                "/stores/${context.read<AuthenticationRepository>().currentUser.id}",
-          ),
-        ),
-        authenticationRepository: context.read<AuthenticationRepository>(),
-        createStoreRepository: CreateStoreRepository(),
-      ),
+    return BlocProvider.value(
+      value: createStoreCubit,
       child: BlocConsumer<CreateStoreCubit, CreateStoreState>(
         listener: (context, state) {
           if (state.status.isSubmissionFailure) {
@@ -67,16 +49,9 @@ class CreateStoreView extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          final createStoreCubit = context.read<CreateStoreCubit>();
-
           return Scaffold(
             appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+              title: const Text("Store Details"),
             ),
             body: SafeArea(
               child: Stack(
@@ -128,7 +103,7 @@ class CreateStoreView extends StatelessWidget {
                   if (state.status == FormzStatus.submissionInProgress)
                     Container(
                       color: Colors.black.withOpacity(0.5), // Optional
-                      child: Center(
+                      child: const Center(
                         child: CircularProgressIndicator(),
                       ),
                     ),

@@ -39,8 +39,9 @@ class CreateProductRepository {
 
     try {
       // Send a POST request
-      var response = await http.post(
-        Uri.parse('http://192.168.4.117:8084/'), // Replace with your URL
+      //var response =
+      await http.post(
+        Uri.parse('http://192.168.4.25:8084/'), // Replace with your URL
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

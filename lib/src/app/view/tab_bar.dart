@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/app/location/bloc/location_cubit.dart';
 
-import 'package:pastry/src/baker/list/bloc/store_list_bloc.dart';
-import 'package:pastry/src/baker/list/view/all_bakers.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
 import 'package:pastry/src/product/cart/view/cart.dart';
 import 'package:pastry/src/product/list/bloc/product_list_bloc.dart';

@@ -58,10 +58,12 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
     emit(state.copyWith(cartModifierSelections: translated));
   }
 
+  void setProductDetails(ProductDetails details) {
+    emit(state.copyWith(productDetails: details));
+  }
+
   void _computePrice() {
     var totalPrice = state.productDetails!.price;
-
-    for (CartModifier mod in state.productDetails!.modifiers ?? []) {}
 
     for (CartModifierSelection mod in state.cartModifierSelections ?? []) {
       if (mod is CartMultiChoiceModifierSelection) {
@@ -96,17 +98,17 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
 
     final priceToAdd = choice.price;
 
-    final choice_answer = choice.title;
+    final choiceAnswer = choice.title;
 
-    final choice_question =
+    final choiceQuestion =
         (state.productDetails!.modifiers![index] as CartMultiChoiceModifier)
             .title;
 
     mods[index] = (mods[index] as CartMultiChoiceModifierSelection).copyWith(
       choiceId: value,
       price: priceToAdd,
-      question: choice_question,
-      answer: choice_answer,
+      question: choiceQuestion,
+      answer: choiceAnswer,
     );
 
     emit(state.copyWith(

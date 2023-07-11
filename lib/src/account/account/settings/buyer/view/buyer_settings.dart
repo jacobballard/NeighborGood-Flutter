@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pastry/src/account/account/settings/utils/custom_buttons.dart';
 
 import 'package:pastry/src/account/create_store/view/create_store.dart';
+import 'package:pastry/src/account/create_store/view/onboarding.dart';
 import 'package:pastry/src/app/bloc/app_bloc.dart';
 
 class BuyerSettingsPage extends StatelessWidget {
@@ -31,7 +32,7 @@ class BuyerSettingsPage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const CreateStoreView(),
+                builder: (context) => const OnboardingView(),
               ),
             );
           },

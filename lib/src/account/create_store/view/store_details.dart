@@ -37,7 +37,6 @@ class StoreDetailsView extends StatelessWidget {
                         : null,
                   ),
                 ),
-                // Other fields...
               ],
             );
           },

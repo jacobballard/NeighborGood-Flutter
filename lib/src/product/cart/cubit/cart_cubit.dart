@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
-import 'package:repositories/models/address.dart';
+
 import 'package:repositories/models/delivery_method.dart';
 import 'package:repositories/models/presentation/cart_delivery_method.dart';
 import 'package:repositories/repositories.dart';
@@ -163,13 +163,12 @@ class CartCubit extends Cubit<CartState> {
 
   bool get isShippingValidated {
     return state.billingSameAsShipping
-        ? (firstStoreAddressCubit?.state.isValidated ?? false)
-        : ((firstStoreAddressCubit?.state.isValidated ?? false) &&
-            (secondStoreAddressCubit?.state.isValidated ?? false));
+        ? (firstStoreAddressCubit.state.isValidated)
+        : ((firstStoreAddressCubit.state.isValidated) &&
+            (secondStoreAddressCubit.state.isValidated));
   }
 
   Future<void> checkout() async {
-    print("checkout");
     emit(
       state.copyWith(status: FormzStatus.submissionInProgress),
     );
@@ -185,16 +184,16 @@ class CartCubit extends Cubit<CartState> {
         items: state.checkoutItems,
         billingAddress: (!state.cartNeedsDeliveryAddress! &&
                 !state.cartNeedsShippingAddress!)
-            ? firstStoreAddressCubit!.toAddress()
+            ? firstStoreAddressCubit.toAddress()
             : state.billingSameAsShipping
-                ? firstStoreAddressCubit!.toAddress()
-                : secondStoreAddressCubit!.toAddress(),
+                ? firstStoreAddressCubit.toAddress()
+                : secondStoreAddressCubit.toAddress(),
         shippingAddress: state.billingSameAsShipping
-            ? firstStoreAddressCubit!.toAddress()
+            ? firstStoreAddressCubit.toAddress()
             : (!state.cartNeedsDeliveryAddress! &&
                     !state.cartNeedsShippingAddress!)
-                ? secondStoreAddressCubit!.toAddress()
-                : firstStoreAddressCubit!.toAddress(),
+                ? secondStoreAddressCubit.toAddress()
+                : firstStoreAddressCubit.toAddress(),
         token: await authenticationRepository.getIdToken(),
       );
 

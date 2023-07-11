@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pastry/src/product/detail/view/product_detail.dart';
-import 'package:pastry/src/product/list/model/product_summary.dart';
 import 'package:repositories/models/product.dart';
 
 class ProductGridView extends StatelessWidget {

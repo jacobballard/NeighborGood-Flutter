@@ -19,10 +19,10 @@ class StoreAddressView extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: text,
-        style: TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black),
         children: [
           if (required)
-            TextSpan(
+            const TextSpan(
               text: ' *',
               style: TextStyle(color: Colors.red),
             )
@@ -34,7 +34,7 @@ class StoreAddressView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (storeAddressCubit == null) {
-      return SizedBox
+      return const SizedBox
           .shrink(); // return an empty widget if storeAddressCubit is null
     }
 
@@ -130,23 +130,7 @@ class StoreAddressView extends StatelessWidget {
                       style: TextStyle(fontSize: 16)),
                   Text(
                       state.suggestedAddress != null
-                          ? (state.suggestedAddress!.address_line_1 != null
-                                  ? '${state.suggestedAddress!.address_line_1}\n'
-                                  : '') +
-                              (state.suggestedAddress!.address_line_2 != null &&
-                                      state.suggestedAddress!.address_line_2!
-                                          .isNotEmpty
-                                  ? '${state.suggestedAddress!.address_line_2}\n'
-                                  : '') +
-                              (state.suggestedAddress!.city != null
-                                  ? '${state.suggestedAddress!.city}, '
-                                  : '') +
-                              (state.suggestedAddress!.state != null
-                                  ? '${state.suggestedAddress!.state}\n'
-                                  : '') +
-                              (state.suggestedAddress!.zip != null
-                                  ? '${state.suggestedAddress!.zip}'
-                                  : '')
+                          ? '${state.suggestedAddress!.address_line_1 != null ? '${state.suggestedAddress!.address_line_1}\n' : ''}${state.suggestedAddress!.address_line_2 != null && state.suggestedAddress!.address_line_2!.isNotEmpty ? '${state.suggestedAddress!.address_line_2}\n' : ''}${state.suggestedAddress!.city != null ? '${state.suggestedAddress!.city}, ' : ''}${state.suggestedAddress!.state}\n${state.suggestedAddress!.zip}'
                           : '',
                       style: const TextStyle(fontSize: 14)),
                   const SizedBox(height: 10),
@@ -234,10 +218,10 @@ class _StateInput extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: text,
-        style: TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black),
         children: [
           if (isRequired)
-            TextSpan(
+            const TextSpan(
               text: ' *',
               style: TextStyle(color: Colors.red),
             )

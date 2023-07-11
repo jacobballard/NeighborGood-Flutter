@@ -1,4 +1,3 @@
-import 'package:pastry/src/product/detail/model/product.dart';
 import 'package:repositories/models/product.dart';
 
 class Storefront {

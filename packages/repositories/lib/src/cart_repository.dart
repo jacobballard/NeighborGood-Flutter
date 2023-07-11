@@ -21,7 +21,7 @@ class CartRepository {
     // return '-';
 
     print('inside');
-    print(billingAddress!.address_line_1!);
+    print(billingAddress.address_line_1!);
     print(shippingAddress.address_line_1);
     print("inside booya");
     var body = {
@@ -32,7 +32,7 @@ class CartRepository {
 
     try {
       var response = await http.post(
-        Uri.parse('http://127.0.0.1:8090'),
+        Uri.parse('http://192.168.4.25:8090'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

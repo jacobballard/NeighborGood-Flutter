@@ -69,7 +69,7 @@ class ConcreteImageUploaderRepository extends ImageUploaderRepository {
 
 // Create a reference using the segments
         CollectionReference ref =
-            FirebaseFirestore.instance.collection("users");
+            FirebaseFirestore.instance.collection("stores");
         docRef = ref
             .doc(pathSegments[1])
             .collection(pathSegments[0])
@@ -105,7 +105,7 @@ class ConcreteImageUploaderRepository extends ImageUploaderRepository {
 
 // Create a reference using the segments
         CollectionReference ref =
-            FirebaseFirestore.instance.collection("users");
+            FirebaseFirestore.instance.collection("stores");
         docRef = ref
             .doc(pathSegments[1])
             .collection(pathSegments[0])
@@ -133,7 +133,7 @@ class ConcreteImageUploaderRepository extends ImageUploaderRepository {
 
 // Create a reference using the segments
         CollectionReference ref =
-            FirebaseFirestore.instance.collection("users");
+            FirebaseFirestore.instance.collection("stores");
         docRef = ref
             .doc(pathSegments[1])
             .collection(pathSegments[0])

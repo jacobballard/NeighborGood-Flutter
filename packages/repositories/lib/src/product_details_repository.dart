@@ -15,7 +15,7 @@ class ProductDetailsRepository {
     try {
       // Fetch the product document from Firestore
       DocumentSnapshot productDoc = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('stores')
           .doc(sellerId)
           .collection('products')
           .doc(productId)

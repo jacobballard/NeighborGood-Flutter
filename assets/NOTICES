@@ -4845,6 +4845,7 @@ firebase_storage
 cross_file
 flutter_lints
 flutter_plugin_android_lifecycle
+go_router
 google_identity_services_web
 google_maps_flutter
 google_maps_flutter_android
@@ -4939,6 +4940,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
 csslib
+logging
 
 Copyright 2013, the Dart project authors. 
 

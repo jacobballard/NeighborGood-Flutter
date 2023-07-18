@@ -45,9 +45,10 @@ class CreateProductPage extends StatelessWidget {
                     required: false,
                     getDeliveryMethodsRepository: GetDeliveryMethodsRepository(
                         sellerId: context
-                            .read<AuthenticationRepository>()
-                            .currentUser
-                            .id))
+                                .read<AuthenticationRepository>()
+                                .currentUser
+                                ?.id ??
+                            ""))
                   ..loadMethods(),
                 imageUploaderCubit: ImageUploaderCubit(
                   imageUploaderRepository: ConcreteImageUploaderRepository(

@@ -6,7 +6,7 @@ enum AccountType { buyer, seller, guest }
 class User extends Equatable {
   /// {@macro user}
   const User({
-    required this.id,
+    this.id,
     this.email,
     this.name,
     this.photo,
@@ -17,7 +17,7 @@ class User extends Equatable {
   final String? email;
 
   /// The current user's id.
-  final String id;
+  final String? id;
 
   /// The current user's name (display name).
   final String? name;
@@ -29,10 +29,14 @@ class User extends Equatable {
   final AccountType? accountType; // Add accountType property
 
   /// Empty user which represents an unauthenticated user.
-  static const empty = User(id: '');
+  static const empty = User();
 
   /// Convenience getter to determine whether the current user is empty.
   bool get isEmpty => this == User.empty;
+
+  bool get isEmptyForWeb =>
+      this == User.empty ||
+      ((this.id?.isNotEmpty ?? true) && this.accountType == null);
 
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;

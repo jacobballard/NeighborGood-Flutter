@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pastry/src/app/app.dart';
 
 class GuestSettingsPage extends StatelessWidget {
@@ -9,10 +10,15 @@ class GuestSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          BlocProvider.of<AppBloc>(context).add(const AppLogoutRequested());
+        onPressed: () async {
+          print('pressed');
+          await BlocProvider.of<AppBloc>(context)
+              .onLogoutRequested(); //add(const AppLogoutRequested());
+          print('go');
+          context.go('/login');
+          print('context.go');
         },
-        child: const Text('Login In'),
+        child: const Text('Login Isan'),
       ),
     );
   }

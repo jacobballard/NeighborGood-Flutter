@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pastry/firebase_options.dart';
 import 'package:pastry/src/app/app.dart';
@@ -47,15 +48,21 @@ void main() async {
 
   await authenticationRepository.user.first;
 
+  final appBloc = AppBloc(authenticationRepository: authenticationRepository);
+  final profileBloc = ProfileBloc(
+    appBloc: appBloc,
+    authenticationRepository: authenticationRepository,
+  );
+  if (authenticationRepository.currentUser.isEmptyForWeb && kIsWeb) {
+    await authenticationRepository.signInAnonymously();
+  }
+
   runApp(
     RepositoryProvider<AuthenticationRepository>.value(
       value: authenticationRepository,
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<AppBloc>(
-            create: (_) => AppBloc(
-                authenticationRepository: _.read<AuthenticationRepository>()),
-          ),
+          BlocProvider<AppBloc>.value(value: appBloc),
           BlocProvider<LocationCubit>(
             create: (_) => LocationCubit()..initLocation(),
           ),
@@ -67,18 +74,71 @@ void main() async {
               cartRepository: CartRepository(),
             ),
           ),
-          BlocProvider<ProfileBloc>(
-            create: (_) => ProfileBloc(
-              appBloc: _.read<AppBloc>(),
-              profileRepository: ProfileRepository(
-                userId: null,
-                authenticationRepository: _.read<AuthenticationRepository>(),
-              ),
-            ),
-          ),
+          BlocProvider<ProfileBloc>.value(value: profileBloc),
         ],
-        child: App(),
+        child: const App(),
       ),
     ),
   );
 }
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+
+//   final authenticationRepository = AuthenticationRepository();
+
+//   if (authenticationRepository.currentUser == User.empty && kIsWeb) {
+//     print("should sign in anonymously");
+//     await authenticationRepository.signInAnonymously();
+//     print("did");
+//   }
+
+//   final appBloc = AppBloc(
+//     authenticationRepository: authenticationRepository,
+//   );
+
+//   final profileBloc = ProfileBloc(
+//     appBloc: appBloc,
+//     profileRepository: ProfileRepository(
+//       userId: null,
+//       authenticationRepository: authenticationRepository,
+//     ),
+//   );
+
+//   runApp(
+//     RepositoryProvider<AuthenticationRepository>.value(
+//       value: authenticationRepository,
+//       child: MultiBlocProvider(
+//         providers: [
+//           BlocProvider<AppBloc>.value(value: appBloc),
+//           BlocProvider<LocationCubit>(
+//             create: (_) => LocationCubit()..initLocation(),
+//           ),
+//           BlocProvider<CartCubit>(
+//             create: (_) => CartCubit(
+//               firstStoreAddressCubit: StoreAddressCubit(),
+//               secondStoreAddressCubit: StoreAddressCubit(),
+//               authenticationRepository: authenticationRepository,
+//               cartRepository: CartRepository(),
+//             ),
+//           ),
+//           BlocProvider<ProfileBloc>.value(value: profileBloc),
+//         ],
+//         child: BlocListener<AppBloc, AppState>(
+//           listener: (context, state) {
+//             print('listed');
+//             print(state.status);
+//             if (state.status == AppStatus.authenticated) {
+//               print("adding :)");
+//               profileBloc.add(ProfileUserChanged(state.user));
+//             }
+//           },
+//           child: App(),
+//         ),
+//       ),
+//     ),
+//   );
+// }

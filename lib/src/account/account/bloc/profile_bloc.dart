@@ -7,36 +7,121 @@ import 'package:repositories/repositories.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
-class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc(
-      {required ProfileRepository profileRepository, required AppBloc appBloc})
-      : _profileRepository = profileRepository,
-        super(const ProfileNone(User.empty)) {
-    on<ProfileUserChanged>(_onUserChanged);
-    // _userSubscription = _profileRepository.user.listen(
-    //   (user) => add(ProfileUserChanged(user)),
-    // );
+// class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+//   ProfileBloc({
+//     // required this.profileRepository,
+//     required this.appBloc,
+//   }) : super(const ProfileNone(User.empty)) {
+//     on<ProfileUserChanged>(_onUserChanged);
 
-    _userSubscription = appBloc.state.status == AppStatus.authenticated
-        ? _profileRepository.user.listen(
+//     _appBlocSubscription = appBloc.stream.listen((state) {
+//       print('app bloc sub');
+//       print(state.status);
+//       if (state.status == AppStatus.authenticated &&
+//           _userSubscription == null) {
+//         _userSubscription = profileRepository.user.listen(
+//           (user) => add(ProfileUserChanged(user)),
+//         );
+//       } else if (state.status != AppStatus.authenticated &&
+//           _userSubscription != null) {
+//         _userSubscription?.cancel();
+//         _userSubscription = null;
+//       }
+//     });
+//   }
+
+//   late ProfileRepository profileRepository;
+//   final AppBloc appBloc;
+//   StreamSubscription<User>? _userSubscription;
+//   StreamSubscription<AppState>? _appBlocSubscription;
+
+//   void _onUserChanged(ProfileUserChanged event, Emitter<ProfileState> emit) {
+//     if (event.user.isEmpty) {
+//       emit(ProfileNone(event.user));
+//     } else {
+//       switch (event.user.accountType) {
+//         case AccountType.buyer:
+//           emit(ProfileBuyer(event.user));
+//           break;
+//         case AccountType.seller:
+//           emit(ProfileSeller(event.user));
+//           break;
+//         case AccountType.guest:
+//           emit(ProfileGuest(event.user));
+//           break;
+//         default:
+//           emit(ProfileNone(event.user));
+//           break;
+//       }
+//     }
+//   }
+
+//   @override
+//   Future<void> close() {
+//     _userSubscription?.cancel();
+//     _appBlocSubscription?.cancel();
+//     return super.close();
+//   }
+// }
+
+var test = {
+  'email': 'jacob.platypus.ballard@gmail.com',
+  'metadata': {
+    'createdAt': '2023-06-06T02:25:57Z',
+    'lastSignedInAt': '2023-06-06T02:25:57Z'
+  },
+  'providerData': [
+    {
+      'email': 'jacob.platypus.ballard@gmail.com',
+      'providerId': 'password',
+      'uid': 'jacob.platypus.ballard@gmail.com'
+    }
+  ],
+  'uid': 'ym3BCcs1oidMg8Mw4qCLHVNROmv2'
+};
+
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+  ProfileBloc({
+    required this.authenticationRepository,
+    required this.appBloc,
+  }) : super(const ProfileNone(User.empty)) {
+    on<ProfileUserChanged>(_onUserChanged);
+    print("instantiating profile bloc");
+    _appBlocSubscription = appBloc.stream.listen((state) {
+      print("listening");
+      print(state.status);
+      if (state.status == AppStatus.authenticated &&
+          _authSubscription == null) {
+        _authSubscription = authenticationRepository.user.listen((user) {
+          _userSubscription?.cancel();
+          // _profileRepository?.dispose();  // Dispose of old repository
+          // Create new ProfileRepository with updated user ID
+          _profileRepository = ProfileRepository(
+            userId: user.id,
+            authenticationRepository: authenticationRepository,
+          );
+          // Start listening to the user stream of new ProfileRepository
+          _userSubscription = _profileRepository!.user.listen(
             (user) => add(ProfileUserChanged(user)),
-          )
-        : const Stream<User>.empty().listen((user) {});
-    // _appSubscription = _appBloc.stream.listen((appState) {
-    //   if (appState.status == AppStatus.unauthenticated) {
-    //     _userSubscription?.cancel();
-    //     _userSubscription = Stream<User>.empty().listen((user) {});
-    //   } else if (appState.status == AppStatus.authenticated) {
-    //     _userSubscription?.cancel();
-    //     _userSubscription = _profileRepository.user.listen(
-    //       (user) => add(ProfileUserChanged(user)),
-    //     );
-    //   }
-    // });
+          );
+        });
+      } else if (state.status != AppStatus.authenticated) {
+        _authSubscription?.cancel();
+        _authSubscription = null;
+        _userSubscription?.cancel();
+        _userSubscription = null;
+        // _profileRepository?.dispose();
+        _profileRepository = null;
+      }
+    });
   }
 
-  final ProfileRepository _profileRepository;
+  final AuthenticationRepository authenticationRepository;
+  final AppBloc appBloc;
+  ProfileRepository? _profileRepository;
   StreamSubscription<User>? _userSubscription;
+  StreamSubscription<AppState>? _appBlocSubscription;
+  StreamSubscription<User>? _authSubscription;
 
   void _onUserChanged(ProfileUserChanged event, Emitter<ProfileState> emit) {
     if (event.user.isEmpty) {
@@ -62,23 +147,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   @override
   Future<void> close() {
     _userSubscription?.cancel();
-    // _appSubscription?.cancel();
+    _appBlocSubscription?.cancel();
+    _authSubscription?.cancel();
+    // _profileRepository?.();
     return super.close();
   }
 }
-
-var test = {
-  'email': 'jacob.platypus.ballard@gmail.com',
-  'metadata': {
-    'createdAt': '2023-06-06T02:25:57Z',
-    'lastSignedInAt': '2023-06-06T02:25:57Z'
-  },
-  'providerData': [
-    {
-      'email': 'jacob.platypus.ballard@gmail.com',
-      'providerId': 'password',
-      'uid': 'jacob.platypus.ballard@gmail.com'
-    }
-  ],
-  'uid': 'ym3BCcs1oidMg8Mw4qCLHVNROmv2'
-};

@@ -64,7 +64,8 @@ class SellerSettingsPage extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            BlocProvider.of<AppBloc>(context).add(const AppLogoutRequested());
+            BlocProvider.of<AppBloc>(context)
+                .onLogoutRequested(); //add(const AppLogoutRequested());
           },
           child: const Text('Logout'),
         ),

@@ -17,6 +17,7 @@ class AccountSettingsView extends StatelessWidget {
       body: BlocBuilder<ProfileBloc, ProfileState>(
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
+          print(state);
           if (state is ProfileBuyer) {
             return const BuyerSettingsPage();
           } else if (state is ProfileGuest) {

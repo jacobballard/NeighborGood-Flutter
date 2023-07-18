@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 part 'app_event.dart';
 part 'app_state.dart';
 
-class AppBloc extends Bloc<AppEvent, AppState> {
+class AppBloc extends Cubit<AppState> {
   AppBloc({required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
         //_cacheClient = CacheClient(),
@@ -15,29 +15,38 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               ? AppState.authenticated(authenticationRepository.currentUser)
               : const AppState.unauthenticated(),
         ) {
-    on<_AppUserChanged>(_onUserChanged);
-    on<AppLogoutRequested>(_onLogoutRequested);
-    _userSubscription = _authenticationRepository.user.listen(
-      (user) => add(_AppUserChanged(user)),
-    );
+    // on<_AppUserChanged>(_onUserChanged);
+    // on<AppLogoutRequested>(_onLogoutRequested);
+    _userSubscription = _authenticationRepository.user.listen((user) {
+      print("app bloc user sub");
+      print(user.toMap());
+      // add(_AppUserChanged(user));
+      _onUserChanged(user);
+    });
   }
 
   final AuthenticationRepository _authenticationRepository;
   // ignore: unused_field
   late final StreamSubscription<User> _userSubscription;
-
-  void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
-    if (event.user.isEmpty) {
+  //_AppUserChanged event, Emitter<AppState> emit
+  void _onUserChanged(User user) async {
+    print('user changed');
+    print(user.toMap());
+    if (user.isEmpty) {
+      print('empty');
       emit(const AppState.unauthenticated());
     } else if (_authenticationRepository.isAnonymous) {
+      print('anonymous');
       emit(AppState.authenticated(
-          event.user.copyWith(accountType: AccountType.guest)));
+          user.copyWith(accountType: AccountType.guest)));
     } else {
-      emit(AppState.authenticated(event.user));
+      emit(AppState.authenticated(user));
     }
   }
 
-  void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
+  //AppLogoutRequested event, Emitter<AppState> emit
+  Future<void> onLogoutRequested() async {
+    emit(const AppState.loggingOut());
     unawaited(_authenticationRepository.logOut());
   }
 }

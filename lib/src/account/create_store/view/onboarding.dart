@@ -28,7 +28,8 @@ class OnboardingView extends StatelessWidget {
       storeAddressCubit: StoreAddressCubit(),
       deliveryMethodsCubit: DeliveryMethodsCubit(
         getDeliveryMethodsRepository: GetDeliveryMethodsRepository(
-          sellerId: context.read<AuthenticationRepository>().currentUser.id,
+          sellerId:
+              context.read<AuthenticationRepository>().currentUser.id ?? "",
         ),
       )..addMethod(),
       imageUploaderCubit: ImageUploaderCubit(

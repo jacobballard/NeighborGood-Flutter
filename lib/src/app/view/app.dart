@@ -77,8 +77,19 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return BlocBuilder<AppBloc, AppState>(
+    //   buildWhen: (previous, current) => previous.status != current.status,
+    //   builder: (context, state) => MaterialApp.router(
+    //     routerConfig: GoRouterProvider().goRouter(
+    //       state.status,
+    //     ),
+    //     theme: theme,
+    //     darkTheme: darkTheme,
+    //   ),
+    // );
+    // Provider.of<AppBloc>(context);
     return MaterialApp.router(
-      routerConfig: GoRouterProvider().goRouter,
+      routerConfig: GoRouterProvider().goRouter(),
       theme: theme,
       darkTheme: darkTheme,
     );
@@ -152,89 +163,92 @@ class AppView extends StatelessWidget {
 //     );
 //   }
 
-  Future<void> showAuthDialog(BuildContext context) async {
-    // ignore: unused_local_variable
-    final result = await showDialog<bool>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => AuthPopupCubit(
-                authenticationRepository:
-                    context.read<AuthenticationRepository>(),
-              ),
-            ),
-            BlocProvider(
-              create: (context) =>
-                  LoginCubit(context.read<AuthenticationRepository>()),
-            ),
-          ],
-          child: BlocBuilder<AuthPopupCubit, AuthPopupType>(
-            builder: (context, state) {
-              if (state == AuthPopupType.login) {
-                return GestureDetector(
-                  onTap: () async {
-                    await context.read<LoginCubit>().signInAnonymously();
-                    if (context.mounted) Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    child: const Center(
-                      child: LoginPage(),
-                    ),
-                  ),
-                );
-              } else if (state == AuthPopupType.signUp) {
-                return Container(
-                  color: Colors.transparent,
-                  child: const Center(
-                    child: SignUpPage(),
-                  ),
-                );
-              }
-              // else if (state == AuthPopupType.verify) {
-              //   return Container(
-              //     color: Colors.transparent,
-              //     child: const Center(
-              //       child: EmailVerificationPage(),
-              //     ),
-              //   );
-              // }
-              return Container(); // This should never happen
-            },
-          ),
-        );
-      },
-    );
-  }
+//   Future<void> showAuthDialog(BuildContext context) async {
+//     // ignore: unused_local_variable
+//     final result = await showDialog<bool>(
+//       context: context,
+//       barrierDismissible: true,
+//       builder: (BuildContext context) {
+//         return MultiBlocProvider(
+//           providers: [
+//             BlocProvider(
+//               create: (context) => AuthPopupCubit(
+//                 authenticationRepository:
+//                     context.read<AuthenticationRepository>(),
+//               ),
+//             ),
+//             BlocProvider(
+//               create: (context) =>
+//                   LoginCubit(context.read<AuthenticationRepository>()),
+//             ),
+//           ],
+//           child: BlocBuilder<AuthPopupCubit, AuthPopupType>(
+//             builder: (context, state) {
+//               if (state == AuthPopupType.login) {
+//                 return GestureDetector(
+//                   onTap: () async {
+//                     await context.read<LoginCubit>().signInAnonymously();
+//                     if (context.mounted) Navigator.of(context).pop();
+//                   },
+//                   child: Container(
+//                     color: Colors.transparent,
+//                     child: const Center(
+//                       child: LoginPage(),
+//                     ),
+//                   ),
+//                 );
+//               } else if (state == AuthPopupType.signUp) {
+//                 return Container(
+//                   color: Colors.transparent,
+//                   child: const Center(
+//                     child: SignUpPage(),
+//                   ),
+//                 );
+//               }
+//               // else if (state == AuthPopupType.verify) {
+//               //   return Container(
+//               //     color: Colors.transparent,
+//               //     child: const Center(
+//               //       child: EmailVerificationPage(),
+//               //     ),
+//               //   );
+//               // }
+//               return Container(); // This should never happen
+//             },
+//           ),
+//         );
+//       },
+//     );
+//   }
 
-  Future<void> _showLocationPopup(BuildContext context) async {
-    await showDialog<bool>(
-      context: context,
-      barrierDismissible: true, // barrier is dismissible
-      builder: (BuildContext context) {
-        return Builder(
-          builder: (BuildContext innerContext) {
-            return GestureDetector(
-              onTap: () {
-                // innerContext.read<LocationCubit>().
-                Navigator.of(innerContext).pop(); // Close the popup
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: const Center(
-                  child: LocationPopup(),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-}
+//   Future<void> _showLocationPopup(BuildContext context) async {
+//     await showDialog<bool>(
+//       context: context,
+//       barrierDismissible: true, // barrier is dismissible
+//       builder: (BuildContext context) {
+//         return BlocProvider(
+//           create: (context) => LocationCubit(),
+//           child: Builder(
+//             builder: (BuildContext innerContext) {
+//               return GestureDetector(
+//                 onTap: () {
+//                   // innerContext.read<LocationCubit>().
+//                   Navigator.of(innerContext).pop(); // Close the popup
+//                 },
+//                 child: Container(
+//                   color: Colors.transparent,
+//                   child: const Center(
+//                     child: LocationPopup(),
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
 
 
 

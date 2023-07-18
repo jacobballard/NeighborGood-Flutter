@@ -160,8 +160,8 @@ class StorePage extends StatelessWidget {
               icon: const Icon(
                   Icons.abc_outlined), //replace with your desired icon
               onPressed: () {
-                BlocProvider.of<AppBloc>(context)
-                    .add(const AppLogoutRequested());
+                // BlocProvider.of<AppBloc>(context)
+                //     .add(const AppLogoutRequested());
               },
             ),
           ],

@@ -64,7 +64,7 @@ class _ContinueAsGuestButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: () async {
             await context.read<LoginCubit>().signInAnonymously();
-            if (context.mounted) Navigator.of(context).pop();
+            // if (context.mounted) Navigator.of(context).pop();
           },
           child: const Text('CONTINUE AS GUEST'),
         );
@@ -132,9 +132,9 @@ class _LoginButton extends StatelessWidget {
                 onPressed: state.status.isValidated
                     ? () async {
                         await context.read<LoginCubit>().logInWithCredentials();
-                        if (context.mounted) {
-                          Navigator.of(context).pop();
-                        }
+                        // if (context.mounted) {
+                        //   Navigator.of(context).pop();
+                        // }
                       }
                     : null,
                 child: const Text('LOGIN'),
@@ -163,7 +163,7 @@ class _GoogleLoginButton extends StatelessWidget {
         icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
         onPressed: () async {
           await context.read<LoginCubit>().logInWithGoogle();
-          if (context.mounted) Navigator.of(context).pop();
+          // if (context.mounted) Navigator.of(context).pop();
         });
   }
 }

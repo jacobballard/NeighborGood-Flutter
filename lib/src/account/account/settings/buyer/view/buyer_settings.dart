@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pastry/src/account/account/settings/utils/custom_buttons.dart';
 
 import 'package:pastry/src/account/create_store/view/create_store.dart';
@@ -46,8 +47,10 @@ class BuyerSettingsPage extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            BlocProvider.of<AppBloc>(context)
-                .onLogoutRequested(); //add(const AppLogoutRequested());
+            BlocProvider.of<AppBloc>(context).onLogoutRequested();
+            //add(const AppLogoutRequested());
+
+            context.push('/login');
           },
           child: const Text('Logout'),
         ),

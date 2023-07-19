@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:pastry/src/app/bloc/auth_popup_cubit.dart';
 
+import '../../signup/signup.dart';
 import '../login.dart';
 
 class LoginForm extends StatelessWidget {
@@ -64,6 +66,7 @@ class _ContinueAsGuestButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: () async {
             await context.read<LoginCubit>().signInAnonymously();
+            context.push('/login');
             // if (context.mounted) Navigator.of(context).pop();
           },
           child: const Text('CONTINUE AS GUEST'),
@@ -173,8 +176,11 @@ class _SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
-      // onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
-      onPressed: () => context.read<AuthPopupCubit>().showSignUp(),
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => SignUpPage.create(context),
+        ));
+      },
       child: Text(
         'CREATE ACCOUNT',
       ),

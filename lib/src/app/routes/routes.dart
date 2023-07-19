@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pastry/src/app/view/app.dart';
@@ -10,15 +13,19 @@ import 'package:repositories/repositories.dart';
 
 import '../bloc/app_bloc.dart';
 
-class GoRouterProvider {
+mixin GoRouterMixin on State<App> {
   // final AppStatus authStatus;
 
   // const GoRouterProvider({
   //   // required this.authStatus,
   // });AppStatus authStatus
-  GoRouter goRouter() {
-    return GoRouter(
-      // refreshListenable: authStatus,
+  late final AppBloc _appBloc;
+  late final GoRouter _router;
+
+  void init(AppBloc appBloc) {
+    _appBloc = appBloc;
+    _router = GoRouter(
+      refreshListenable: GoRouterRefreshStream(_appBloc.stream),
       routes: [
         GoRoute(
           path: '/',
@@ -57,13 +64,17 @@ class GoRouterProvider {
         // final status = context.watch<AppBloc>().state.status;
         final status =
             Provider.of<AppBloc>(context, listen: false).state.status;
+        print('stutaa');
+        print(status);
         final authenticated = status == AppStatus.authenticated;
         final loggingOut = status == AppStatus.loggingOut;
 
-        final onLoginPath = state.path == '/login';
+        final onLoginPath = state.matchedLocation == '/login';
         print('redirect');
 
         final loginRequest = state.fullPath == '/login';
+        print('matched');
+        print(state.matchedLocation);
         print(state.fullPath);
         print(state.name);
         // print(authenticated);
@@ -83,5 +94,24 @@ class GoRouterProvider {
         return null;
       },
     );
+  }
+
+  GoRouter get router => _router;
+}
+
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
+        );
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }

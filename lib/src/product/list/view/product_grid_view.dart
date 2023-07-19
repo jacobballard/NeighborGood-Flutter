@@ -24,7 +24,6 @@ class ProductGridView extends StatelessWidget {
         return InkWell(
           onTap: () {
             Navigator.of(context, rootNavigator: false).push(
-              // <-- Change this line
               MaterialPageRoute(
                 builder: (context) => ProductDetailPage(product: product),
               ),

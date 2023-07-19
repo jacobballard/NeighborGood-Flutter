@@ -33,6 +33,7 @@ final theme = ThemeData(
       ),
     ),
   ),
+
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     selectedItemColor: Colors.black,
     unselectedItemColor: Color.fromARGB(255, 12, 12, 12),

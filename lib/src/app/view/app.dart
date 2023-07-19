@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +10,8 @@ import 'package:pastry/src/auth/login/login.dart';
 import 'package:pastry/src/auth/signup/signup.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
 import 'package:pastry/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:repositories/repositories.dart';
-import '../../account/account/bloc/profile_bloc.dart';
-import '../bloc/auth_popup_cubit.dart';
 
 // class App extends StatelessWidget {
 //   const App({
@@ -72,8 +70,21 @@ import '../bloc/auth_popup_cubit.dart';
 //     );
 //   }
 // }
-class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+
+class App extends StatefulWidget {
+  const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> with GoRouterMixin {
+  // const App({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    init(Provider.of<AppBloc>(context, listen: false));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +100,7 @@ class App extends StatelessWidget {
     // );
     // Provider.of<AppBloc>(context);
     return MaterialApp.router(
-      routerConfig: GoRouterProvider().goRouter(),
+      routerConfig: router,
       theme: theme,
       darkTheme: darkTheme,
     );

@@ -53,6 +53,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
           ));
         }
       } else {
+        // List<Product> product
         emit(state.copyWith(status: () => ProductListStatus.failure));
       }
     } catch (e) {

@@ -5,37 +5,42 @@ import '../models/product.dart';
 import '../models/store_detail.dart';
 
 class StoreDetailsRepository {
-  final String sellerId;
+  String? sellerId;
+  final String? storeId;
 
   StoreDetailsRepository({
-    required this.sellerId,
+    this.sellerId,
+    this.storeId,
   });
 
   Future<StoreDetail> get() async {
-    try {
-      // Fetch the store document from Firestore
-      DocumentSnapshot storeDoc = await FirebaseFirestore.instance
-          .collection('stores')
-          .doc(sellerId)
-          .get();
+    if (storeId != null) {}
+    if (sellerId != null) {
+      try {
+        // Fetch the store document from Firestore
+        DocumentSnapshot storeDoc = await FirebaseFirestore.instance
+            .collection('stores')
+            .doc(sellerId)
+            .get();
 
-      print(storeDoc.toString());
-      print("doc");
+        print(storeDoc.toString());
+        print("doc");
 
-      // Convert the document to a StoreDetail object
-      StoreDetail storeDetails = StoreDetail.fromDocument(storeDoc);
+        // Convert the document to a StoreDetail object
+        StoreDetail storeDetails = StoreDetail.fromDocument(storeDoc);
 
-      print("returning");
+        print("returning");
 
-      // Return the store details
-      return storeDetails;
-    } on FirebaseException catch (e) {
-      // Handle Firebase exceptions
-      throw FetchStoreFailure.fromCode(e.code);
-    } catch (e) {
-      print('Error fetching store details: $e');
-      // Handle other exceptions
-      throw FetchStoreFailure();
+        // Return the store details
+        return storeDetails;
+      } on FirebaseException catch (e) {
+        // Handle Firebase exceptions
+        throw FetchStoreFailure.fromCode(e.code);
+      } catch (e) {
+        print('Error fetching store details: $e');
+        // Handle other exceptions
+        throw FetchStoreFailure();
+      }
     }
   }
 

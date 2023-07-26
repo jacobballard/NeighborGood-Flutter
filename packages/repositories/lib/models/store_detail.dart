@@ -18,7 +18,7 @@ class StoreDetail {
 
     return StoreDetail(
       storeId: doc.id,
-      storeName: data['store_name'] ?? '',
+      storeName: data['title'] ?? '',
       description: data['description'] ?? '',
       imageUrls:
           (data['image_urls'] as List).map((item) => item as String).toList(),

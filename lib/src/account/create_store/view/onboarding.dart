@@ -48,52 +48,53 @@ class OnboardingView extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Onboarding'),
-              leading: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
+              appBar: AppBar(
+                title: const Text('Onboarding'),
+                leading: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              body: BlocConsumer<CreateStoreCubit, CreateStoreState>(
+                listener: (context, state) {
+                  // You can handle state changes here.
+                },
+                builder: (context, state) {
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        OnboardingDetailsView(),
+                      ],
+                    ),
+                  );
                 },
               ),
-            ),
-            body: BlocConsumer<CreateStoreCubit, CreateStoreState>(
-              listener: (context, state) {
-                // You can handle state changes here.
-              },
-              builder: (context, state) {
-                return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      OnboardingDetailsView(),
-                    ],
-                  ),
-                );
-              },
-            ),
-            floatingActionButton:
-                BlocBuilder<CreateStoreCubit, CreateStoreState>(
-              builder: (context, state) {
-                print("built again");
-                return FloatingActionButton(
-                  onPressed: state.onboardingStatus.isValid
-                      ? () {
-                          print("tapped");
-                          Navigator.of(context, rootNavigator: false).push(
-                            MaterialPageRoute(
-                              builder: (context) => CreateStoreView(
-                                createStoreCubit: createStoreCubit,
-                              ),
-                            ),
-                          );
-                        }
-                      : null,
-                  child: const Icon(Icons.arrow_forward),
-                );
-              },
-            ),
-          );
+              floatingActionButton: BlocProvider<OnboardingCubit>.value(
+                value: createStoreCubit.onboardingCubit,
+                child: BlocBuilder<OnboardingCubit, OnboardingState>(
+                  builder: (context, state) {
+                    print("built again");
+                    return FloatingActionButton(
+                      onPressed: (state.status.isValid && state.tosAccepted)
+                          ? () {
+                              print("tapped");
+                              Navigator.of(context, rootNavigator: false).push(
+                                MaterialPageRoute(
+                                  builder: (context) => CreateStoreView(
+                                    createStoreCubit: createStoreCubit,
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
+                      child: const Icon(Icons.arrow_forward),
+                    );
+                  },
+                ),
+              ));
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repositories/models/business_type.dart';
 
 import '../cubit/create_store_cubit.dart';
 import '../cubit/onboarding_cubit.dart';
@@ -55,11 +56,88 @@ class OnboardingDetailsView extends StatelessWidget {
                     BusinessView(),
                   if (state.businessType == BusinessType.individual)
                     const IndividualView(),
-                ]
+                ],
+                const BankAccountView(),
+                const TermsAcceptanceView(),
               ],
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class TermsAcceptanceView extends StatelessWidget {
+  const TermsAcceptanceView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final onboardingCubit = context.read<CreateStoreCubit>().onboardingCubit;
+
+    return BlocProvider.value(
+      value: onboardingCubit,
+      child: BlocBuilder<OnboardingCubit, OnboardingState>(
+        builder: (context, state) {
+          return CheckboxListTile(
+            title: InkWell(
+              onTap: () => Navigator.pushNamed(context, '/terms_of_service'),
+              child: const Text(
+                'I agree to the Terms of Service',
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            value: state.tosAccepted,
+            onChanged: (bool? value) =>
+                onboardingCubit.acceptTermsChanged(value!),
+            controlAffinity: ListTileControlAffinity.leading,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class BankAccountView extends StatelessWidget {
+  const BankAccountView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final onboardingCubit = context.read<CreateStoreCubit>().onboardingCubit;
+
+    return BlocProvider.value(
+      value: onboardingCubit,
+      child: BlocBuilder<OnboardingCubit, OnboardingState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              TextField(
+                onChanged: onboardingCubit.bankAccountChanged,
+                decoration: InputDecoration(
+                  labelText: 'Bank Account Number',
+                  errorText: state.bankAccount.invalid
+                      ? 'Invalid Bank Account Number'
+                      : null,
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                onChanged: onboardingCubit.routingNumberChanged,
+                decoration: InputDecoration(
+                  labelText: 'Routing Number',
+                  errorText: state.routingNumber.invalid
+                      ? 'Invalid Routing Number'
+                      : null,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -87,9 +165,10 @@ class IndividualView extends StatelessWidget {
                           key: const Key("first_name_key_textField"),
                           onChanged: onboardingCubit.firstNameChanged,
                           decoration: InputDecoration(
-                            labelText: 'Name',
-                            errorText:
-                                state.firstName.invalid ? 'Invalid Name' : null,
+                            labelText: 'First Name',
+                            errorText: state.firstName.invalid
+                                ? 'Invalid First Name'
+                                : null,
                           ),
                         ),
                       ),
@@ -98,9 +177,10 @@ class IndividualView extends StatelessWidget {
                           key: const Key("last_name_key_textField"),
                           onChanged: onboardingCubit.lastNameChanged,
                           decoration: InputDecoration(
-                            labelText: 'Name',
-                            errorText:
-                                state.lastName.invalid ? 'Invalid Name' : null,
+                            labelText: 'Last Name',
+                            errorText: state.lastName.invalid
+                                ? 'Invalid Last Name'
+                                : null,
                           ),
                         ),
                       ),
@@ -117,7 +197,7 @@ class IndividualView extends StatelessWidget {
                           key: const Key("month_key_textField"),
                           onChanged: onboardingCubit.monthChanged,
                           decoration: InputDecoration(
-                            labelText: 'Month of Birth',
+                            labelText: 'Birth Month',
                             errorText:
                                 state.month.invalid ? 'Invalid Month' : null,
                           ),
@@ -131,7 +211,7 @@ class IndividualView extends StatelessWidget {
                           key: const Key("day_key_textField"),
                           onChanged: onboardingCubit.dayChanged,
                           decoration: InputDecoration(
-                            labelText: 'Day of Birth',
+                            labelText: 'Birth Day',
                             errorText: state.day.invalid ? 'Invalid Day' : null,
                           ),
                         ),
@@ -144,7 +224,7 @@ class IndividualView extends StatelessWidget {
                           key: const Key("year_key_textField"),
                           onChanged: onboardingCubit.yearChanged,
                           decoration: InputDecoration(
-                            labelText: 'Year of Birth',
+                            labelText: 'Birth Year',
                             errorText:
                                 state.year.invalid ? 'Invalid Year' : null,
                           ),

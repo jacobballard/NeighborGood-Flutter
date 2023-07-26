@@ -18,7 +18,7 @@ class GuestSettingsPage extends StatelessWidget {
           context.go('/login');
           print('context.go');
         },
-        child: const Text('Login Isan'),
+        child: const Text('Login'),
       ),
     );
   }

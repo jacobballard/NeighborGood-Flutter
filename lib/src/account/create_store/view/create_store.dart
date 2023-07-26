@@ -45,7 +45,7 @@ class CreateStoreView extends StatelessWidget {
                   content: Text("Store Created!"),
                 ),
               );
-            Navigator.of(context).pop();
+            Navigator.of(context).popUntil((route) => route.isFirst);
           }
         },
         builder: (context, state) {

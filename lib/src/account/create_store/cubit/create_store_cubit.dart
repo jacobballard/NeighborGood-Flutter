@@ -105,26 +105,53 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
     if (!state.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      await createStoreRepository.create(
-          token: await authenticationRepository.getIdToken(),
-          title: storeDetailsCubit.state.title.value,
-          address: Address(
-            storeAddressCubit.state.addressLine1.value,
-            storeAddressCubit.state.addressLine2.value,
-            storeAddressCubit.state.city.value,
-            storeAddressCubit.state.stateName,
-            storeAddressCubit.state.zipCode.value,
-          ),
-          deliveryMethods: deliveryMethodsCubit.state.methods,
-          description: storeDetailsCubit.state.description.value);
-
+      bool isBusiness =
+          onboardingCubit.state.businessType == BusinessType.business;
+      if (isBusiness) {
+        await createStoreRepository.create(
+            type: onboardingCubit.state.businessType,
+            companyName: onboardingCubit.state.companyName.value,
+            companyTaxId: onboardingCubit.state.companyTaxId.value,
+            token: await authenticationRepository.getIdToken(),
+            title: storeDetailsCubit.state.title.value,
+            address: Address(
+              storeAddressCubit.state.addressLine1.value,
+              storeAddressCubit.state.addressLine2.value,
+              storeAddressCubit.state.city.value,
+              storeAddressCubit.state.stateName,
+              storeAddressCubit.state.zipCode.value,
+            ),
+            deliveryMethods: deliveryMethodsCubit.state.methods,
+            description: storeDetailsCubit.state.description.value);
+      } else {
+        await createStoreRepository.create(
+            type: onboardingCubit.state.businessType,
+            firstName: onboardingCubit.state.firstName.value,
+            lastName: onboardingCubit.state.lastName.value,
+            birthDay: onboardingCubit.state.day.value,
+            birthMonth: onboardingCubit.state.month.value,
+            birthYear: onboardingCubit.state.year.value,
+            ssnLastFour: onboardingCubit.state.ssLastFour.value,
+            token: await authenticationRepository.getIdToken(),
+            title: storeDetailsCubit.state.title.value,
+            address: Address(
+              storeAddressCubit.state.addressLine1.value,
+              storeAddressCubit.state.addressLine2.value,
+              storeAddressCubit.state.city.value,
+              storeAddressCubit.state.stateName,
+              storeAddressCubit.state.zipCode.value,
+            ),
+            deliveryMethods: deliveryMethodsCubit.state.methods,
+            description: storeDetailsCubit.state.description.value);
+      }
       if (createStoreRepository.suggestedAddress != null) {
         print("there's something suggest");
         storeAddressCubit
             .addSuggestedAddress(createStoreRepository.suggestedAddress);
         createStoreRepository.suggestedAddress = null;
         emit(state.copyWith(
-            status: FormzStatus.submissionFailure,
+            // status: FormzStatus.submissionFailure,
+
             errorMessage: "Verify your address"));
       } else {
         emit(state.copyWith(status: FormzStatus.submissionSuccess));

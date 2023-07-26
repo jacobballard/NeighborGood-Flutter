@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pastry/src/account/account/settings/utils/custom_buttons.dart';
 import 'package:pastry/src/account/create_product/view/create_product.dart';
 import 'package:pastry/src/app/bloc/app_bloc.dart';
@@ -66,6 +67,7 @@ class SellerSettingsPage extends StatelessWidget {
           onPressed: () {
             BlocProvider.of<AppBloc>(context)
                 .onLogoutRequested(); //add(const AppLogoutRequested());
+            context.go('/login');
           },
           child: const Text('Logout'),
         ),

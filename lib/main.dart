@@ -52,7 +52,7 @@ void main() async {
     appBloc: appBloc,
     authenticationRepository: authenticationRepository,
   );
-  if (authenticationRepository.currentUser.isEmptyForWeb && kIsWeb) {
+  if (authenticationRepository.currentUser.isEmpty && kIsWeb) {
     await authenticationRepository.signInAnonymously();
   }
 

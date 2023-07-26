@@ -32,6 +32,7 @@ class CreateStoreState extends Equatable {
     FormzStatus? storeAddressStatus,
     FormzStatus? deliveryMethodsStatus,
     FormzStatus? imageUploaderStatus,
+    FormzStatus? onboardingStatus,
     FormzStatus? status,
     String? errorMessage,
   }) {
@@ -41,6 +42,7 @@ class CreateStoreState extends Equatable {
       deliveryMethodsStatus:
           deliveryMethodsStatus ?? this.deliveryMethodsStatus,
       imageUploaderStatus: imageUploaderStatus ?? this.imageUploaderStatus,
+      onboardingStatus: onboardingStatus ?? this.onboardingStatus,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
     );

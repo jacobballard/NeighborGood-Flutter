@@ -1,7 +1,5 @@
 part of 'onboarding_cubit.dart';
 
-enum BusinessType { none, business, individual }
-
 class OnboardingState extends Equatable {
   final BusinessType businessType;
   final CompanyTaxId companyTaxId;
@@ -12,6 +10,9 @@ class OnboardingState extends Equatable {
   final Month month;
   final Year year;
   final SSLastFour ssLastFour;
+  final BankAccount bankAccount;
+  final RoutingNumber routingNumber;
+  final bool tosAccepted;
   final FormzStatus status;
 
   const OnboardingState({
@@ -24,6 +25,9 @@ class OnboardingState extends Equatable {
     this.month = const Month.pure(),
     this.year = const Year.pure(),
     this.ssLastFour = const SSLastFour.pure(),
+    this.bankAccount = const BankAccount.pure(),
+    this.routingNumber = const RoutingNumber.pure(),
+    this.tosAccepted = false,
     this.status = FormzStatus.pure,
   });
   @override
@@ -37,6 +41,9 @@ class OnboardingState extends Equatable {
         month,
         year,
         ssLastFour,
+        bankAccount,
+        routingNumber,
+        tosAccepted,
         status,
       ];
 
@@ -50,6 +57,9 @@ class OnboardingState extends Equatable {
     Month? month,
     Year? year,
     SSLastFour? ssLastFour,
+    BankAccount? bankAccount,
+    RoutingNumber? routingNumber,
+    bool? tosAccepted,
     FormzStatus? status,
   }) {
     return OnboardingState(
@@ -62,6 +72,9 @@ class OnboardingState extends Equatable {
       month: month ?? this.month,
       year: year ?? this.year,
       ssLastFour: ssLastFour ?? this.ssLastFour,
+      bankAccount: bankAccount ?? this.bankAccount,
+      routingNumber: routingNumber ?? this.routingNumber,
+      tosAccepted: tosAccepted ?? this.tosAccepted,
       status: status ?? this.status,
     );
   }

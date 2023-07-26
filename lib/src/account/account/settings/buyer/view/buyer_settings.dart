@@ -50,7 +50,7 @@ class BuyerSettingsPage extends StatelessWidget {
             BlocProvider.of<AppBloc>(context).onLogoutRequested();
             //add(const AppLogoutRequested());
 
-            context.push('/login');
+            context.go('/login');
           },
           child: const Text('Logout'),
         ),

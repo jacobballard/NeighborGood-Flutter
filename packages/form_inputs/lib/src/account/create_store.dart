@@ -273,3 +273,37 @@ class CompanyTaxId extends FormzInput<String, CompanyTaxIdValidationError> {
     return null;
   }
 }
+
+enum BankAccountValidationError { invalid }
+
+class BankAccount extends FormzInput<String, BankAccountValidationError> {
+  const BankAccount.pure() : super.pure("");
+  const BankAccount.dirty([String value = '']) : super.dirty(value);
+
+  static final regex = RegExp(r'^\d{1,17}$');
+
+  @override
+  BankAccountValidationError? validator(String? value) {
+    if (value == null || value.isEmpty || !regex.hasMatch(value)) {
+      return BankAccountValidationError.invalid;
+    }
+    return null;
+  }
+}
+
+enum RoutingNumberValidationError { invalid }
+
+class RoutingNumber extends FormzInput<String, RoutingNumberValidationError> {
+  const RoutingNumber.pure() : super.pure("");
+  const RoutingNumber.dirty([String value = '']) : super.dirty(value);
+
+  static final regex = RegExp(r'^\d{9}$');
+
+  @override
+  RoutingNumberValidationError? validator(String? value) {
+    if (value == null || value.isEmpty || !regex.hasMatch(value)) {
+      return RoutingNumberValidationError.invalid;
+    }
+    return null;
+  }
+}

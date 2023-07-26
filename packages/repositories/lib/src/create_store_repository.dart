@@ -3,23 +3,46 @@ import 'package:http/http.dart' as http;
 import 'package:repositories/models/address.dart';
 import 'package:repositories/models/delivery_method.dart';
 
+import '../models/business_type.dart';
+
 class CreateStoreRepository {
   Address? suggestedAddress;
 
   Future<void> create(
       {required String token,
       required String title,
+      // required
+      required BusinessType type,
+      String? ssnLastFour,
+      String? firstName,
+      String? lastName,
+      String? birthDay,
+      String? birthYear,
+      String? birthMonth,
+      String? companyName,
+      String? companyTaxId,
       String? description,
       required Address address,
       List<DeliveryMethod>? deliveryMethods}) async {
     print("clicked??");
     // Create a Map for your JSON body
+    bool isBusiness = type == BusinessType.business;
     var body = {
       'title': title,
       'description': description,
       'address': address.toJson(),
       'delivery_methods':
           deliveryMethods?.map((method) => method.toJson()).toList(),
+      if (isBusiness) 'type': 'business',
+      if (!isBusiness) 'type': 'individual',
+      if (isBusiness) 'company_name': companyName,
+      if (isBusiness) 'company_tax_id': companyTaxId,
+      if (!isBusiness) 'first_name': firstName,
+      if (!isBusiness) 'last_name': lastName,
+      if (!isBusiness) 'birth_day': birthDay,
+      if (!isBusiness) 'birth_month': birthMonth,
+      if (!isBusiness) 'birth_year': birthYear,
+      if (!isBusiness) 'ssn_last_four': ssnLastFour,
     };
 
     print("token $token");
@@ -29,7 +52,7 @@ class CreateStoreRepository {
       var response = await http.post(
         Uri.parse(
             // 'https://us-central1-pastry-6b817.cloudfunctions.net/create_store'), // Replace with your URL
-            'http://192.168.4.25:8085/'),
+            'http://192.168.4.117:8085'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
+import 'package:repositories/models/business_type.dart';
 
 part 'onboarding_state.dart';
 
@@ -51,6 +52,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       status: Formz.validate([
         companyTaxId,
         state.companyName,
+        state.routingNumber,
+        state.bankAccount
       ]),
     ));
   }
@@ -59,7 +62,12 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     final companyName = Name.dirty(value);
     emit(state.copyWith(
       companyName: companyName,
-      status: Formz.validate([companyName, state.companyTaxId]),
+      status: Formz.validate([
+        companyName,
+        state.companyTaxId,
+        state.routingNumber,
+        state.bankAccount
+      ]),
     ));
   }
 
@@ -75,6 +83,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         state.month,
         state.year,
         state.ssLastFour,
+        state.routingNumber,
+        state.bankAccount,
       ]),
     ));
   }
@@ -91,6 +101,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         state.month,
         state.year,
         state.ssLastFour,
+        state.routingNumber,
+        state.bankAccount,
       ]),
     ));
   }
@@ -107,6 +119,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         state.month,
         state.year,
         state.ssLastFour,
+        state.routingNumber,
+        state.bankAccount,
       ]),
     ));
   }
@@ -123,6 +137,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         state.day,
         state.year,
         state.ssLastFour,
+        state.routingNumber,
+        state.bankAccount,
       ]),
     ));
   }
@@ -139,6 +155,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         state.day,
         state.month,
         state.ssLastFour,
+        state.bankAccount,
+        state.routingNumber,
       ]),
     ));
   }
@@ -155,7 +173,118 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         state.day,
         state.month,
         state.year,
+        state.routingNumber,
+        state.bankAccount,
       ]),
     ));
+  }
+
+  void bankAccountChanged(String value) {
+    final bankAccount = BankAccount.dirty(value);
+
+    switch (state.businessType) {
+      case BusinessType.business:
+        emit(state.copyWith(
+          bankAccount: bankAccount,
+          status: Formz.validate([
+            state.companyTaxId,
+            state.companyName,
+            state.routingNumber,
+            bankAccount,
+          ]),
+        ));
+        break;
+      case BusinessType.individual:
+        emit(state.copyWith(
+            bankAccount: bankAccount,
+            status: Formz.validate([
+              state.firstName,
+              state.lastName,
+              state.day,
+              state.month,
+              state.year,
+              state.ssLastFour,
+              state.routingNumber,
+              bankAccount,
+            ])));
+        break;
+      default:
+        emit(state.copyWith(
+          bankAccount: bankAccount,
+          status: FormzStatus.pure,
+        ));
+    }
+  }
+
+  void routingNumberChanged(String value) {
+    final routingNumber = RoutingNumber.dirty(value);
+
+    switch (state.businessType) {
+      case BusinessType.business:
+        emit(state.copyWith(
+          routingNumber: routingNumber,
+          status: Formz.validate([
+            state.companyTaxId,
+            state.companyName,
+            state.bankAccount,
+            routingNumber,
+          ]),
+        ));
+        break;
+      case BusinessType.individual:
+        emit(state.copyWith(
+            routingNumber: routingNumber,
+            status: Formz.validate([
+              state.firstName,
+              state.lastName,
+              state.day,
+              state.month,
+              state.year,
+              state.ssLastFour,
+              state.bankAccount,
+              routingNumber,
+            ])));
+        break;
+      default:
+        emit(state.copyWith(
+          routingNumber: routingNumber,
+          status: FormzStatus.pure,
+        ));
+    }
+  }
+
+  void acceptTermsChanged(bool value) {
+    switch (state.businessType) {
+      case BusinessType.business:
+        emit(state.copyWith(
+          tosAccepted: value,
+          status: Formz.validate([
+            state.companyTaxId,
+            state.companyName,
+            state.bankAccount,
+            state.routingNumber,
+          ]),
+        ));
+        break;
+      case BusinessType.individual:
+        emit(state.copyWith(
+            tosAccepted: value,
+            status: Formz.validate([
+              state.firstName,
+              state.lastName,
+              state.day,
+              state.month,
+              state.year,
+              state.ssLastFour,
+              state.bankAccount,
+              state.routingNumber
+            ])));
+        break;
+      default:
+        emit(state.copyWith(
+          tosAccepted: value,
+          status: FormzStatus.pure,
+        ));
+    }
   }
 }

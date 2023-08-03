@@ -13,5 +13,5 @@ export 'src/cart_repository.dart';
 export 'src/get_delivery_methods.dart';
 export 'models/checkout/cart_item.dart';
 export 'models/store_detail.dart';
-export 'src/store_details_repository.dart';
+export 'src/store_detail.dart';
 export 'models/business_type.dart';

@@ -22,6 +22,10 @@ class CreateStoreRepository {
       String? companyName,
       String? companyTaxId,
       String? description,
+      required String bankAccountNumber,
+      required String bankRoutingNumber,
+      required bool termsAccepted,
+      required int termsTimeAccepted,
       required Address address,
       List<DeliveryMethod>? deliveryMethods}) async {
     print("clicked??");
@@ -31,6 +35,10 @@ class CreateStoreRepository {
       'title': title,
       'description': description,
       'address': address.toJson(),
+      'bank_account_number': bankAccountNumber,
+      'bank_routing_number': bankRoutingNumber,
+      'terms_accepted': termsAccepted,
+      'terms_time_accepted': termsTimeAccepted,
       'delivery_methods':
           deliveryMethods?.map((method) => method.toJson()).toList(),
       if (isBusiness) 'type': 'business',

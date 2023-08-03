@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:repositories/models/store_detail.dart';
 import 'package:repositories/repositories.dart';
 
 part 'store_detail_state.dart';
@@ -16,17 +16,31 @@ class StoreDetailCubit extends Cubit<StoreDetailState> {
   }) : super(const StoreDetailState());
 
   Future<void> getStoreDetails() async {
+    print('getting');
+
     emit(state.copyWith(status: StoreDetailStatus.loading));
     try {
-      var storeDetails = await storeDetailsRepository.get();
+      // var storeDoc = await FirebaseFirestore.instance
+      //     .collection('stores')
+      //     .doc("xJmGFIDVCXOsac8THQyNqfS31Ws1");
+      // print(storeDoc.path);
+      // print('between');
 
+      // var snap = await storeDoc.get();
+
+      // print('storeDoc ${snap.data()}');
+      var storeDetails = await storeDetailsRepository.get();
+      print(storeDetails);
       emit(state.copyWith(
         store: storeDetails,
         status: StoreDetailStatus.success,
       ));
     } on FetchStoreFailure catch (e) {
+      print(e);
       emit(state.copyWith(
           status: StoreDetailStatus.failure, errorMessage: e.message));
+    } catch (e) {
+      print('in general');
     }
   }
 

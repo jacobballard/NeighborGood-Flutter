@@ -109,6 +109,10 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
           onboardingCubit.state.businessType == BusinessType.business;
       if (isBusiness) {
         await createStoreRepository.create(
+            bankAccountNumber: onboardingCubit.state.bankAccount.value,
+            bankRoutingNumber: onboardingCubit.state.routingNumber.value,
+            termsAccepted: onboardingCubit.state.tosAccepted,
+            termsTimeAccepted: onboardingCubit.state.tosTimeAccepted,
             type: onboardingCubit.state.businessType,
             companyName: onboardingCubit.state.companyName.value,
             companyTaxId: onboardingCubit.state.companyTaxId.value,
@@ -125,6 +129,10 @@ class CreateStoreCubit extends Cubit<CreateStoreState> {
             description: storeDetailsCubit.state.description.value);
       } else {
         await createStoreRepository.create(
+            bankAccountNumber: onboardingCubit.state.bankAccount.value,
+            bankRoutingNumber: onboardingCubit.state.routingNumber.value,
+            termsAccepted: onboardingCubit.state.tosAccepted,
+            termsTimeAccepted: onboardingCubit.state.tosTimeAccepted,
             type: onboardingCubit.state.businessType,
             firstName: onboardingCubit.state.firstName.value,
             lastName: onboardingCubit.state.lastName.value,

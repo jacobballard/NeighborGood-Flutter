@@ -11,6 +11,7 @@ import 'package:pastry/src/product/detail/view/product_detail_modifiers.dart';
 import 'package:repositories/repositories.dart';
 
 class ProductDetailPage extends StatelessWidget {
+  // TODO : Put in cubit
   final Product product;
   final ProductDetails? details;
   const ProductDetailPage({
@@ -21,6 +22,7 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('building product detail');
     var viewProductDetailsCubit = ViewProductDetailsCubit(
       productDetailsRepository: ProductDetailsRepository(
           productId: product.id, sellerId: product.seller_id),
@@ -28,7 +30,7 @@ class ProductDetailPage extends StatelessWidget {
     );
 
     // TODO: This is shanky I feel like my repo needs to handle instead
-    if (details == null) viewProductDetailsCubit.getProductDetails;
+    if (details == null) viewProductDetailsCubit.getProductDetails();
     if (details != null) viewProductDetailsCubit.setProductDetails(details!);
     return BlocProvider(
       create: (context) => viewProductDetailsCubit,

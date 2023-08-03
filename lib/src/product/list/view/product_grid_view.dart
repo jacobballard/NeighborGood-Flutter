@@ -3,7 +3,7 @@ import 'package:pastry/src/product/detail/view/product_detail.dart';
 import 'package:repositories/models/product.dart';
 
 class ProductGridView extends StatelessWidget {
-  final List<Product> products;
+  final List<Product>? products;
 
   const ProductGridView({super.key, required this.products});
 
@@ -13,29 +13,31 @@ class ProductGridView extends StatelessWidget {
       shrinkWrap: true,
       primary: false,
       physics: const ScrollPhysics(),
-      itemCount: products.length,
+      itemCount: products?.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: MediaQuery.of(context).size.width > 600 ? 5 : 2,
         crossAxisSpacing: 8.0,
         mainAxisSpacing: 8.0,
       ),
       itemBuilder: (BuildContext context, int index) {
-        final product = products[index];
+        final product = products?[index];
         return InkWell(
           onTap: () {
             Navigator.of(context, rootNavigator: false).push(
               MaterialPageRoute(
-                builder: (context) => ProductDetailPage(product: product),
+                builder: (context) => product != null
+                    ? ProductDetailPage(product: product)
+                    : const CircularProgressIndicator(),
               ),
             );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              if (product.image_urls.isNotEmpty)
+              if (product?.image_urls.isNotEmpty ?? false)
                 Expanded(
                   child: Image.network(
-                    product.image_urls[0],
+                    product?.image_urls[0] ?? "",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -45,14 +47,14 @@ class ProductGridView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      product.name,
+                      product?.name ?? "",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      "\$${product.price.toString()}",
+                      "\$${product?.price.toString()}",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

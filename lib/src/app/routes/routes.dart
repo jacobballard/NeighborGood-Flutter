@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pastry/src/app/view/app.dart';
 import 'package:pastry/src/auth/login/login.dart';
 import 'package:pastry/src/product/detail/view/product_detail.dart';
+import 'package:pastry/src/store/detail/view/store_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:repositories/repositories.dart';
 
@@ -30,25 +31,33 @@ mixin GoRouterMixin on State<App> {
         GoRoute(
           path: '/',
           builder: (context, state) => const AppView(),
-          // routes: [GoRoute(path: '')])
+          routes: [
+            GoRoute(
+              path: 'store/:id',
+              name: 'store',
+              builder: (context, state) {
+                print('here !!!  ${state.matchedLocation}');
+                return StoreDetailPage(
+                    sellerId: state.pathParameters['id'].toString());
+              },
+            ),
+            GoRoute(
+                path: 'store/:store_id/product/:id',
+                name: 'product',
+                builder: (context, state) {
+                  print('ew');
+                  return ProductDetailPage(
+                      product: ProductQuick(
+                    id: state.pathParameters['id'].toString(),
+                    seller_id: state.pathParameters['store_id'].toString(),
+                    name: "",
+                    latitude: double.nan,
+                    longitude: double.nan,
+                    price: double.nan,
+                  ));
+                }),
+          ],
         ),
-        // GoRoute(
-        //   path: '/store/:id',
-        //   name: 'store',
-        //   // builder: (context, state) => ,
-        // ),
-        GoRoute(
-            path: '/store/:store_id/product/:id',
-            name: 'product',
-            builder: (context, state) => ProductDetailPage(
-                    product: Product(
-                  id: state.queryParameters['id'].toString(),
-                  seller_id: state.queryParameters['store_id'].toString(),
-                  name: "",
-                  latitude: double.nan,
-                  longitude: double.nan,
-                  price: double.nan,
-                ))),
         GoRoute(
           path: '/login',
           name: 'login',

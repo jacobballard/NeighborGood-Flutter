@@ -258,6 +258,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       case BusinessType.business:
         emit(state.copyWith(
           tosAccepted: value,
+          tosTimeAccepted: DateTime.now().millisecondsSinceEpoch ~/ 1000,
           status: Formz.validate([
             state.companyTaxId,
             state.companyName,
@@ -269,6 +270,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       case BusinessType.individual:
         emit(state.copyWith(
             tosAccepted: value,
+            tosTimeAccepted: DateTime.now().millisecondsSinceEpoch ~/ 1000,
             status: Formz.validate([
               state.firstName,
               state.lastName,
@@ -283,6 +285,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       default:
         emit(state.copyWith(
           tosAccepted: value,
+          tosTimeAccepted: DateTime.now().millisecondsSinceEpoch ~/ 1000,
           status: FormzStatus.pure,
         ));
     }

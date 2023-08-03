@@ -43,7 +43,7 @@ class ProductRepository {
       print(data);
       final products = (data['products'] as List)
           .map((productJson) =>
-              Product.fromJson(productJson as Map<String, dynamic>))
+              ProductQuick.fromJson(productJson as Map<String, dynamic>))
           .toList();
 
       print("to list");

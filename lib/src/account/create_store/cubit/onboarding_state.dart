@@ -12,11 +12,13 @@ class OnboardingState extends Equatable {
   final SSLastFour ssLastFour;
   final BankAccount bankAccount;
   final RoutingNumber routingNumber;
+  final int tosTimeAccepted;
   final bool tosAccepted;
   final FormzStatus status;
 
   const OnboardingState({
     this.businessType = BusinessType.none,
+    this.tosTimeAccepted = -1,
     this.companyTaxId = const CompanyTaxId.pure(),
     this.companyName = const Name.pure(),
     this.firstName = const Name.pure(),
@@ -44,6 +46,7 @@ class OnboardingState extends Equatable {
         bankAccount,
         routingNumber,
         tosAccepted,
+        tosTimeAccepted,
         status,
       ];
 
@@ -60,6 +63,7 @@ class OnboardingState extends Equatable {
     BankAccount? bankAccount,
     RoutingNumber? routingNumber,
     bool? tosAccepted,
+    int? tosTimeAccepted,
     FormzStatus? status,
   }) {
     return OnboardingState(
@@ -75,6 +79,7 @@ class OnboardingState extends Equatable {
       bankAccount: bankAccount ?? this.bankAccount,
       routingNumber: routingNumber ?? this.routingNumber,
       tosAccepted: tosAccepted ?? this.tosAccepted,
+      tosTimeAccepted: tosTimeAccepted ?? this.tosTimeAccepted,
       status: status ?? this.status,
     );
   }

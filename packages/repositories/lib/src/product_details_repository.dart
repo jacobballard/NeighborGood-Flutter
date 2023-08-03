@@ -13,6 +13,7 @@ class ProductDetailsRepository {
 
   Future<ProductDetails> get() async {
     try {
+      print('getting details');
       // Fetch the product document from Firestore
       DocumentSnapshot productDoc = await FirebaseFirestore.instance
           .collection('stores')

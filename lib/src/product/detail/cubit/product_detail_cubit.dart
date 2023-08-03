@@ -17,6 +17,7 @@ class ViewProductDetailsCubit extends Cubit<ViewProductDetailsState> {
   }) : super(const ViewProductDetailsState());
 
   Future<void> getProductDetails() async {
+    print('getting product details');
     emit(state.copyWith(status: ViewProductDetailsStatus.loading));
     try {
       var productDetails = await productDetailsRepository.get();

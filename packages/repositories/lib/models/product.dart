@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repositories/models/presentation/cart_delivery_method.dart';
 import 'presentation/cart_modifier.dart';
 
-class ProductDetails {
+class ProductDetails extends Product {
   final String id;
   final String seller_id;
   final String seller_name;
@@ -23,7 +23,7 @@ class ProductDetails {
     this.modifiers,
     this.deliveryMethods,
     required this.image_urls,
-  });
+  }) : super.withUrls(id, price, seller_id, name, image_urls);
 
   factory ProductDetails.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -94,30 +94,42 @@ class ProductDetails {
   }
 }
 
-class Product {
+abstract class Product {
+  final String id;
+  final double price;
+  final String seller_id;
+  final String name;
+  late List<String> image_urls;
+
+  Product.withUrls(
+      this.id, this.price, this.seller_id, this.name, this.image_urls);
+  Product(this.id, this.price, this.seller_id, this.name);
+
+  void set_images(List<String> images) {
+    this.image_urls = images;
+  }
+}
+
+class ProductQuick extends Product {
   final String id;
   final double latitude;
   final double longitude;
   final double price;
   final String seller_id;
   final String name;
-  late List<String> image_urls;
+
   // add other product properties
 
-  Product({
+  ProductQuick({
     required this.id,
     required this.name,
     required this.latitude,
     required this.longitude,
     required this.price,
     required this.seller_id,
-  });
+  }) : super(id, price, seller_id, name);
 
-  void set_images(List<String> images) {
-    this.image_urls = images;
-  }
-
-  factory Product.fromJson(Map<String, dynamic> json) {
+  factory ProductQuick.fromJson(Map<String, dynamic> json) {
     print("from json");
     double latitude = double.tryParse(
             double.tryParse(json['latitude']?.toString() ?? "0")
@@ -131,7 +143,7 @@ class Product {
         0.0;
     print(latitude);
     print(json);
-    return Product(
+    return ProductQuick(
       latitude: latitude,
       longitude: longitude,
       price: double.tryParse(json['price']) ?? 0.0,

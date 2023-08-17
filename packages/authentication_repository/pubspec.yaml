@@ -19,3 +19,5 @@ dependencies:
     sdk: flutter
   google_sign_in:
   meta:
+  flutter_chat_types: ^3.6.2
+  flutter_firebase_chat_core: ^1.6.7

@@ -9,6 +9,9 @@ class ProductGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("product grid");
+    print(products?.first.id ?? "");
+    print(products?.first.seller_id ?? "");
     return GridView.builder(
       shrinkWrap: true,
       primary: false,
@@ -26,7 +29,10 @@ class ProductGridView extends StatelessWidget {
             Navigator.of(context, rootNavigator: false).push(
               MaterialPageRoute(
                 builder: (context) => product != null
-                    ? ProductDetailPage(product: product)
+                    ? ProductDetailPage(
+                        product: product,
+                        details: (product is ProductDetails) ? product : null,
+                      )
                     : const CircularProgressIndicator(),
               ),
             );

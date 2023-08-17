@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/view/store_address.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
+import 'package:pastry/src/product/cart/view/payment_details.dart';
 
 class CartAddressPage extends StatelessWidget {
   const CartAddressPage({Key? key}) : super(key: key);
@@ -15,6 +16,16 @@ class CartAddressPage extends StatelessWidget {
       ),
       body: BlocConsumer<CartCubit, CartState>(
         listener: (context, state) {
+          print(state.status);
+          print('status');
+          if (state.status.isSubmissionSuccess) {
+            print('here');
+            Navigator.of(context, rootNavigator: false).push(
+              MaterialPageRoute(
+                builder: (context) => PaymentScreen(),
+              ),
+            );
+          }
           // ... existing code ...
         },
         // buildWhen: (previous, current) =>

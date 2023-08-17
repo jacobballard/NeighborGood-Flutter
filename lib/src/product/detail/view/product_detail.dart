@@ -22,7 +22,6 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('building product detail');
     var viewProductDetailsCubit = ViewProductDetailsCubit(
       productDetailsRepository: ProductDetailsRepository(
           productId: product.id, sellerId: product.seller_id),
@@ -38,6 +37,7 @@ class ProductDetailPage extends StatelessWidget {
         appBar: AppBar(title: const Text('Product Details')),
         body: BlocBuilder<ViewProductDetailsCubit, ViewProductDetailsState>(
           builder: (context, state) {
+            print('status ${state.status}');
             switch (state.status) {
               case ViewProductDetailsStatus.loading:
                 return const Center(child: CircularProgressIndicator());
@@ -69,7 +69,11 @@ class ProductDetailsBody extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: CarouselWidget(images: productDetails.image_urls),
+          child: CarouselWidget(
+            images: productDetails.image_urls,
+            carouselRequiredMaxHeight:
+                (MediaQuery.of(context).size.height * 0.75),
+          ),
         ),
         SliverList(
           delegate: SliverChildListDelegate(
@@ -115,8 +119,13 @@ class DeliveryMethodIconsWidget extends StatelessWidget {
 
 class CarouselWidget extends StatefulWidget {
   final List<String> images;
+  final double carouselRequiredMaxHeight;
 
-  const CarouselWidget({Key? key, required this.images}) : super(key: key);
+  const CarouselWidget({
+    Key? key,
+    required this.images,
+    required this.carouselRequiredMaxHeight,
+  }) : super(key: key);
 
   @override
   CarouselWidgetState createState() => CarouselWidgetState();
@@ -180,14 +189,14 @@ class CarouselWidgetState extends State<CarouselWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-    var maxImageHeight = screenHeight * 0.75;
+    // var screenHeight = MediaQuery.of(context).size.height;
+    // var maxImageHeight = screenHeight * 0.75;
     var screenWidth = MediaQuery.of(context).size.width;
     double guidelineheight = 0;
     if (imageRatios.isNotEmpty) {
       guidelineheight = screenWidth * imageRatios[0];
     }
-    var carouselHeight = min(maxImageHeight, guidelineheight);
+    var carouselHeight = min(widget.carouselRequiredMaxHeight, guidelineheight);
 
     if (imageRatios.isEmpty) {
       // Display a loading indicator or something else while waiting for image ratios to load

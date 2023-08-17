@@ -54,7 +54,10 @@ class StoreDetailsRepository {
     }
   }
 
-  Future<List<Product>> getProducts() async {
+  Future<List<ProductDetails>> getProducts() async {
+    print('repo get products !!!');
+    print(sellerId);
+
     try {
       // Fetch the products collection from Firestore
       QuerySnapshot productCollection = await FirebaseFirestore.instance
@@ -67,8 +70,9 @@ class StoreDetailsRepository {
       print("docs");
 
       // Convert each document to a ProductDetails object
-      List<Product> productDetails = productCollection.docs
-          .map((doc) => ProductDetails.fromDocument(doc))
+      List<ProductDetails> productDetails = productCollection.docs
+          .map((doc) =>
+              ProductDetails.fromDocument(doc)..copyWith(seller_id: sellerId))
           .toList();
 
       print("returning");

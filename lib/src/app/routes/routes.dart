@@ -25,6 +25,7 @@ mixin GoRouterMixin on State<App> {
 
   void init(AppBloc appBloc) {
     _appBloc = appBloc;
+
     _router = GoRouter(
       refreshListenable: GoRouterRefreshStream(_appBloc.stream),
       routes: [
@@ -33,16 +34,35 @@ mixin GoRouterMixin on State<App> {
           builder: (context, state) => const AppView(),
           routes: [
             GoRoute(
-              path: 'store/:id',
+              path: 'store/:store_id',
               name: 'store',
               builder: (context, state) {
                 print('here !!!  ${state.matchedLocation}');
                 return StoreDetailPage(
-                    sellerId: state.pathParameters['id'].toString());
+                    sellerId: state.pathParameters['store_id'].toString());
               },
+              // routes: [
+              //   GoRoute(
+              //       // path: 'store/:store_id/product/:id',
+              //       path: 'product/:id',
+              //       name: 'product',
+              //       builder: (context, state) {
+              //         print('ew');
+              //         return ProductDetailPage(
+              //             product: ProductQuick(
+              //           id: state.pathParameters['id'].toString(),
+              //           seller_id: state.pathParameters['store_id'].toString(),
+              //           name: "",
+              //           latitude: double.nan,
+              //           longitude: double.nan,
+              //           price: double.nan,
+              //         ));
+              //       }),
+              // ],
             ),
             GoRoute(
                 path: 'store/:store_id/product/:id',
+                // path: 'product/:id',
                 name: 'product',
                 builder: (context, state) {
                   print('ew');

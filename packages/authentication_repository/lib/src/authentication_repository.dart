@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 /// {@template sign_up_with_email_and_password_failure}
 /// Thrown if during the sign up process if a failure occurs.
@@ -249,9 +251,15 @@ class AuthenticationRepository {
   /// Throws a [SignUpWithEmailAndPasswordFailure] if an exception occurs.
   Future<void> signUp({required String email, required String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      var credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
+      );
+
+      await FirebaseChatCore.instance.createUserInFirestore(
+        types.User(
+          id: credential.user!.uid,
+        ),
       );
 
       await sendEmailVerification();

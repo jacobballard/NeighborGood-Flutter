@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
 
@@ -15,12 +16,13 @@ class CartCubit extends Cubit<CartState> {
   final AuthenticationRepository authenticationRepository;
   final StoreAddressCubit firstStoreAddressCubit;
   final StoreAddressCubit secondStoreAddressCubit;
-
+  final CardEditController cardEditController;
   CartCubit({
     required this.cartRepository,
     required this.firstStoreAddressCubit,
     required this.secondStoreAddressCubit,
     required this.authenticationRepository,
+    required this.cardEditController,
   }) : super(const CartState()); //{
   //   emit(state.copyWith(
   //       firstStoreAddressCubit: StoreAddressCubit(),
@@ -196,7 +198,7 @@ class CartCubit extends Cubit<CartState> {
                 : firstStoreAddressCubit.toAddress(),
         token: await authenticationRepository.getIdToken(),
       );
-
+      print('trans id $transactionId');
       if (!transactionId) {
         if (billingFirst) {
           firstStoreAddressCubit
@@ -213,8 +215,9 @@ class CartCubit extends Cubit<CartState> {
         cartRepository.suggestedShippingAddress = null;
         emit(state.copyWith(status: FormzStatus.valid));
       } else {
+        print('else success');
         emit(state.copyWith(
-            transactionId: cartRepository.transactionId,
+            clientSecret: cartRepository.clientSecret,
             status: FormzStatus.submissionSuccess));
       }
 

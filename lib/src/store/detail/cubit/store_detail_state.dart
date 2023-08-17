@@ -16,7 +16,7 @@ class StoreDetailState extends Equatable {
   final StoreDetailStatus? status;
   final StoreDetail? store;
   final String? errorMessage;
-  final List<ProductDetails>? products;
+  final List<Product>? products;
 
   StoreDetailState copyWith({
     StoreDetailStatus? status,

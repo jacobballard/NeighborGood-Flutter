@@ -15,18 +15,19 @@ class BuyerSettingsPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        EditAccountDetailsButton(
-          onPressed: () {
-            // Navigate to edit account details page
-            Navigator.pushNamed(context, '/edit_account_details');
-          },
-        ),
-        EditAddPaymentInfoButton(
-          onPressed: () {
-            // Navigate to edit/add payment information page
-            Navigator.pushNamed(context, '/edit_add_payment_info');
-          },
-        ),
+        // EditAccountDetailsButton(
+        //   onPressed: () {
+        //     // Navigate to edit account details page
+        //     Navigator.pushNamed(context, '/edit_account_details');
+        //   },
+        // ),
+        // EditAddPaymentInfoButton(
+        //   onPressed: () {
+        //     // Navigate to edit/add payment information page
+        //     Navigator.pushNamed(context, '/edit_add_payment_info');
+        //   },
+        // ),
+        const ViewMessagesButton(),
         TextButton(
           onPressed: () {
             // Navigate to become a seller page
@@ -39,6 +40,7 @@ class BuyerSettingsPage extends StatelessWidget {
           },
           child: const Text('Become a Seller'),
         ),
+
         ContactSupportButton(
           onPressed: () {
             // Navigate to contact support page

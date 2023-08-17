@@ -11,11 +11,11 @@ class CartState extends Equatable {
   final String subtotal;
   final bool? cartNeedsShippingAddress;
   final bool? cartNeedsDeliveryAddress;
-  final String transactionId;
+  final String clientSecret;
   final bool billingSameAsShipping;
 
   const CartState({
-    this.transactionId = '',
+    this.clientSecret = '',
     this.cartNeedsShippingAddress,
     this.cartNeedsDeliveryAddress,
     this.subtotal = '',
@@ -39,7 +39,7 @@ class CartState extends Equatable {
     String? platformFee,
     String? subtotal,
     bool? cartNeedsShippingAddress,
-    String? transactionId,
+    String? clientSecret,
     bool? cartNeedsDeliveryAddress,
     bool? billingSameAsShipping,
   }) {
@@ -58,7 +58,7 @@ class CartState extends Equatable {
           cartNeedsDeliveryAddress ?? this.cartNeedsDeliveryAddress,
       billingSameAsShipping:
           billingSameAsShipping ?? this.billingSameAsShipping,
-      transactionId: transactionId ?? this.transactionId,
+      clientSecret: clientSecret ?? this.clientSecret,
     );
   }
 
@@ -75,6 +75,6 @@ class CartState extends Equatable {
         cartNeedsShippingAddress,
         cartNeedsDeliveryAddress,
         billingSameAsShipping,
-        transactionId,
+        clientSecret,
       ];
 }

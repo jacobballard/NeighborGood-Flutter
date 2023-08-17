@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:pastry/firebase_options.dart';
 import 'package:pastry/src/app/app.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +13,7 @@ import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
 import 'package:repositories/repositories.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
+
 import 'src/account/account/bloc/profile_bloc.dart';
 
 void main() async {
@@ -33,7 +35,7 @@ void main() async {
   if (authenticationRepository.currentUser.isEmpty && kIsWeb) {
     await authenticationRepository.signInAnonymously();
   }
-  // usePathUrlStrategy();
+  usePathUrlStrategy();
   runApp(
     RepositoryProvider<AuthenticationRepository>.value(
       value: authenticationRepository,
@@ -49,6 +51,7 @@ void main() async {
               secondStoreAddressCubit: StoreAddressCubit(),
               authenticationRepository: _.read<AuthenticationRepository>(),
               cartRepository: CartRepository(),
+              cardEditController: CardEditController(),
             ),
           ),
           BlocProvider<ProfileBloc>.value(value: profileBloc),

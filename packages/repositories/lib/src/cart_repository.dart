@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class CartRepository {
   // Side effects lolz
-  late String transactionId;
+  late String clientSecret;
   Address? suggestedBillingAddress;
   Address? suggestedShippingAddress;
 
@@ -32,7 +32,7 @@ class CartRepository {
 
     try {
       var response = await http.post(
-        Uri.parse('http://192.168.4.117:8090/'),
+        Uri.parse('http://127.0.0.1:8090/'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
@@ -41,11 +41,22 @@ class CartRepository {
       );
 
       print(response.statusCode);
-
+      print('code');
+      print(response.body);
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        print(data.toString());
-        if (data['code'] == 'suggested_address') {
+        print('was 200');
+        var data;
+        var flag = false;
+        try {
+          data = jsonDecode(response.body) as Map<String, dynamic>;
+          flag = true;
+          print(data.toString());
+        } catch (e) {
+          print(e.toString());
+        }
+
+        if (flag && data['code'] == 'suggested_address') {
+          print('inside here ${data["code"]}');
           if (data.containsKey('billing')) {
             var adr = data['billing'];
             suggestedBillingAddress = Address(adr['Address1'], adr['Address2'],
@@ -60,6 +71,8 @@ class CartRepository {
           }
           return false;
         } else {
+          print('true');
+          clientSecret = data['transaction_id'];
           return true;
         }
         // print(data);

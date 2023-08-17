@@ -13,22 +13,25 @@ class StoreDetailCubit extends Cubit<StoreDetailState> {
   StoreDetailCubit({
     required this.storeDetailsRepository,
     required this.authenticationRepository,
-  }) : super(const StoreDetailState());
+  }) : super(const StoreDetailState()) {
+    getStoreDetails();
+    getProductDetails();
+  }
 
   Future<void> getStoreDetails() async {
     print('getting');
 
     emit(state.copyWith(status: StoreDetailStatus.loading));
     try {
-      // var storeDoc = await FirebaseFirestore.instance
-      //     .collection('stores')
-      //     .doc("xJmGFIDVCXOsac8THQyNqfS31Ws1");
-      // print(storeDoc.path);
-      // print('between');
+      var storeDoc = await FirebaseFirestore.instance
+          .collection('stores')
+          .doc("xJmGFIDVCXOsac8THQyNqfS31Ws1");
+      print(storeDoc.path);
+      print('between');
 
-      // var snap = await storeDoc.get();
+      var snap = await storeDoc.get();
 
-      // print('storeDoc ${snap.data()}');
+      print('storeDoc ${snap.data()}');
       var storeDetails = await storeDetailsRepository.get();
       print(storeDetails);
       emit(state.copyWith(
@@ -44,18 +47,20 @@ class StoreDetailCubit extends Cubit<StoreDetailState> {
     }
   }
 
-  // Future<void> getProductDetails() async {
-  //   emit(state.copyWith(productsStatus: StoreProductDetailStatus.loading));
+  Future<void> getProductDetails() async {
+    emit(state.copyWith(productsStatus: StoreProductDetailStatus.loading));
 
-  //   try {
-  //     var products = await storeDetailsRepository.getProducts();
-
-  //     emit(state.copyWith(
-  //         products: products,
-  //         productsStatus: StoreProductDetailStatus.success));
-  //   } on FetchProductFailure catch (e) {
-  //     emit(state.copyWith(
-  //         status: StoreDetailStatus.failure, errorMessage: e.message));
-  //   }
-  // }
+    try {
+      var products = await storeDetailsRepository.getProducts();
+      print('get details cubit');
+      print(products.first.id);
+      print(products.first.seller_id);
+      emit(state.copyWith(
+          products: products,
+          productsStatus: StoreProductDetailStatus.success));
+    } on FetchProductFailure catch (e) {
+      emit(state.copyWith(
+          status: StoreDetailStatus.failure, errorMessage: e.message));
+    }
+  }
 }

@@ -1,6 +1,6 @@
 part of 'app_bloc.dart';
 
-enum AppStatus { authenticated, unauthenticated, loggingOut }
+enum AppStatus { authenticated, unauthenticated, loggingOut, needsVerification }
 
 class AppState extends Equatable {
   const AppState._({
@@ -14,6 +14,9 @@ class AppState extends Equatable {
   const AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
 
   const AppState.loggingOut() : this._(status: AppStatus.loggingOut);
+
+  const AppState.needsVerification()
+      : this._(status: AppStatus.needsVerification);
   final AppStatus status;
   final User user;
 

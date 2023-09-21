@@ -26,6 +26,8 @@ class AppBloc extends Cubit<AppState> {
   }
 
   final AuthenticationRepository _authenticationRepository;
+
+  Timer? timer;
   // ignore: unused_field
   late final StreamSubscription<User> _userSubscription;
   //_AppUserChanged event, Emitter<AppState> emit
@@ -40,7 +42,24 @@ class AppBloc extends Cubit<AppState> {
       emit(AppState.authenticated(
           user.copyWith(accountType: AccountType.guest)));
     } else {
+      if (!_authenticationRepository.isUserVerified) {
+        emit(const AppState.needsVerification());
+        timer = Timer.periodic(
+            const Duration(seconds: 3), (_) => checkVerificationStatus(user));
+      } else {
+        print('should finally be here');
+        emit(AppState.authenticated(user));
+      }
+    }
+  }
+
+  Future<void> checkVerificationStatus(User user) async {
+    if (_authenticationRepository.isUserVerified) {
+      print('yay');
       emit(AppState.authenticated(user));
+      timer?.cancel();
+    } else {
+      _authenticationRepository.isVerificationNeeded();
     }
   }
 

@@ -1,9 +1,13 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/view/store_address.dart';
 import 'package:pastry/src/product/cart/cubit/cart_cubit.dart';
 import 'package:pastry/src/product/cart/view/payment_details.dart';
+import 'package:repositories/repositories.dart';
+
+import '../cubit/finalize_payment_cubit.dart';
 
 class CartAddressPage extends StatelessWidget {
   const CartAddressPage({Key? key}) : super(key: key);
@@ -22,7 +26,14 @@ class CartAddressPage extends StatelessWidget {
             print('here');
             Navigator.of(context, rootNavigator: false).push(
               MaterialPageRoute(
-                builder: (context) => PaymentScreen(),
+                builder: (context) => BlocProvider(
+                    create: (context) => FinalizePaymentCubit(
+                          authenticationRepository:
+                              context.read<AuthenticationRepository>(),
+                          cartRepository: context.read<CartRepository>(),
+                        )..copyNeededStateDetails(state.needsEmailAddress,
+                            state.email, state.clientSecret),
+                    child: PaymentScreen()),
               ),
             );
           }
@@ -33,7 +44,7 @@ class CartAddressPage extends StatelessWidget {
         //     previous.hasSuggestedFirstAddress !=
         //         current.hasSuggestedFirstAddress,
         buildWhen: (previous, current) {
-          print("rebuilding");
+          print("rebuilding cart address");
           return previous != current;
         },
         builder: (context, state) {
@@ -133,7 +144,7 @@ class CartAddressPage extends StatelessWidget {
                         : null,
                     child: state.status.isSubmissionInProgress
                         ? const CircularProgressIndicator()
-                        : const Text("Finish checkout"),
+                        : const Text("Payment Details"),
                   ),
                 ),
               ],

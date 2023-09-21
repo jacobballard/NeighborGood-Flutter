@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pastry/src/app/view/app.dart';
 import 'package:pastry/src/auth/login/login.dart';
+import 'package:pastry/src/auth/signup/view/email_verification_page.dart';
 import 'package:pastry/src/product/detail/view/product_detail.dart';
 import 'package:pastry/src/store/detail/view/store_detail.dart';
 import 'package:provider/provider.dart';
@@ -87,6 +88,11 @@ mixin GoRouterMixin on State<App> {
             ),
             child: const LoginPage(),
           ),
+        ),
+        GoRoute(
+          path: '/verify',
+          name: 'verify',
+          builder: (context, state) => const EmailVerificationPage(),
         )
       ],
       redirect: (context, state) {
@@ -98,8 +104,12 @@ mixin GoRouterMixin on State<App> {
         final authenticated = status == AppStatus.authenticated;
         final loggingOut = status == AppStatus.loggingOut;
 
+        final verificationNeeded = status == AppStatus.needsVerification;
         final onLoginPath = state.matchedLocation == '/login';
         print('redirect');
+        // print(state.matchedLocation);
+
+        final onVerificationPath = state.matchedLocation == '/verify';
 
         final loginRequest = state.fullPath == '/login';
         print('matched');
@@ -109,6 +119,10 @@ mixin GoRouterMixin on State<App> {
         // print(authenticated);
         print(onLoginPath);
         print(kIsWeb);
+        if (verificationNeeded) {
+          return '/verify';
+        }
+
         if (!authenticated && !onLoginPath && !kIsWeb) {
           return '/login';
         }
@@ -117,7 +131,7 @@ mixin GoRouterMixin on State<App> {
           return '/login';
         }
 
-        if (authenticated && onLoginPath) {
+        if (authenticated && (onLoginPath || onVerificationPath)) {
           return '/';
         }
         return null;

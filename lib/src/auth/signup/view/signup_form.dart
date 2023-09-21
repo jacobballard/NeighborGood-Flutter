@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import 'package:pastry/src/app/bloc/auth_popup_cubit.dart';
+import 'package:pastry/src/auth/login/login.dart';
 
 import '../cubit/signup_cubit.dart';
 
@@ -50,7 +51,9 @@ class _LoginButton extends StatelessWidget {
     final theme = Theme.of(context);
     return TextButton(
       key: const Key('signUpForm_login_flatButton'),
-      onPressed: () => context.read<AuthPopupCubit>().showLogin(),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
       child: Text(
         'LOGIN',
         style: TextStyle(color: theme.primaryColor),

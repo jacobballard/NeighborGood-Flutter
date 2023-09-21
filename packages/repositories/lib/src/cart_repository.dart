@@ -8,6 +8,11 @@ import 'package:http/http.dart' as http;
 class CartRepository {
   // Side effects lolz
   late String clientSecret;
+  late String subtotal;
+  late String totalCharge;
+  late String taxes;
+  late String shipping;
+  late String platformFee;
   Address? suggestedBillingAddress;
   Address? suggestedShippingAddress;
 
@@ -72,7 +77,18 @@ class CartRepository {
           return false;
         } else {
           print('true');
-          clientSecret = data['transaction_id'];
+
+          // 'total_charge' : (total_charge / 100),
+          //            'subtotal' : subtotal,
+          //            'taxes' : taxes,
+          //            'shipping' : total_shipping_fee,
+          //            'platform_fee' : platform_fee,
+          clientSecret = data['client_secret'];
+          taxes = data['taxes'].toString();
+          totalCharge = data['total_charge'].toString();
+          subtotal = data['subtotal'].toString();
+          shipping = data['shipping'].toString();
+          platformFee = data['platform_fee'].toString();
           return true;
         }
         // print(data);

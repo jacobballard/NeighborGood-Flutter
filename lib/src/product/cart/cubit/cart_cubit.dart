@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
 import 'package:pastry/src/account/create_store/cubit/store_address_cubit.dart';
 
@@ -17,17 +18,26 @@ class CartCubit extends Cubit<CartState> {
   final StoreAddressCubit firstStoreAddressCubit;
   final StoreAddressCubit secondStoreAddressCubit;
   final CardEditController cardEditController;
+  CardFieldInputDetails? _card;
   CartCubit({
     required this.cartRepository,
     required this.firstStoreAddressCubit,
     required this.secondStoreAddressCubit,
     required this.authenticationRepository,
     required this.cardEditController,
-  }) : super(const CartState()); //{
-  //   emit(state.copyWith(
-  //       firstStoreAddressCubit: StoreAddressCubit(),
-  //       secondStoreAddressCubit: StoreAddressCubit()));
-  // }
+  }) : super(const CartState()) {
+    // emit(state.copyWith(email: authenticationRepository.user.e))
+    //   emit(state.copyWith(
+    //       firstStoreAddressCubit: StoreAddressCubit(),
+    //       secondStoreAddressCubit: StoreAddressCubit()));
+  }
+
+  void resetState() {
+    _card = null;
+    firstStoreAddressCubit.resetState;
+    secondStoreAddressCubit.resetState;
+    emit(const CartState());
+  }
 
   void updateCartQuantity(int position, int? newValue) {
     if (newValue == null) return;
@@ -217,18 +227,25 @@ class CartCubit extends Cubit<CartState> {
       } else {
         print('else success');
         emit(state.copyWith(
-            clientSecret: cartRepository.clientSecret,
-            status: FormzStatus.submissionSuccess));
-      }
+          clientSecret: cartRepository.clientSecret,
+          status: FormzStatus.submissionSuccess,
+          needsEmailAddress:
+              (authenticationRepository.getEmailIfAnyElseNull() == null)
+                  ? true
+                  : false,
+          email: (authenticationRepository.getEmailIfAnyElseNull() == null)
+              ? const Email.dirty("")
+              : Email.dirty(authenticationRepository.currentUser.email ?? ""),
+          shippingPrice: cartRepository.shipping,
+          tax: cartRepository.taxes,
+          totalPrice: cartRepository.totalCharge,
+          subtotal: cartRepository.subtotal,
+          platformFee: cartRepository.platformFee,
+        ));
 
-      // emit(
-      //   state.copyWith(
-      //     // transactionId: transactionId,
-      //     status: !transactionId
-      //         ? FormzStatus.submissionFailure
-      //         : FormzStatus.submissionSuccess,
-      //   ),
-      // );
+        print(state.email.value);
+        print('state.email');
+      }
     } catch (e) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }

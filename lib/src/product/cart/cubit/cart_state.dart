@@ -11,11 +11,16 @@ class CartState extends Equatable {
   final String subtotal;
   final bool? cartNeedsShippingAddress;
   final bool? cartNeedsDeliveryAddress;
+  final bool needsEmailAddress;
+  final Email email;
+  final FormzStatus goodToFinishCheckout;
   final String clientSecret;
   final bool billingSameAsShipping;
 
   const CartState({
     this.clientSecret = '',
+    this.needsEmailAddress = true,
+    this.email = const Email.pure(),
     this.cartNeedsShippingAddress,
     this.cartNeedsDeliveryAddress,
     this.subtotal = '',
@@ -25,6 +30,7 @@ class CartState extends Equatable {
     this.billingSameAsShipping = true,
     this.tax = '',
     this.status = FormzStatus.pure,
+    this.goodToFinishCheckout = FormzStatus.pure,
     this.errorMessage,
     this.checkoutItems = const [],
   });
@@ -42,6 +48,9 @@ class CartState extends Equatable {
     String? clientSecret,
     bool? cartNeedsDeliveryAddress,
     bool? billingSameAsShipping,
+    bool? needsEmailAddress,
+    FormzStatus? goodToFinishCheckout,
+    Email? email,
   }) {
     return CartState(
       status: status ?? this.status,
@@ -59,6 +68,9 @@ class CartState extends Equatable {
       billingSameAsShipping:
           billingSameAsShipping ?? this.billingSameAsShipping,
       clientSecret: clientSecret ?? this.clientSecret,
+      needsEmailAddress: needsEmailAddress ?? this.needsEmailAddress,
+      email: email ?? this.email,
+      goodToFinishCheckout: goodToFinishCheckout ?? this.goodToFinishCheckout,
     );
   }
 
@@ -76,5 +88,8 @@ class CartState extends Equatable {
         cartNeedsDeliveryAddress,
         billingSameAsShipping,
         clientSecret,
+        needsEmailAddress,
+        email,
+        goodToFinishCheckout,
       ];
 }

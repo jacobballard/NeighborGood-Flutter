@@ -10,6 +10,7 @@ class User extends Equatable {
     this.email,
     this.name,
     this.photo,
+    this.needsVerification,
     this.accountType, // Add accountType property
   });
 
@@ -24,6 +25,9 @@ class User extends Equatable {
 
   /// Url for the current user's photo.
   final String? photo;
+
+  /// Boolean for if I need to verify
+  final bool? needsVerification;
 
   /// The current user's account type (buyer or seller).
   final AccountType? accountType; // Add accountType property
@@ -47,6 +51,7 @@ class User extends Equatable {
         email = (doc.data() as Map<String, dynamic>)['email'] as String?,
         name = (doc.data() as Map<String, dynamic>)['name'] as String?,
         photo = (doc.data() as Map<String, dynamic>)['photo'] as String?,
+        needsVerification = true,
         accountType = _accountTypeFromString(
             (doc.data() as Map<String, dynamic>)['role'] as String?);
 
@@ -85,5 +90,6 @@ class User extends Equatable {
   }
 
   @override
-  List<Object?> get props => [email, id, name, photo, accountType];
+  List<Object?> get props =>
+      [email, id, name, photo, accountType, needsVerification];
 }

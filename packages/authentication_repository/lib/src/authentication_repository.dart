@@ -177,6 +177,7 @@ class AuthenticationRepository {
     GoogleSignIn? googleSignIn,
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+        isUserVerified = false,
         _googleSignIn = googleSignIn ??
             GoogleSignIn(
                 clientId:
@@ -187,6 +188,8 @@ class AuthenticationRepository {
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+
+  bool isUserVerified;
 
   /// Whether or not the current environment is web
   /// Should only be overriden for testing purposes. Otherwise,
@@ -209,7 +212,10 @@ class AuthenticationRepository {
       print(firebaseUser.toString());
 
       final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
+
       _cache.write(key: userCacheKey, value: user);
+
+      this.isUserVerified = !(user.needsVerification ?? true);
       return user;
     });
   }
@@ -255,7 +261,8 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-
+      print(currentUser);
+      print('cu');
       await FirebaseChatCore.instance.createUserInFirestore(
         types.User(
           id: credential.user!.uid,
@@ -263,6 +270,7 @@ class AuthenticationRepository {
       );
 
       await sendEmailVerification();
+      print('sent verification');
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -383,25 +391,37 @@ class AuthenticationRepository {
     }
   }
 
-  final _emailVerificationController = StreamController<bool>();
-  Stream<bool> get isEmailVerified => _emailVerificationController.stream;
+  // final _emailVerificationController = StreamController<bool>();
+  // Stream<bool> get isEmailVerified => _emailVerificationController.stream;
 
-  // ignore: unused_element
-  void _checkEmailVerificationStatus() async {
-    // Stop checking if the controller has been closed.
-    if (_emailVerificationController.isClosed) return;
+  // // ignore: unused_element
+  // void _checkEmailVerificationStatus() async {
+  //   // Stop checking if the controller has been closed.
+  //   if (_emailVerificationController.isClosed) return;
 
-    final firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser != null) {
-      await firebaseUser.reload();
-      _emailVerificationController.add(firebaseUser.emailVerified);
+  //   final firebaseUser = _firebaseAuth.currentUser;
+  //   if (firebaseUser != null) {
+  //     await firebaseUser.reload();
+  //     _emailVerificationController.add(firebaseUser.emailVerified);
 
-      if (!firebaseUser.emailVerified) {
-        // Check again after a delay.
-        await Future.delayed(Duration(seconds: 5));
-        _checkEmailVerificationStatus();
-      }
-    }
+  //     if (!firebaseUser.emailVerified) {
+  //       // Check again after a delay.
+  //       await Future.delayed(Duration(seconds: 5));
+  //       _checkEmailVerificationStatus();
+  //     }
+  //   }
+  // }
+
+  Future<void> isVerificationNeeded() async {
+    print('is verification needed?');
+    await _firebaseAuth.currentUser?.reload();
+
+    print(_firebaseAuth.currentUser.toString());
+
+    // User user = _firebaseAuth.currentUser == null ? User.empty : _firebaseAuth.currentUser!.toUser;
+    // _cache.write(key: userCacheKey, value: user);
+    print(_firebaseAuth.currentUser?.emailVerified);
+    this.isUserVerified = _firebaseAuth.currentUser?.emailVerified ?? false;
   }
   //This will always exist so probably useless?
   // void dispose() {
@@ -419,15 +439,24 @@ class AuthenticationRepository {
         _googleSignIn.signOut(),
       ]);
 
-      _emailVerificationController.close();
+      // _emailVerificationController.close();
     } catch (_) {
       throw LogOutFailure();
     }
+  }
+
+  String? getEmailIfAnyElseNull() {
+    return this.currentUser.email;
   }
 }
 
 extension on firebase_auth.User {
   User get toUser {
-    return User(id: uid, email: email, name: displayName, photo: photoURL);
+    return User(
+        id: uid,
+        email: email,
+        name: displayName,
+        photo: photoURL,
+        needsVerification: !emailVerified);
   }
 }

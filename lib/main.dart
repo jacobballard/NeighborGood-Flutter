@@ -19,6 +19,10 @@ import 'src/account/account/bloc/profile_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  Stripe.publishableKey =
+      "pk_test_51N6jmGExW75aEFO965E6PWmVDGODrqo8wxgMAcEFQLUhIAArt5NWeW0bExNnMbhdErF7fGoq7LfRHt7C6OCSNzrF00lyXZspei";
+  Stripe.merchantIdentifier = 'acct_1N6jmGExW75aEFO9';
+  Stripe.urlScheme = 'flutterstripe';
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -36,9 +40,14 @@ void main() async {
     await authenticationRepository.signInAnonymously();
   }
   usePathUrlStrategy();
+
   runApp(
-    RepositoryProvider<AuthenticationRepository>.value(
-      value: authenticationRepository,
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthenticationRepository>.value(
+            value: authenticationRepository),
+        RepositoryProvider(create: (_) => CartRepository()),
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AppBloc>.value(value: appBloc),
@@ -50,7 +59,7 @@ void main() async {
               firstStoreAddressCubit: StoreAddressCubit(),
               secondStoreAddressCubit: StoreAddressCubit(),
               authenticationRepository: _.read<AuthenticationRepository>(),
-              cartRepository: CartRepository(),
+              cartRepository: _.read<CartRepository>(),
               cardEditController: CardEditController(),
             ),
           ),

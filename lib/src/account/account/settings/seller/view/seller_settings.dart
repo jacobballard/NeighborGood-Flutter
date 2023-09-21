@@ -58,6 +58,16 @@ class SellerSettingsPage extends StatelessWidget {
         //   },
         //   child: const Text('Manage Products'),
         // ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: false).push(
+              MaterialPageRoute(
+                builder: (context) => const CreateProductPage(),
+              ),
+            );
+          },
+          child: const Text('Outgoing Orders'),
+        ),
 
         ContactSupportButton(
           onPressed: () {
@@ -65,6 +75,7 @@ class SellerSettingsPage extends StatelessWidget {
             Navigator.pushNamed(context, '/contact_support');
           },
         ),
+
         ElevatedButton(
           onPressed: () {
             BlocProvider.of<AppBloc>(context)

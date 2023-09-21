@@ -66,7 +66,7 @@ class _ContinueAsGuestButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: () async {
             await context.read<LoginCubit>().signInAnonymously();
-            context.push('/login');
+            context.go('/login');
             // if (context.mounted) Navigator.of(context).pop();
           },
           child: const Text('CONTINUE AS GUEST'),

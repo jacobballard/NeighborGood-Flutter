@@ -1,4 +1,6 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EmailVerificationPage extends StatelessWidget {
   const EmailVerificationPage({Key? key}) : super(key: key);
@@ -8,25 +10,15 @@ class EmailVerificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: const Align(
-          // alignment: const Alignment(0, -1 / 3),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Please verify your account!"),
+    return Scaffold(
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+              "Please verify ${context.read<AuthenticationRepository>().currentUser.email}"),
 
-              SizedBox(
-                height: 8,
-              ),
-
-              // Submit verification
-            ],
-          ),
-        ),
+          // Submit verification
+        ],
       ),
     );
   }

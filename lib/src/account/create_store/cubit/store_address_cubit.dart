@@ -29,6 +29,10 @@ class StoreAddressCubit extends Cubit<StoreAddressState> {
     print("statis");
   }
 
+  void resetState() {
+    emit(StoreAddressState());
+  }
+
   void addSuggestedAddress(returnAddress.Address? address) {
     emit(state.copyWith(
         suggestedAddress: address,
